@@ -69,6 +69,93 @@ export function AgentEntry({ variante }: { variante: VariantId }) {
   );
 }
 
+/* One answer of the agent per variant, frozen: the sentence, the capability it marks, the case and a seal. */
+const PREVIEW = {
+  software: { frase: "Necesitamos una app para abrir cuentas sin ir a una agencia", cap: "cap_desarrollo", caso: "credicomer", chips: ["calidad", "casos"], sello: "badge-clutch-top-software-developers" },
+  cloud: { frase: "Tenemos un portal que se cae cuando hay mucha gente", cap: "cap_operacion", caso: "tse", chips: ["calidad", "nube"], sello: "gcp-services-select" },
+} as const;
+
+const miniLabel = "font-display text-[9.5px] font-semibold uppercase tracking-[.08em]";
+const pop = "absolute"; // each pop sits on its own Z plane; the float lives on its child so the two transforms don't fight
+
+/*
+  Hero asset: the agent's whole screen, tilted in space, with three pieces leaving its plane. It straightens on hover.
+  Decorative (aria-hidden): it repeats content the page and the agent already expose to assistive tech.
+  ponytail: a hand-drawn miniature, not the real <Agent /> scaled down. If the agent's layout changes a lot, redraw it.
+*/
+export function HeroPreview({ variante }: { variante: VariantId }) {
+  const p = PREVIEW[variante];
+  const cap = CAPS[p.cap];
+  const c = cases.find((x) => x.id === p.caso)!;
+  const t = themes[c.theme];
+  return (
+    <div aria-hidden="true" className="rise group col-span-5 min-w-0 self-center py-10 pl-4 [perspective:1500px] max-lg:hidden xl:pl-10 min-[1400px]:pl-20" style={{ ["--i" as string]: 3 }}>
+      <div className="relative [zoom:.78] xl:[zoom:.88] min-[1400px]:[zoom:1] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] [transform-style:preserve-3d] [transform:rotateY(-19deg)_rotateX(7deg)_rotateZ(1.5deg)] group-hover:[transform:rotateY(-7deg)_rotateX(3deg)] motion-reduce:transition-none">
+        {/* the window */}
+        <div className="grid min-h-[25rem] grid-cols-[34%_1fr] overflow-hidden rounded-card border border-border-default bg-white shadow-[0_60px_80px_-40px_rgba(0,0,64,.45),0_30px_40px_-30px_rgba(0,0,0,.25)]">
+          <div className="flex min-w-0 flex-col gap-3 border-r border-border-default p-3.5">
+            <Logo className="h-3.5 w-auto self-start" />
+            <p className="text-[10px] leading-snug text-text-muted">{p.frase}</p>
+            <p className="font-display text-[13px] font-semibold leading-tight text-text-primary">Esto es lo que aplica a lo que describes.</p>
+            <div className="mt-auto grid gap-1.5">
+              {p.chips.map((id) => (
+                <span key={id} className="rounded-tag border border-border-default px-2 py-1.5 font-display text-[9.5px] font-semibold text-text-primary">{SUGGESTIONS[id]}</span>
+              ))}
+              <span className="rounded-tag border border-inspire-blue px-2 py-1.5 font-display text-[9.5px] font-semibold text-inspire-blue">{SUGGESTIONS.especialista}</span>
+              <div className="h-6 rounded-tag border border-border-strong" />
+            </div>
+          </div>
+          <div className="grid min-w-0 content-start gap-2.5 bg-surface-subtle p-3.5">
+            <div className="min-w-0 rounded-button border border-border-default bg-white p-3">
+              <p className={`${miniLabel} text-text-muted`}>Capacidad que aplica</p>
+              <div className="my-2.5 grid grid-cols-4 gap-1">
+                {CAP_GROUPS[cap.grupo].nombres.map((n, i) => (
+                  <i key={n} className={`h-[3px] rounded-full ${i === cap.n ? "bg-inspire-blue" : "bg-border-default"}`} />
+                ))}
+              </div>
+              <p className="font-display text-[14px] font-semibold text-text-primary">{cap.nombre}</p>
+            </div>
+            <div className={`relative isolate min-w-0 overflow-hidden rounded-button p-3.5 ${t.card}`}>
+              <Glow {...t.glow} />
+              <p className={`${miniLabel} ${t.tag}`}>{c.tag}</p>
+              {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG logo */}
+              <img src={asset(c.logo)} alt="" className="my-3 h-5 w-auto max-w-[70%] brightness-0 invert" />
+              <p className="font-display text-[15px] font-semibold leading-tight">{c.title}</p>
+            </div>
+            <div className="min-w-0 rounded-button border border-border-default bg-white p-3">
+              <p className={`${miniLabel} text-text-muted`}>Software Nivel A</p>
+              <div className="mt-2 grid grid-cols-4 gap-2">
+                {THRESHOLDS.map(([v, l]) => (
+                  <div key={l} className="min-w-0 border-l-2 border-inspire-blue pl-1.5">
+                    <p className="font-mono text-[16px] font-semibold tabular-nums text-text-primary">{v}</p>
+                    <p className="text-[7.5px] leading-tight text-text-muted">{l}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* pieces that leave the plane of the screen */}
+        <div className={`${pop} left-[22%] top-[-8%] max-w-[62%] [transform:translateZ(60px)]`}>
+          <p className="float-chip rounded-card rounded-br-tag bg-inspire-blue px-3 py-2 text-[11px] text-white shadow-[0_30px_40px_-20px_rgba(0,0,64,.5)] [animation-delay:-1.5s]">{p.frase}</p>
+        </div>
+        <div className={`${pop} right-[-9%] top-[40%] w-[41%] [transform:translateZ(90px)]`}>
+          <div className="float-chip rounded-card bg-excellence-blue px-4 py-3.5 text-white shadow-[0_30px_40px_-20px_rgba(0,0,64,.5)]">
+            <p className="font-display text-[28px] font-semibold leading-none tracking-tight tabular-nums">{c.highlight.value}</p>
+            <p className={`${miniLabel} mt-1.5 text-text-on-dark-accent`}>{c.highlight.label}</p>
+          </div>
+        </div>
+        <div className={`${pop} bottom-[-9%] left-[6%] [transform:translateZ(70px)]`}>
+          <div className="float-chip rounded-card border border-border-default bg-white p-2.5 shadow-[0_30px_40px_-20px_rgba(0,0,64,.5)] [animation-delay:-3s]">
+            {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG badge */}
+            <img src={asset(`/certifications/${p.sello}.svg`)} alt="" className="h-14 w-auto" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ---------- blocks: every one is built from content the site already shows ----------
 
 function CapBlock({ id }: { id: keyof typeof CAPS }) {

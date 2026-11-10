@@ -111,8 +111,11 @@ function CaseCard({ c, onOpen, index }: { c: CaseStudy; onOpen: () => void; inde
   const t = themes[c.theme];
   return (
     <article
-      className={`card-glow reveal relative isolate grid min-w-0 cursor-pointer gap-10 rounded-card pad-card shadow-product md:sticky md:min-h-[26rem] md:grid-cols-[1.3fr_1fr] md:gap-12 ${t.card}`}
-      style={{ ["--i" as string]: index, top: `calc(var(--nav-height) + ${24 + index * 20}px)` }}
+      /* The pin offset lives in --stick and is only used together with `sticky`: as a plain `top` it also moved the
+         non-sticky (relative) card down and pushed the last one over the next section. On phones the stack is on
+         only when the screen is tall enough to show a whole card under the bar. */
+      className={`card-glow reveal relative isolate grid min-w-0 cursor-pointer gap-8 rounded-card pad-card shadow-product md:sticky md:top-(--stick) md:min-h-[26rem] md:grid-cols-[1.3fr_1fr] md:gap-12 [@media(min-height:700px)]:sticky [@media(min-height:700px)]:top-(--stick) ${t.card}`}
+      style={{ ["--i" as string]: index, ["--stick" as string]: `calc(var(--nav-height) + ${16 + index * 16}px)` }}
     >
       <Glow {...t.glow} />
 

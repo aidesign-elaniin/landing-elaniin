@@ -6,7 +6,7 @@ import { Cases } from "./cases";
 import { Nav, VariantSwitch } from "./nav";
 import { ButtonLink } from "./ui";
 import { Logo } from "./logo";
-import { Agent, AgentEntry } from "./agent";
+import { Agent, AgentEntry, HeroPreview } from "./agent";
 import { PrivacyLink } from "./privacy-link";
 import { asset } from "@/lib/site";
 
@@ -41,8 +41,8 @@ function Hero({ v }: { v: Variant }) {
   const h = v.hero;
   return (
     <section className="relative isolate overflow-hidden pb-20 pt-12 md:pb-28 md:pt-16 lg:pb-32 lg:pt-20">
-      <div className="container-site relative grid-page">
-        <div className="col-span-12 min-w-0 lg:col-span-9">
+      <div className="container-site relative grid-page gap-y-0">
+        <div className="col-span-12 min-w-0 lg:col-span-7">
           <VariantSwitch current={v.id} className="rise mb-8" />
           <h1 className="rise break-words font-display text-display-lg font-semibold text-text-primary">
             {h.h1} <span className="text-inspire-blue">{h.accent}</span>
@@ -54,6 +54,11 @@ function Hero({ v }: { v: Variant }) {
           <div className="rise mt-10" style={{ ["--i" as string]: 2 }}>
             <AgentEntry variante={v.id} />
           </div>
+        </div>
+        {/* what the field gives back: a still of the agent's canvas, built from the same pieces it shows */}
+        <HeroPreview variante={v.id} />
+        {/* seals and proof sit on their own row, so the asset centers on the headline block and not on them */}
+        <div className="col-span-12 min-w-0 lg:col-span-7">
           {h.seals && (
             <div className="rise mt-6" style={{ ["--i" as string]: 3 }}>
               <ul className="flex flex-wrap items-center gap-4" aria-label="Alianzas">
@@ -69,7 +74,7 @@ function Hero({ v }: { v: Variant }) {
           <p className="rise mt-12 flex max-w-[52ch] items-start gap-3 border-t border-border-default pt-5 font-display text-body font-medium text-text-primary" style={{ ["--i" as string]: 3 }}>
             <span className="mt-2 size-2 shrink-0 rounded-module bg-inspire-blue" aria-hidden="true" />
             {h.proof}
-          </p>
+        </p>
         </div>
       </div>
     </section>
