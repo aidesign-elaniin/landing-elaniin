@@ -119,6 +119,21 @@ function CaseBlock({ id }: { id: string }) {
           </li>
         ))}
       </ul>
+      {/* project sheet: how the work was set up */}
+      {c.ficha && (
+        <dl className="mt-6 grid gap-x-8 gap-y-4 border-t border-border-on-dark pt-6 sm:grid-cols-[auto_auto_1fr]">
+          {[
+            ["Tipo de proyecto", c.ficha.tipo],
+            ["Duración", c.ficha.duracion],
+            ["Tecnologías", c.ficha.tecnologias],
+          ].map(([k, v]) => (
+            <div key={k} className="min-w-0">
+              <dt className={`mono-label text-nano ${t.panelMuted}`}>{k}</dt>
+              <dd className="mt-1 text-body-sm">{v}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </section>
   );
 }

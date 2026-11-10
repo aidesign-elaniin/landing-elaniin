@@ -23,6 +23,7 @@ export const CAP_GROUPS: Record<Variante, { titulo: string; nombres: string[] }>
 export const BLOCK_IDS = [
   "cap_discovery", "cap_desarrollo", "cap_qa", "cap_evolucion", "cap_assessment", "cap_migracion", "cap_apigee", "cap_operacion",
   "caso_tse", "caso_credicomer", "caso_procesar", "caso_jostens",
+  "caso_dgme", "caso_mercandu", "caso_bancoazul", "caso_transexpress", "caso_graziela",
   "umbrales", "respaldo", "sector_publico", "contacto",
 ] as const;
 export type BlockId = (typeof BLOCK_IDS)[number];
@@ -67,13 +68,15 @@ const RULES: [RegExp, string, BlockId[], SuggestionId[]][] = [
   [/precio|cuesta|costo|presupuesto|cotiza|plazo|cu[aá]nto tarda|tiempo de entrega/, "precio", ["contacto"], []],
   [/calidad|segur|prueba|vulnerab/, "calidad", ["umbrales", "cap_qa"], ["casos", "respaldo"]],
   [/respald|certific|partner|sello|qui[eé]n los/, "respaldo", ["respaldo"], ["calidad", "casos"]],
-  [/gobierno|instituci[oó]n|p[uú]blic|ministerio|alcald|licitaci/, "sector_publico", ["sector_publico", "caso_tse", "respaldo"], ["calidad"]],
+  [/gobierno|instituci[oó]n|p[uú]blic|ministerio|alcald|licitaci|migratori|frontera|visa/, "sector_publico", ["sector_publico", "caso_tse", "caso_dgme"], ["calidad", "respaldo"]],
+  [/tienda|e-?commerce|comercio electr|marketplace|cat[aá]logo|vender en l[ií]nea|carrito/, "industria", ["cap_desarrollo", "caso_mercandu", "caso_graziela"], ["calidad", "alcance"]],
+  [/log[ií]stic|env[ií]o|paquete|casillero|courier/, "industria", ["cap_desarrollo", "caso_transexpress"], ["calidad", "casos"]],
   [/ingenier|equipo|staff|talento|desarrolladores|l[ií]der t[eé]cnico/, "servicios", ["caso_jostens", "respaldo"], ["calidad"]],
   [/\bapi|apigee/, "servicios", ["cap_apigee", "caso_procesar", "respaldo"], ["calidad", "nube"]],
   [/se cae|pico|demanda|lento|mucha gente|disponibilidad|escal/, "servicios", ["cap_operacion", "caso_tse", "respaldo"], ["calidad", "nube"]],
-  [/nube|cloud|migra|aws|google|servidor|on-?premise|legacy/, "servicios", ["cap_migracion", "caso_procesar", "cap_assessment"], ["calidad", "nube"]],
+  [/nube|cloud|migra|aws|google|servidor|on-?premise|legacy/, "servicios", ["cap_migracion", "caso_procesar", "caso_dgme"], ["calidad", "nube"]],
   [/alcance|no s[eé] por d[oó]nde|empezar|idea/, "alcance", ["cap_discovery", "caso_credicomer"], ["calidad", "casos"]],
-  [/banco|banca|cuenta|financ|fintech|pago/, "industria", ["cap_desarrollo", "caso_credicomer", "umbrales"], ["calidad", "alcance"]],
+  [/banco|banca|cuenta|financ|fintech|pago/, "industria", ["cap_desarrollo", "caso_credicomer", "caso_bancoazul"], ["calidad", "alcance"]],
   [/mantener|mantenimiento|soporte|ya tenemos un sistema|evolucion/, "servicios", ["cap_evolucion", "caso_credicomer"], ["calidad"]],
   [/app|web|m[oó]vil|plataforma|sistema|software|erp|portal|sitio|integraci|caso/, "servicios", ["cap_desarrollo", "caso_credicomer", "umbrales"], ["calidad", "alcance"]],
 ];

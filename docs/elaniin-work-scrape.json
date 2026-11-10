@@ -1,0 +1,394 @@
+{
+ "mercandu": {
+  "title": "The Largest Marketplace in Central America",
+  "logo": "https://media.elaniin.com/uploads/social_clutch_9512862e40.svg",
+  "hero": "https://media.elaniin.com/uploads/mercandu_header_d767ba02d9.jpg",
+  "Project Services": [
+   "Product Discovery",
+   "Product Design",
+   "Support"
+  ],
+  "Project problem": [
+   "The pandemic accelerated online consumption habits in the Central American region, creating an opportunity to develop a platform that provides a genuine online purchasing experience in the region."
+  ],
+  "Team": [
+   "1 Product Designer",
+   "1 UX/UI Designer",
+   "2 Frontend Developers",
+   "2 Backend Developers",
+   "2 QA",
+   "1 Project Manager"
+  ],
+  "Deliverables": [
+   "Brand Styles",
+   "UX Analysis",
+   "Microservices Architecture",
+   "UI, Prototype, Handoff, Source Library",
+   "Source Code",
+   "CMS",
+   "Launch to Production"
+  ],
+  "Project Type": [
+   "Full Project"
+  ],
+  "Duration": [
+   "Ongoing Project"
+  ],
+  "Applied methodologies": [
+   "Competitive benchmarking, User and product discovery, Usability testing, High-fi prototyping, Backend implementation, Frontend implementation, Microservices, and QA."
+  ],
+  "Technologies": [
+   "Laravel, NodeJS, ElasticSearch, React Native, MySQL, Vue, Docker and Kubernetes."
+  ],
+  "The Challenge": [
+   "Managing a large product catalog",
+   "01",
+   "With over 500,000 products in its catalog, Mercandú faced the challenge of managing and keeping such a large database up to date. This required the implementation of a solid and scalable microservices infrastructure that could handle the workload, allowing for greater flexibility in managing the platform, and enabling faster adaptation to market needs.",
+   "Cross-Border Transactions",
+   "02",
+   "Mercandú expanded from El Salvador to Guatemala and is now opening in Honduras. This process has required the adaptation of the platform to different local laws and regulations, the incorporation of new providers, and shipping services, and the integration of multi-currencies for consolidating Mercandú as a leader in the Central American market.",
+   "Integration of local businesses",
+   "03",
+   "Integrating local businesses into Mercandú has posed challenges in data management and shipping logistics. Our team had to collaborate with stakeholders to seamlessly fuse these businesses into the platform.",
+   "It was a huge challenge to be in the process of creating the largest marketplace in Central America, but with a highly qualified team and a total focus on the user, we were able to build a robust e-commerce platform that demonstrates the tech quality of the region.",
+   "Rodrigo Castillo",
+   "Engineer Manager, Mercandú",
+   "Experience is everything",
+   "To create a regional e-commerce platform, the development team managed logistical and technological processes such as platform selection, user interface design, payment gateway integration, security implementation, and CRM software utilisation. They executed these tasks carefully to ensure a satisfying and seamless customer experience.",
+   "Developers’ main takeaways",
+   "A highly skilled and experienced team can make a massive difference in the quality and efficiency of the development process. This project shows the importance of having the right developers in the right place to achieve project objectives.",
+   "The use of cutting-edge technologies and the adoption of best industry practices are crucial to maintaining a competitive edge. At Mercandú, you can see how the development team is committed to staying up-to-date with the latest trends and technologies to offer their users a high-quality experience.",
+   "The focus on constant innovation is essential for success in today's increasingly competitive online market. Mercandú has demonstrated a remarkable ability to adapt to trends and offer innovative features to its users.",
+   "Effective collaboration between teams is essential for the success of any project. The team works in an integrated and coordinated way with other departments such as design, product, and marketing to achieve an optimal result."
+  ],
+  "The Result": [
+   "Mercandú is a successful e-commerce startup company that keeps growing and improving, in order to provide users with a 360 ° shopping experience through a website and mobile application platform.",
+   "Users can find more than 500,000 products in various categories such as Technology, Home, Vitamins, Makeup, Pets, Toys, Cell phones, and Computers, among others. In Mercandú, you can find everything for everyone!",
+   "So far Mercandú has thousands of products available in different categories, managing to impact many users, families, and partners, giving them an experience only thought to be available in other countries."
+  ],
+  "Discover More Projects": []
+ },
+ "banco-azul": {
+  "title": "The next generation for digital banking",
+  "logo": "https://media.elaniin.com/uploads/logo_banco_azul_397d07cdb0.svg",
+  "hero": "https://media.elaniin.com/uploads/Header_v1_0_1_e64ac0effe.jpg",
+  "Project Services": [
+   "Product Discovery",
+   "Product Design"
+  ],
+  "Project problem": [
+   "Online banking needed a refresh for the overall image and functionality of the existing application. There were a number of taps that made navigation complicated, and on many occasions, there were sections that generated confusion for the user."
+  ],
+  "Team": [
+   "2 Android Developers",
+   "2 iOS Developers",
+   "2 UX/UI Designers",
+   "1 Project Manager",
+   "1 Team Leader"
+  ],
+  "Deliverables": [
+   "Android and iOS Mobile Applications",
+   "Configuration, Architecture, and User Manuals",
+   "New interface"
+  ],
+  "Project Type": [
+   "Staff Augmentation",
+   "Team Augmentation"
+  ],
+  "Duration": [
+   "7 months under Team Augmentation",
+   "9 months under Staff Augmentation"
+  ],
+  "Applied methodologies": [
+   "Waterfall Methodology, migration to Agile (SCRUM)."
+  ],
+  "Technologies": [
+   "Swift 5 (iOS), Kotlin (Android), MDM Architecture."
+  ],
+  "The Challenge": [
+   "Complicated Navigation",
+   "01",
+   "The different taps and sections made navigation complicated and confusing for the user. It was necessary to be able to access each product in an intuitive and friendly way to avoid frustration or confusion when reviewing their accounts.",
+   "Proper Documentation",
+   "02",
+   "We had no documentation of the services or the flow of transactions within the app to start with. Reverse-engineered had to be performed, a search for which flows to replicate, and several different processes to redo.",
+   "Proper Time Frames",
+   "03",
+   "The time could have been better estimated to achieve the project within the established time frame and it was part of what drove us to migrate to the Agile methodology.",
+   "The Banco Azul mobile app was born with the idea of giving a 360º turn to the current online banking that they handled for their users. It sought to give a new user experience and a new friendly way to have control of all products offered by the bank, taking into account all security measures to ensure the utmost protection of customer information.",
+   "Gabriela Mejía",
+   "Scrum Master, Elaniin",
+   "An ideal design process",
+   "We had to take into account comments from several users in different interviews. Prototypes, and testing processes were carried out to arrive at the desired product. Also, microinteractions were generated to make navigation user-friendly.",
+   "Developers’ main takeaways",
+   "The goal was to create an application that could offer all these products and transactions like control of personal and business accounts, the balance of expenses by category, credit / personal loans, and time deposits.",
+   "It was a significant challenge given all the processes that had to be carried out, such as updating the interfaces that were zero user-friendly and redesigning the interaction of the mobile banking app's services.",
+   "We grew as a team and developed a level of commitment to one another to deliver a nearly perfect product and demonstrate the quality of the projects that can be delivered to future customers.",
+   "Through this project, we learned to request the correct documentation from the client. For our work to be done correctly and thus deliver the highest quality product."
+  ],
+  "The Result": [
+   "We managed to create an application completely from scratch based on existing online banking functionalities, in order to find a logical, intuitive, and functional experience that would accompany the user from the moment they enter until they leave the application.",
+   "The application performed all the services its users needed and it was much easier to do every transaction on the app. This result and the quality of the deliverables are the reasons Banco Azul was left happy and more than satisfied with the app for their clients.",
+   "Although there always were problems synchronising times between the client and the team, thanks to the delivered results, more contracts were extended to make more improvements to the applications."
+  ],
+  "Discover More Projects": []
+ },
+ "trans-express": {
+  "title": "Bringing Logistics to the Next Level",
+  "logo": "https://media.elaniin.com/uploads/logo_TE_d3f8d86ca1.svg",
+  "hero": "https://media.elaniin.com/uploads/Header_v1_0_5ca729eed6.jpg",
+  "Project Services": [
+   "Product Discovery",
+   "Product Design",
+   "Support",
+   "Project  problem",
+   "A Miami P.O. Box leader in international e-commerce logistics all over Latin America and the Caribbean required an upgrade for the customer’s website and user dashboard as the technologies and interface employed were outdated and unfriendly for users."
+  ],
+  "Team": [
+   "1 Frontend Developer",
+   "1 Backend Developer",
+   "1 UX/UI Designer",
+   "1 QA",
+   "1 Tech Lead",
+   "1 DevOps"
+  ],
+  "Deliverables": [
+   "Customer's Website",
+   "User Dashboard"
+  ],
+  "Project Type": [
+   "Team Augmentation"
+  ],
+  "Duration": [
+   "11 Months"
+  ],
+  "Applied methodologies": [
+   "Agile Methodology"
+  ],
+  "Technologies": [
+   "Laravel (PHP) with Statamic as CMS, Vue.js (JavaScript)"
+  ],
+  "The Challenge": [
+   "Ensuring Scalability & Adaptability",
+   "01",
+   "Ensuring that the new platform was scalable and adaptable to future changes, which was not possible with the current platform's structure. To address this, we had to carefully consider the architecture of the new system and choose technologies that would allow for easy integration and expansion. This required a thorough assessment of the project's scalability needs to ensure that the new platform was flexible enough to accommodate future growth.",
+   "Counterintuitive User Dashboard",
+   "02",
+   "Users found it difficult to manage their dashboards and access information on their current shipping packages, as well as create and manage their storage lockers. This created a stressful experience for them. To address this issue, we needed to improve the user experience and make it more intuitive for users to manage their dashboards with ease.",
+   "Technology & UX/UI Design upgrade",
+   "03",
+   "The website was functional but outdated, both in terms of technology and user interface. To provide users with a more satisfying experience, we upgraded the technology and created a more user-friendly interface. Our development team updated the platform and integrated all Trans-Express services with the new displays.",
+   "A top international logistics company had to match its quality services with a quality online experience for its users. That is why, we provided a high-performing, highly skilled, and highly experienced team that knows how to use agile methodologies to understand and solve in a timely manner, the clients pain points and deliver valuable solutions for the company and its customers.",
+   "Vladimir Contreras",
+   "Director of Engineering, Elaniin",
+   "Experience is everything",
+   "In order to deliver a functional platform, we had to define how this new platform would look and what was the best way to integrate all the Trans-Express services with the new screens. This also includes an effort to change the way that all the services were consumed by the frontend which will help to include changes or new features in the future.",
+   "Developers’ main takeaways",
+   "Building up a common language between the team and the clients. We have to empathize and be aware of clients that do not understand technical language, in order to have clear communication and expectations for the project.",
+   "Establishing trust with the client led to better feedback in each phase of the process, conducting to a final product that meets and exceeds the customer's expectations.",
+   "An initial session for discussing expectations and limitations with the client is key. The team needs to be aware of the client’s needs and limitations for collaboration to run smoothly and for both parties to become aware of what is attainable since the beginning of the project."
+  ],
+  "The Result": [
+   "We worked with the Trans-Express team to define the new screens for the platform applying all the UX/UI techniques and best practices to give the users a great experience. To create these designs, we selected a new stack of technologies that allow us to improve security, implement best practices and give the best quality product.",
+   "Changing the UX/UI also comprises an effort to change the way all the services were consumed by the frontend which enabled to include changes and new features.",
+   "As a result of all these changes, a completely new platform where the users have all the Trans-Express main services now includes a friendly and more secure way to view their package information, make requests, and know all the company information through an updated User Dashboard."
+  ],
+  "Discover More Projects": []
+ },
+ "credicomer": {
+  "title": "A New and Improved Online Banking Experience",
+  "logo": "https://media.elaniin.com/uploads/logos_credicomer_f24e458b41.svg",
+  "hero": "https://media.elaniin.com/uploads/Header_v1_1_2_d3666a153b.jpg",
+  "Project Services": [
+   "Product Discovery",
+   "Support",
+   "Product Design"
+  ],
+  "Project problem": [
+   "Credicomer recognized the need to upgrade and enhance its digital products to provide more advanced technological experiences to its customers. However, their existing banking app lacked the necessary flexibility for innovation and the user interface was not designed to provide an optimal user experience. Credicomer aimed to provide its current customers with greater access to online banking services and attract new customers by improving its digital banking experience."
+  ],
+  "Team": [
+   "2 Backend Developers",
+   "2 Frontend Web Developers",
+   "2 Frontend Mobile Developers",
+   "1 Lead Developer",
+   "1 Project Manager"
+  ],
+  "Deliverables": [
+   "Prototypes",
+   "Web App - Online banking & Administrative board",
+   "Mobile App - Mobile banking & Simplified account",
+   "Infrastructure - Implementation of High Availability Infrastructure (Kubernetes) On-Premise",
+   "Entity-Relationship model",
+   "Software architecture design",
+   "User, Back End and Front End technical manual"
+  ],
+  "Project Type": [
+   "Team Augmentation"
+  ],
+  "Duration": [
+   "16 Months"
+  ],
+  "Applied methodologies": [
+   "For the structure and complexity of the project, the team opted for a Waterfall methodology."
+  ],
+  "Technologies": [
+   "Java Spring Boot (Back End), Vue.js with Nuxt.js (Web Front End), React Native (Mobile Front End), Docker and Kubernetes."
+  ],
+  "The Challenge": [
+   "App Reconstruction",
+   "01",
+   "Credicomer already had a monolithic application. Our team had to reconstruct all of its current functionality under a new architecture. Adding new features for easier customer transactions and acquisitions of banking products online.",
+   "Infrastructure",
+   "02",
+   "It became a necessity to update the infrastructure with the latest technology — Our team had to build a high-availability on-premise product with improved functionalities and an improved user experience.",
+   "Time & Quality",
+   "03",
+   "As banking institutions are in a race for technological innovation, Credicomer needed to launch its new products in the least amount of time possible and with high-quality results to stay as one of the top banking institutions in El Salvador.",
+   "We produced top-notch solutions using innovative technologies, a micro-services architecture, a high-availability infrastructure, and modern UX/UI trends. In a time when customers seek companies that digitalize their products and services, Credicomer Web App and Mobile App deliver a highly functional and improved customer experience.",
+   "Oscar Magaña",
+   "Software Development Manager, Elaniin",
+   "Sustainable solutions",
+   "Elaniin's working model involves Agile's good practices, involving Credicomer's representatives through each stage of the process to ensure strategic alignment. We created a scalable, trusted, and sustainable solution for the client to manage on its own, as the last platform was a closed tool maintained by an external provider.",
+   "Developers’ main takeaways",
+   "We focused the creation of the MVP on quickly stabilizing the product and making essential adjustments to its usability to maximize the delivered value within the designated time.",
+   "The constant communication and collaboration established with the client were key to delivering a valuable product that solved its needs and exceeded expectations.",
+   "Each member of the Team Augmentation service was carefully chosen for their high performance and skills profile to solve each of the project's challenges."
+  ],
+  "The Result": [
+   "With Rapicuenta App, customers can create a simple savings account without the need to visit an agency. Being a completely digital product, a customer identity verification process was implemented by using artificial intelligence services. In addition, an agreement of the account contract is done during the user registration process, creating the possibility of having a banking product to perform multiple transactions online, offering a better experience and better services for its customers.",
+   "A complete upgrade of web and mobile online banking has been made possible with Credicomer Online. Thanks to world-class technologies and the implementation of a software architecture that enables scalability and high availability undoubtedly distinguishes this banking platform. Innovative processes, from biometric log-in to simple step-by-step transactions are functionalities that make the user experience unparalleled. Credicomer customers can check their product balances, view their transaction history, and make transfers and payments easily, quickly, and securely."
+  ],
+  "Discover More Projects": []
+ },
+ "graziela": {
+  "title": "Luxury Jewelry Through the Right Tech",
+  "logo": "https://media.elaniin.com/uploads/logo_graziela_fbb1c8f4e5.svg",
+  "hero": "https://media.elaniin.com/uploads/Header_v1_1_3_7ca08097f1.jpg",
+  "Project Services": [
+   "Product Discovery",
+   "Product Design"
+  ],
+  "Project problem": [
+   "They needed to improve their catalog for the users. The search filters were not interactive and did not allow them to see the different options in variety or details of the products, and the search engine’s speed of the seeker was plodding."
+  ],
+  "Team": [
+   "1 Product Designer",
+   "1 UX/UI Designer",
+   "2 Frontend Developers",
+   "2 Backend Developers",
+   "2 QA",
+   "1 Project Manager"
+  ],
+  "Deliverables": [
+   "Brand Styles",
+   "UX Analysis",
+   "UI, Prototype, Handoff, Source Library",
+   "Source Code",
+   "CMS",
+   "Launch to Production"
+  ],
+  "Project Type": [
+   "Landing Page",
+   "App mobile",
+   "Motiongraphs"
+  ],
+  "Duration": [
+   "8 Months",
+   "Methodologies",
+   "Competitive benchmarking, User and product discovery, Usability testing, High-fi prototyping, Backend implementation, Frontend implementation, QA"
+  ],
+  "Technologies": [
+   "WordPress, PHP, Amazon Web Service (AWS)."
+  ],
+  "The Challenge": [
+   "User-friendly deliverable",
+   "01",
+   "We pride ourselves on our end-to-end development process and creating user-friendly websites that are tailored to our clients' specific needs. Our development team used a variety of front-end and back-end technologies to ensure the website is responsive, visually appealing, and highly functional.",
+   "Optimization of e-commerce transactions",
+   "02",
+   "The challenge was to create a secure and seamless online store functionality for our client's website. To achieve this, our development team utilized the WooCommerce plugin on a WordPress platform, implementing features such as product pages, shopping carts, and checkout processes. By doing so, we were able to deliver a highly functional online store that ensures secure and seamless transactions for our client's customers.",
+   "Developing a safe and effective",
+   "03",
+   "The challenge was to create a seamless and secure online store functionality for our client's website. To achieve this, our development team implemented features such as product pages, shopping carts, and checkout processes. By doing so, we were able to offer a highly functional online store that ensures safe and smooth transactions for our client's customers.",
+   "In this project, we use a combination of cutting-edge technologies and development best practices to create a highly functional and easy-to-use website. It was exciting to collaborate with the client to bring their vision to life and see the positive impact our work had on their business.",
+   "Oscar Magaña",
+   "Software Development Manager, Elaniin",
+   "Developers’ main takeaways",
+   "We make sure that the website runs seamlessly on all devices and browsers by performing comprehensive testing during the development process. Our testing covers compatibility and functionality across different browsers and devices, including desktops, laptops, tablets, and mobile devices. By conducting thorough testing, we can pinpoint any issues and make the necessary adjustments to ensure optimal website performance for all users.",
+   "When developing a website or web application, it's important to test it on a range of devices and browsers to ensure that it is compatible and functions properly. This involves conducting comprehensive testing to identify any bugs, glitches, or issues that may arise when the website is accessed from different devices or browsers.",
+   "To ensure the website stays relevant and meets the evolving needs of its users, we offer continuous monitoring and updating services. Our team stays up-to-date with the latest trends and technologies, regularly analyzing website performance data and user feedback. This allows us to identify areas that require improvement and implement updates to keep the website current and engaging.",
+   "Improve website performance by reducing file sizes through minification and compressing images."
+  ],
+  "The Result": [
+   "The collaboration between the development team and the client was crucial in achieving the desired results. By working closely with the client, the development team was able to understand their needs and goals, leading to a more effective and successful development process.",
+   "We held a strategic product design session to define the key search criteria that would enhance the system's performance and improve the user experience. Additionally, we created an ecosystem that not only refined the client's perspective but also increased the platform's speed and optimized the server's performance. The end result was a highly efficient search engine that allows users to easily find the information they need while providing a seamless and smooth browsing experience."
+  ],
+  "Discover More Projects": []
+ },
+ "ministerio-de-justicia-dgme": {
+  "title": "Innovating a Country’s Migration Control System",
+  "logo": "https://media.elaniin.com/uploads/logo_M_and_E_1_62cce5ca5c.svg",
+  "hero": "https://media.elaniin.com/uploads/migracion_app_c72d020bda.jpg",
+  "Project Services": [
+   "Product Discovery",
+   "Product Design",
+   "Support"
+  ],
+  "Project problem": [
+   "The General Directorate of Migration and Immigration of El Salvador processed approximately 86 million migration records at its maritime, aerial, and terrestrial borders using an outdated On-Premise Legacy system that was 12 years old. The user experience and interface were lacking, causing delays in the work of migratory agents. The intent was to renovate the overall systems involved in migration control of the General Directorate, creating an innovative and efficient solution for its users."
+  ],
+  "Team": [
+   "3 Frontend Developers",
+   "3 Backend Developers",
+   "2 UX/UI Designers",
+   "2 QA",
+   "1 Scrum Master",
+   "1 Product Owner"
+  ],
+  "Deliverables": [
+   "Integrated Migration Management System",
+   "Visa Emission System",
+   "Travelers Web-App"
+  ],
+  "Project Type": [
+   "Team Augmentation"
+  ],
+  "Duration": [
+   "12 Months"
+  ],
+  "Applied methodologies": [
+   "Agile methodology, Scrum framework."
+  ],
+  "Technologies": [
+   "React, Next.js, Laravel, PHP, Horizon, SQL, AWS"
+  ],
+  "The Challenge": [
+   "Data migration process",
+   "01",
+   "Migrating more than 86 million delicate migration records was a critical part of the process. The data integrity and accuracy were of utmost importance, leaving no margin for errors as it had to be completed successfully on the first try. An ETL process was used to migrate the data to the cloud while ensuring that all the sensitive information was handled with the highest care and security.",
+   "Non-scalable architecture",
+   "02",
+   "The architecture ran on-premise. With no scalability, extra components, and many different technologies — The process and architecture had to be updated to relocate the migration system to the cloud with a new data structure.",
+   "Creating a new process",
+   "03",
+   "We analyzed the existing migration system to create a new blueprint for improving the migration process for all stakeholders. This solution resulted in the development of new products to enhance the work and migration process of travelers and consulates of the country.",
+   "Using the new methodologies on development and cutting-edge technologies, we renewed all the systems and processes of the General Directorate in Migration control. This project makes me proud, it exceeded our expectations and yields a social and technological impact in El Salvador that will improve its perception in terms of innovation and technology.",
+   "Ariel Torres",
+   "Scrum Master, Elaniin",
+   "Experience is everything",
+   "With an Agile methodology approach and state-of-the-art technology, the project successfully renovated the overall systems involved in Migratory Control, developing an Integrated Migration Management System, a visa emission system for El Salvador consulates worldwide, and a travelers' web app for streamlining the pre-check-in process and improving times for customs agents and travelers.",
+   "Developers’ main takeaways",
+   "When the outcome of the final product makes the users' workflow easier, we know we have made exemplary efforts and applied the best methods to solve their needs. It satisfied us that we improved their performance, provided a more secure system, and automated a process that will save them time and effort.",
+   "It was a challenging and complex project. We had to analyze the processes, needs, and paint points of each of the stakeholders involved - the customs agents, the consulates, migrants, and immigrants, and deliver an integrated solution that was innovative and functional for each user.",
+   "Using the Agile methodology allowed us to finish each project in time record; the Integrated Migration Management System was delivered within 12 months, the Visa Emission System took us six months and the Travelers Web-App was built in 3 months."
+  ],
+  "The Result": [
+   "The Integrated Migration Management System is an innovative registering cloud-based system that delivers flexibility, reliability, and efficiency to custom agents and travelers who cross borders.",
+   "The Visa Emission System administrates and issues visas for foreigners wanting to visit the country for and out of touristic matters. This system will enable an easier and more accessible process for users to enter their paperwork information online and get immediate responses from consulates to get their Salvadoran visas faster.",
+   "With the Travelers web-app, Travelers can entry their PreCheck information and Customs declaration on their smartphones. A QR code is generated to show in Customs, making it an easier and faster process for airport agents and visitors to travel through the country anytime.",
+   "With agile methodologies, Stakeholders collaborate with the team throughout the entire process, resulting in a series of innovative products that bring the best user experience and solve the client's needs beyond its expectations."
+  ],
+  "Discover More Projects": []
+ }
+}
