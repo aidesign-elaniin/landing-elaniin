@@ -20,7 +20,7 @@ export type CaseStudy = {
     results: string[];
     cta: string;
   };
-  /** Project sheet, shown on the agent's cards. Only the cases taken from elaniin.com/work have it. */
+  /** Project sheet. Only the cases taken from elaniin.com/work have it. */
   ficha?: { tipo: string; duracion: string; tecnologias: string };
 };
 
@@ -163,7 +163,7 @@ export const cases: CaseStudy[] = [
     },
   },
   // ---------- Cases from elaniin.com/work (scraped Nov 9 2026, translated from English; raw data in docs/elaniin-work-scrape.json).
-  // They are shown only by the agent: no variant lists them, so they do not appear in the page's case section.
+  // Not shown anywhere today (the agent that used them was removed): add an id to a variant's `cases.ids` to show one.
   {
     id: "dgme",
     theme: "excellence",

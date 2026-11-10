@@ -1,6 +1,6 @@
 # Publishes a static copy of the landing on GitHub Pages, to show the design.
-# GitHub Pages has no server: in this copy the agent picks pieces with keyword rules (no AI)
-# and the contact form cannot send. The full site needs a host that runs Next.js.
+# GitHub Pages has no server: in this copy the contact form cannot send.
+# The full site needs a host that runs Next.js.
 name: GitHub Pages
 
 on:

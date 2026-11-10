@@ -15,7 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { cases, type CaseStudy } from "@/data/cases";
-import { CAPS } from "@/data/agent";
+import { CAPS } from "@/data/variants";
 import { asset } from "@/lib/site";
 
 const icons = {
@@ -568,6 +568,57 @@ export function QualityGate({ thresholds }: { thresholds: { value: string; label
             </li>
           ))}
         </ul>
+      </div>
+    </div>
+  );
+}
+
+/*
+  Hero asset: real proof instead of decoration. Two case cards stacked and tilted in space, with the second
+  case's figure and a seal leaving the plane. It straightens on hover. Everything comes from data/cases.ts.
+  Decorative (aria-hidden): the cases section below exposes the same content to assistive tech.
+*/
+export function HeroStack({ ids, sello }: { ids: string[]; sello: string }) {
+  const [front, back] = ids.map((id) => cases.find((c) => c.id === id)).filter((c): c is CaseStudy => !!c);
+  if (!front) return null;
+  const t = themes[front.theme];
+  const pop = "absolute rounded-card shadow-[0_30px_40px_-20px_rgba(0,0,64,.5)]";
+  return (
+    <div aria-hidden="true" className="rise group col-span-5 min-w-0 self-center pb-12 pt-24 pl-4 [perspective:1500px] max-lg:hidden xl:pl-10 min-[1400px]:pl-20" style={{ ["--i" as string]: 3 }}>
+      <div className="relative transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] [transform-style:preserve-3d] [transform:rotateY(-19deg)_rotateX(7deg)_rotateZ(1.5deg)] [zoom:.78] group-hover:[transform:rotateY(-7deg)_rotateX(3deg)] motion-reduce:transition-none xl:[zoom:.88] min-[1400px]:[zoom:1]">
+        {/* the case behind: it rises enough above the front card for its sector line and logo to read */}
+        {back && (
+          <div className={`absolute inset-x-5 -top-[5.5rem] flex h-48 items-start justify-between gap-4 overflow-hidden rounded-card px-6 py-5 shadow-product [transform:translateZ(-60px)] ${themes[back.theme].card}`}>
+            <p className={`mono-label text-micro ${themes[back.theme].tag}`}>{back.tag}</p>
+            <Logo c={back} h={Math.round(back.logoH.card * 0.6)} white={themes[back.theme].logoWhite} />
+          </div>
+        )}
+        {/* the case in front */}
+        <div className={`relative isolate flex min-h-[24rem] flex-col justify-between gap-8 overflow-hidden rounded-card p-7 shadow-[0_60px_80px_-40px_rgba(0,0,64,.45),0_30px_40px_-30px_rgba(0,0,0,.25)] ${t.card}`}>
+          <Glow {...t.glow} />
+          <p className={`mono-label text-nano ${t.tag}`}>{front.tag}</p>
+          <div className="min-w-0">
+            <Logo c={front} h={front.logoH.card} white={t.logoWhite} />
+            <p className="mt-5 max-w-[14ch] break-words font-display text-h2 font-semibold">{front.title}</p>
+          </div>
+          <div className="border-t border-border-on-dark pt-5">
+            <p className="break-words font-display text-display-lg font-semibold tabular-nums">{front.highlight.value}</p>
+            <p className={`mono-label mt-2 max-w-[26ch] text-micro ${t.panelMuted}`}>{front.highlight.label}</p>
+          </div>
+        </div>
+        {/* pieces that leave the plane */}
+        {back && (
+          <div className={`${pop} right-[-10%] top-[50%] w-[44%] bg-excellence-blue px-5 py-4 text-white [transform:translateZ(90px)]`}>
+            <div className="float-chip">
+              <p className="font-display text-[1.75rem] font-semibold leading-none tabular-nums">{back.highlight.value}</p>
+              <p className="mono-label mt-2 text-nano text-text-on-dark-accent">{back.highlight.label}</p>
+            </div>
+          </div>
+        )}
+        <div className={`${pop} bottom-[-9%] right-[7%] border border-border-default bg-white p-2.5 [transform:translateZ(70px)]`}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG badge */}
+          <img src={asset(`/certifications/${sello}.svg`)} alt="" className="float-chip h-14 w-auto [animation-delay:-3s]" />
+        </div>
       </div>
     </div>
   );

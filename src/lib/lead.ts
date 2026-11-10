@@ -1,4 +1,4 @@
-// Lead contract shared by the form, the chat (Part B) and /api/lead. Shape: plan "Captura del lead y JSON para n8n".
+// Lead contract shared by the form and /api/lead ("chat" stays a valid `modo` for old rows in the sheet). Shape: plan "Captura del lead y JSON para n8n".
 export const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // ponytail: personal mailboxes matched by the provider label (gmail.com, yahoo.com.mx, hotmail.es...). Extend the list if a new one shows up in leads.

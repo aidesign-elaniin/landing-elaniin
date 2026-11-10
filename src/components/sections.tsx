@@ -1,10 +1,10 @@
 import Image from "next/image";
 import type { Variant } from "@/data/variants";
 import { LeadForm } from "./lead-form";
-import { CapTiles, Cases, QualityGate } from "./cases";
+import { CapTiles, Cases, HeroStack, QualityGate } from "./cases";
 import { Nav } from "./nav";
 import { Logo } from "./logo";
-import { Agent, AgentEntry, HeroPreview } from "./agent";
+import { ButtonLink } from "./ui";
 import { PrivacyLink } from "./privacy-link";
 import { asset } from "@/lib/site";
 
@@ -23,10 +23,12 @@ export function Landing({ v }: { v: Variant }) {
         <Contact v={v} />
       </main>
       <Footer />
-      <Agent variante={v.id} />
     </>
   );
 }
+
+/* seal that floats on the hero asset, one per landing */
+const HERO_SEAL = { software: "badge-clutch-top-software-developers", cloud: "gcp-services-select" } as const;
 
 /* seal name in the copy -> official badge file */
 const SEAL_BADGE: Record<string, string> = {
@@ -46,13 +48,18 @@ function Hero({ v }: { v: Variant }) {
           <p className="rise measure-lead mt-6 text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
             {h.subtitle}
           </p>
-          {/* main action: tell the agent what you need. The form is reached from the nav button. */}
-          <div className="rise mt-10" style={{ ["--i" as string]: 2 }}>
-            <AgentEntry variante={v.id} />
+          {/* main action: the contact form further down; the cases are the second path */}
+          <div className="rise mt-10 flex flex-wrap items-center gap-3" style={{ ["--i" as string]: 2 }}>
+            <ButtonLink href="#contacto" size="lg" className="max-[479px]:w-full">
+              {h.button}
+            </ButtonLink>
+            <a href="#casos" className="inline-flex h-12 items-center justify-center rounded-button border border-border-strong px-6 font-display text-button-lg font-medium text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring max-[479px]:w-full">
+              Ver casos
+            </a>
           </div>
         </div>
-        {/* what the field gives back: a still of the agent's canvas, built from the same pieces it shows */}
-        <HeroPreview variante={v.id} />
+        {/* proof next to the promise: the first two cases of this landing, stacked in space */}
+        <HeroStack ids={v.cases.ids} sello={HERO_SEAL[v.id]} />
         {/* seals and proof sit on their own row, so the asset centers on the headline block and not on them */}
         <div className="col-span-12 min-w-0 lg:col-span-7">
           {h.seals && (
@@ -126,7 +133,7 @@ function Clients() {
   );
 }
 
-/* Problem title as the bridge sentence, then the four capability names (descriptions live in the chat). */
+/* Problem title as the bridge sentence, then the four capability names (each with its description and chips). */
 function Capabilities({ v }: { v: Variant }) {
   return (
     <section id="capacidades" className="section-y">

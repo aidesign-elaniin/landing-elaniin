@@ -14,10 +14,6 @@ type Attribution = { utm: Record<string, string>; referrer: string };
 
 const ATTRIBUTION_KEY = "elaniin-attribution";
 
-/* Opens the agent (<Agent />, mounted once per page) with the sentence typed in the hero field. */
-export const OPEN_CHAT_EVENT = "open-chat";
-export type OpenChatDetail = { texto: string };
-
 // UTMs of the current URL + the external site that sent the visitor. Reading them stores nothing.
 function fromPage(): Attribution {
   const params = new URLSearchParams(location.search);
@@ -99,7 +95,7 @@ export function LeadForm({ variante }: { variante: VariantId }) {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Same JSON as the chat (lib/lead.ts); the form sends it with an empty profile.
+        // JSON contract in lib/lead.ts; the form sends it with an empty profile.
         body: JSON.stringify({
           modo: "formulario",
           variante,
