@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
   Building2,
@@ -159,58 +157,36 @@ export function Glow({ primary, bg, angle, reverse, slow }: GlowProps) {
   Stacked cases: every card is full width and sticky, each one pinned a little lower than the
   previous, so the next case slides over the one before and the edge of each stays visible.
 */
-function CaseCard({ c, onOpen }: { c: CaseStudy; onOpen: () => void }) {
+/*
+  One case: sector line on top, then logo and title, then the button. `big` is the lead card of the grid.
+  Requested: the glints in the background keep moving and the card fades in on scroll; nothing else moves
+  (no scroll-driven effect, no arrow slide; hover only changes color).
+*/
+function CaseCard({ c, onOpen, big, index, className = "" }: { c: CaseStudy; onOpen: () => void; big: boolean; index: number; className?: string }) {
   const t = themes[c.theme];
   return (
-    /* One slide of the gallery: narrower than the track, so the next case always peeks in from the right. */
-    <div className="w-[88%] shrink-0 snap-start">
-      <article
-        className={`card-glow relative isolate grid h-full min-w-0 cursor-pointer gap-8 rounded-card pad-card shadow-product md:min-h-[26rem] md:grid-cols-[1.3fr_1fr] md:gap-12 ${t.card}`}
-      >
-        <Glow {...t.glow} />
-
-        <div className="flex min-w-0 flex-col justify-between gap-10">
-          <p className={`mono-label text-nano ${t.tag}`}>{c.tag}</p>
-          <div className="min-w-0">
-            <div className="flex h-14 items-center">
-              <Logo c={c} h={c.logoH.card} white={t.logoWhite} />
-            </div>
-            <h3
-              className={`mt-4 break-words font-display text-h1 font-semibold md:max-w-[16ch] ${t.title}`}
-            >
-              {c.title}
-            </h3>
-            <p className={`mt-3 max-w-[44ch] text-body ${t.panelMuted}`}>
-              {c.summary}
-            </p>
-          </div>
-          <div>
-            <button
-              type="button"
-              onClick={onOpen}
-              aria-haspopup="dialog"
-              aria-label={`${c.button}: ${c.client}, ${c.title}`}
-              className={`btn-arrow inline-flex h-11 items-center gap-2 rounded-button px-4 font-display text-button font-semibold transition-colors duration-base after:absolute after:inset-0 after:content-[''] focus-ring ${t.button}`}
-            >
-              {c.button}
-              <Maximize2 size={15} strokeWidth={1.75} aria-hidden="true" />
-            </button>
-          </div>
+    <article style={{ ["--i" as string]: index }} className={`reveal relative isolate flex min-w-0 cursor-pointer flex-col justify-between gap-10 overflow-hidden rounded-card pad-card shadow-product ${big ? "min-h-[22rem] lg:min-h-[32rem]" : "min-h-[15rem]"} ${t.card} ${className}`}>
+      <Glow {...t.glow} />
+      <p className={`mono-label text-nano ${t.tag}`}>{c.tag}</p>
+      <div className="min-w-0">
+        <div className="flex h-14 items-center">
+          <Logo c={c} h={big ? c.logoH.card : Math.round(c.logoH.card * 0.85)} white={t.logoWhite} />
         </div>
-
-        {/* the figure leads, its label stays small */}
-        <div className="flex min-w-0 flex-col justify-end border-t border-border-on-dark pt-6 md:border-l md:border-t-0 md:pl-12 md:pt-0">
-          <p className="break-words font-display text-display-lg font-semibold tabular-nums">
-            {c.highlight.value}
-          </p>
-          <p
-            className={`mono-label mt-3 max-w-[26ch] text-micro ${t.panelMuted}`}
-          >
-            {c.highlight.label}
-          </p>
-        </div>
-      </article>
-    </div>
+        <h3 className={`mt-4 break-words font-display font-semibold ${big ? "text-h1 md:max-w-[16ch]" : "text-h3"} ${t.title}`}>{c.title}</h3>
+      </div>
+      <div>
+        <button
+          type="button"
+          onClick={onOpen}
+          aria-haspopup="dialog"
+          aria-label={`${c.button}: ${c.client}, ${c.title}`}
+          className={`inline-flex h-11 items-center gap-2 rounded-button px-4 font-display text-button font-semibold transition-colors duration-base after:absolute after:inset-0 after:content-[''] focus-ring ${t.button}`}
+        >
+          {c.button}
+          <Maximize2 size={15} strokeWidth={1.75} aria-hidden="true" />
+        </button>
+      </div>
+    </article>
   );
 }
 
@@ -238,9 +214,6 @@ export function Cases({ ids }: { ids: string[] }) {
     .filter((c): c is CaseStudy => !!c);
   const [openId, setOpenId] = useState<string | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
-  const view = useRef<HTMLDivElement>(null);
-  const track = useRef<HTMLDivElement>(null);
-  const bar = useRef<HTMLElement>(null);
   const current = cases.find((c) => c.id === openId) ?? null;
 
   useEffect(() => {
@@ -249,56 +222,6 @@ export function Cases({ ids }: { ids: string[] }) {
     if (!el.open) el.showModal();
     document.documentElement.classList.add("overflow-hidden");
   }, [openId]);
-
-  /*
-    Gallery driven by the page scroll (GSAP ScrollTrigger): the section pins under the bar and scrolling moves the
-    cases sideways, one stop per case, with the others smaller and dimmed. It replaces the vertical sticky stack,
-    whose pinned card looked frozen until the next one covered it.
-    Only on wide, tall screens with motion allowed; elsewhere the row stays a native swipe.
-  */
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)", () => {
-      const v = view.current, el = track.current, pinned = v?.parentElement;
-      if (!v || !el || !pinned) return;
-      const slides = gsap.utils.toArray<HTMLElement>(el.children);
-      if (slides.length < 2) return;
-      // from layout offsets, not scrollWidth: the scale on the dimmed slides would shorten it
-      const last = slides[slides.length - 1];
-      const distance = () => last.offsetLeft + last.offsetWidth - v.clientWidth;
-      const focus = (p: number) => {
-        const pos = p * (slides.length - 1);
-        slides.forEach((slide, i) => {
-          const d = Math.min(1, Math.abs(i - pos));
-          gsap.set(slide, { scale: 1 - 0.07 * d, opacity: 1 - 0.5 * d });
-        });
-        gsap.set(bar.current, { scaleX: p });
-      };
-      v.scrollLeft = 0;
-      gsap.set(v, { overflow: "visible" });
-      gsap.set(bar.current?.parentElement ?? null, { visibility: "visible" });
-      focus(0);
-      gsap.to(el, {
-        x: () => -distance(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: pinned,
-          start: "top top+=96", // just under the 64px bar
-          end: () => "+=" + distance(),
-          pin: true,
-          scrub: 0.5,
-          snap: { snapTo: 1 / (slides.length - 1), duration: { min: 0.2, max: 0.5 }, ease: "power2.inOut" },
-          invalidateOnRefresh: true,
-          onUpdate: (self) => focus(self.progress),
-        },
-      });
-      return () => {
-        gsap.set([v, el, ...slides, bar.current, bar.current?.parentElement ?? null], { clearProps: "all" });
-      };
-    });
-    return () => mm.revert();
-  }, []);
 
   const close = () => {
     dialog.current?.close();
@@ -309,16 +232,11 @@ export function Cases({ ids }: { ids: string[] }) {
 
   return (
     <>
-      {/* Without script (or on phones, short screens, reduced motion) this is a swipeable row that snaps per case. */}
-      <div ref={view} className="-mb-10 mt-10 snap-x snap-mandatory overflow-x-auto pb-10 [scrollbar-width:none]">
-        <div ref={track} className="relative flex gap-6">
-          {shown.map((c) => (
-            <CaseCard key={c.id} c={c} onOpen={() => setOpenId(c.id)} />
-          ))}
-        </div>
-      </div>
-      <div aria-hidden="true" className="invisible mt-8 h-0.5 overflow-hidden rounded-full bg-border-default">
-        <i ref={bar} className="block h-full origin-left scale-x-0 bg-inspire-blue" />
+      {/* Lead case on the left over two rows, the others stacked on the right; two cases share the row evenly. */}
+      <div className={`mt-10 grid gap-6 ${shown.length > 2 ? "lg:grid-cols-[1.4fr_1fr]" : "md:grid-cols-2"}`}>
+        {shown.map((c, i) => (
+          <CaseCard key={c.id} c={c} index={i} big={i === 0 || shown.length < 3} className={i === 0 && shown.length > 2 ? "lg:row-span-2" : ""} onOpen={() => setOpenId(c.id)} />
+        ))}
       </div>
 
       <dialog

@@ -149,7 +149,7 @@ function Capabilities({ v }: { v: Variant }) {
 
 function CasesSection({ v }: { v: Variant }) {
   return (
-    <section id="casos" className="section-y overflow-x-clip bg-surface-subtle">
+    <section id="casos" className="section-y bg-surface-subtle">
       <div className="container-site">
         <h2 className="reveal max-w-[24ch] break-words font-display text-h2 font-semibold text-text-primary">{v.cases.title}</h2>
         <Cases ids={v.cases.ids} />
