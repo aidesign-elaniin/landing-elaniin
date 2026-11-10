@@ -30,12 +30,6 @@ export function Landing({ v }: { v: Variant }) {
 /* seal that floats on the hero asset, one per landing */
 const HERO_SEAL = { software: "badge-clutch-top-software-developers", cloud: "gcp-services-select" } as const;
 
-/* seal name in the copy -> official badge file */
-const SEAL_BADGE: Record<string, string> = {
-  "Google Cloud Partner": "gcp-cosell-select",
-  "AWS Partner": "badge-clutch-aws",
-};
-
 function Hero({ v }: { v: Variant }) {
   const h = v.hero;
   return (
@@ -57,28 +51,13 @@ function Hero({ v }: { v: Variant }) {
               Ver casos
             </a>
           </div>
-        </div>
-        {/* proof next to the promise: the first two cases of this landing, stacked in space */}
-        <HeroStack ids={v.cases.ids} sello={HERO_SEAL[v.id]} />
-        {/* seals and proof sit on their own row, so the asset centers on the headline block and not on them */}
-        <div className="col-span-12 min-w-0 lg:col-span-7">
-          {h.seals && (
-            <div className="rise mt-6" style={{ ["--i" as string]: 3 }}>
-              <ul className="flex flex-wrap items-center gap-4" aria-label="Alianzas">
-                {h.seals.map((s) => (
-                  <li key={s} className="flex h-16 items-center">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG badge, nothing for next/image to optimize */}
-                    <img src={asset(`/certifications/${SEAL_BADGE[s]}.svg`)} alt={s} className="h-full w-auto" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <p className="rise mt-12 flex max-w-[52ch] items-start gap-3 border-t border-border-default pt-5 font-display text-body font-medium text-text-primary" style={{ ["--i" as string]: 3 }}>
+          <p className="rise mt-10 flex max-w-[52ch] items-start gap-3 border-t border-border-default pt-5 font-display text-body font-medium text-text-primary" style={{ ["--i" as string]: 3 }}>
             <span className="mt-2 size-2 shrink-0 rounded-module bg-inspire-blue" aria-hidden="true" />
             {h.proof}
         </p>
         </div>
+        {/* proof next to the promise: the first two cases of this landing, stacked in space */}
+        <HeroStack ids={v.cases.ids} sello={HERO_SEAL[v.id]} />
       </div>
     </section>
   );
@@ -158,12 +137,12 @@ function CasesSection({ v }: { v: Variant }) {
   );
 }
 
-/* The four thresholds the final texts name ("Entre ellas: ..."). The other three dimensions are not in the doc, so they are not listed. */
+/* Thresholds and wording from the team (Georgina, Nov 10 2026). Do not reword without the team. */
 const THRESHOLDS = [
-  { value: "0", label: "vulnerabilidades críticas o altas", fill: 0 },
-  { value: "0", label: "secretos expuestos", fill: 0 },
-  { value: "80\u00a0%", label: "de cobertura mínima en pruebas automatizadas", fill: 8 },
-  { value: "0", label: "dependencias circulares en la arquitectura", fill: 0 },
+  { value: "0", label: "vulnerabilidades críticas conocidas" },
+  { value: "0", label: "credenciales expuestas" },
+  { value: "80\u00a0%", label: "mínimo de cobertura en pruebas automáticas" },
+  { value: "100\u00a0%", label: "de entregas revisadas por un ingeniero" },
 ];
 
 function Quality() {
@@ -171,15 +150,15 @@ function Quality() {
     <section id="calidad" className="section-y">
       <div className="container-site">
         <div className="grid-page items-end">
-          <h2 className="reveal col-span-12 min-w-0 max-w-[18ch] break-words font-display text-h1 font-semibold text-text-primary lg:col-span-6">
-            Primer nivel no es una promesa. <span className="text-inspire-blue">Es un estándar.</span>
+          <h2 className="reveal col-span-12 min-w-0 max-w-[20ch] break-words font-display text-h1 font-semibold text-text-primary lg:col-span-7">
+            Software crítico exige <span className="text-inspire-blue">un estándar que no se negocia.</span>
           </h2>
-          <p className="reveal col-span-12 min-w-0 text-lead text-text-secondary lg:col-span-5 lg:col-start-8" style={{ ["--i" as string]: 1 }}>
-            <strong className="font-display font-semibold text-text-primary">Software Nivel A:</strong> ninguna solución llega a producción sin superar siete dimensiones de evaluación con umbrales objetivos.
+          <p className="reveal col-span-12 min-w-0 text-lead text-text-secondary lg:col-span-4 lg:col-start-9" style={{ ["--i" as string]: 1 }}>
+            Lo aplicamos en cada solución, sin importar su tamaño.
           </p>
         </div>
 
-        <QualityGate thresholds={THRESHOLDS} />
+        <QualityGate title="Nada llega a producción sin cumplirlo." thresholds={THRESHOLDS} />
       </div>
     </section>
   );

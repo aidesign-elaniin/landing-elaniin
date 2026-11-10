@@ -437,56 +437,24 @@ export function CapTiles({ grupo }: { grupo: "software" | "cloud" }) {
 }
 
 /*
-  The quality standard as one compact instrument panel on Elevate Blue (same stage as the public-sector case).
-  Left: a seven-segment arc, all lit, with "7/7" inside: every dimension passed before production.
-  Right: the four thresholds the final texts name, as tight rows (figure, label, ten-step gauge), not as cards.
-  References: segmented arc gauge with the figure inside and small stat chips (pin 1115063189023198346);
-  small figures with a compact range indicator (pin 1115063189023236389).
+  The quality standard as one compact panel on Elevate Blue (same stage as the public-sector case).
+  Left: the rule. Right: the four thresholds, figure and label only. No gauges or bars: an empty bar next to a
+  "0" read as "not met" (team feedback, Nov 10 2026).
 */
-const ARC = Array.from({ length: 7 }, (_, k) => {
-  // seven strokes along a half circle (180° to 0°), 4° of gap between them
-  const step = 180 / 7, gap = 4, r = 84, cx = 110, cy = 104;
-  const pt = (deg: number) => `${(cx + r * Math.cos((deg * Math.PI) / 180)).toFixed(2)} ${(cy - r * Math.sin((deg * Math.PI) / 180)).toFixed(2)}`;
-  return `M ${pt(180 - k * step - gap / 2)} A ${r} ${r} 0 0 1 ${pt(180 - (k + 1) * step + gap / 2)}`;
-});
-
-export function QualityGate({ thresholds }: { thresholds: { value: string; label: string; fill: number }[] }) {
+export function QualityGate({ title, thresholds }: { title: string; thresholds: { value: string; label: string }[] }) {
   const t = themes.vivid;
   return (
     <div className={`reveal relative isolate mt-12 grid items-center gap-y-8 overflow-hidden rounded-card p-6 shadow-product md:mt-16 md:p-10 lg:grid-cols-12 lg:gap-x-12 ${t.card}`}>
       <Glow {...t.glow} />
-      <div className="flex min-w-0 items-center gap-6 max-sm:flex-col max-sm:items-start lg:col-span-5">
-        <div className="relative w-[13.75rem] shrink-0">
-          <svg viewBox="0 0 220 112" className="block w-full" aria-hidden="true">
-            {ARC.map((d, k) => (
-              <path key={k} d={d} fill="none" stroke="#fff" strokeWidth="22" className="reveal" style={{ ["--i" as string]: k + 1 }} />
-            ))}
-          </svg>
-          <p className="absolute inset-x-0 bottom-0 text-center font-display text-[2.5rem] font-semibold leading-none tabular-nums" aria-label="Siete de siete">
-            7<span className={t.panelMuted}>/7</span>
-          </p>
-        </div>
-        <div className="min-w-0">
-          <p className={`mono-label text-micro ${t.panelMuted}`}>Software Nivel A</p>
-          <p className="mt-2 max-w-[22ch] font-display text-h4 font-medium text-white">dimensiones de evaluación superadas antes de llegar a producción.</p>
-        </div>
-      </div>
-      <div className="min-w-0 lg:col-span-7">
-        <p className={`mono-label text-micro ${t.panelMuted}`}>Entre ellas</p>
-        <ul className="mt-3">
-          {thresholds.map((th, n) => (
-            <li key={th.label} className="reveal flex min-w-0 items-center gap-4 border-t border-white/25 py-3" style={{ ["--i" as string]: n + 1 }}>
-              <p className="w-[5.5rem] shrink-0 font-mono text-h3 font-semibold leading-none tabular-nums text-white">{th.value}</p>
-              <p className="min-w-0 flex-1 text-body-sm text-white">{th.label}</p>
-              <div className="grid w-24 shrink-0 grid-cols-10 gap-0.5 max-sm:hidden" aria-hidden="true">
-                {Array.from({ length: 10 }, (_, k) => (
-                  <i key={k} className={`h-3 rounded-[2px] ${k < th.fill ? "bg-white" : "bg-white/25"}`} />
-                ))}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <p className="min-w-0 max-w-[16ch] font-display text-h2 font-semibold text-white lg:col-span-5">{title}</p>
+      <ul className="grid min-w-0 gap-x-10 sm:grid-cols-2 lg:col-span-7">
+        {thresholds.map((th, n) => (
+          <li key={th.label} className="reveal min-w-0 border-t border-white/25 py-5" style={{ ["--i" as string]: n + 1 }}>
+            <p className="font-display text-display-lg font-semibold leading-none tabular-nums text-white">{th.value}</p>
+            <p className="mt-2 text-body-sm text-white">{th.label}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

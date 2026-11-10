@@ -4,7 +4,7 @@ export type VariantId = "software" | "cloud";
 export type Variant = {
   id: VariantId;
   path: string;
-  hero: { h1: string; accent: string; subtitle: string; proof: string; seals?: string[]; button: string };
+  hero: { h1: string; accent: string; subtitle: string; proof: string; button: string };
   problem: string;
   capabilities: { title: string; names: string[] };
   cases: { title: string; ids: string[] };
@@ -36,7 +36,6 @@ export const variants: Record<VariantId, Variant> = {
       accent: "Tu nube tampoco.",
       subtitle: "Migración, modernización y operación cloud para empresas e instituciones, con arquitectura segura, gobernanza centralizada y sin interrumpir los servicios críticos.",
       proof: "Cientos de APIs críticas migradas a Apigee sin interrumpir servicios regulados.",
-      seals: ["Google Cloud Partner", "AWS Partner"],
       button: "Evalúa tu proyecto cloud",
     },
     problem: "Migrar no debería significar arriesgar lo que ya funciona.",
