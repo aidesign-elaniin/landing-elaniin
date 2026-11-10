@@ -43,3 +43,6 @@ next-env.d.ts
 # local tooling
 /.claude/
 /seo-geo-report
+
+# referencias Pinterest (32 MB, se regeneran con pull)
+/pinterest-pull

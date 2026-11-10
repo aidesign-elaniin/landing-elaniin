@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  Elaniin tokens — single source of truth (DESIGN.md v1.51.2 · Tailwind v4).
+  Elaniin tokens — single source of truth (elaniin-brand skill palette and type · Tailwind v4).
 
   CONTRACT — Tailwind-first API:
     1. Every design value lives in @theme (or in :root when it is a layout/duration
@@ -46,98 +46,95 @@
 
   /* ---------- color: brand ---------- */
   --color-elevate-blue: #1054ff;     /* DETAIL accent only (buttons, links, focus, active, symbol) */
-  --color-inspire-grey: #f0f0f3;
-  --color-excellence-blue: #01172e;  /* the strong color: dark bands, case stages, CTA, footer, code */
-  --color-elaniin-black: #141414;
+  --color-inspire-grey: #f0f0f0;
+  --color-excellence-blue: #000040;  /* the strong color: dark bands, case stages, CTA, footer, code */
+  --color-elaniin-black: #0c0c0c;
+  --color-inspire-blue: #023bfd;
+  --color-tech-blue: #edf1ff;
   --color-dynamic-blue: #4d75fd;     /* non-text accents only */
   --color-white: #ffffff;
   --color-transparent: transparent;
   --color-current: currentColor;
 
-  /* Google Cloud brand colors, used only inside the Google Cloud service card */
-  --color-gcp-blue: #4285f4;
-  --color-gcp-red: #ea4335;
-  --color-gcp-yellow: #fbbc04;
-  --color-gcp-green: #34a853;
-  --color-gcp-tint: #dcefff;
 
   /* ---------- color: blue ramp ---------- */
-  --color-blue-100: #d7e2f8;
-  --color-blue-200: #b9cefb;
-  --color-blue-300: #6a9aff;
+  --color-blue-50: #f2f5ff;
+  --color-blue-100: #edf1ff;
+  --color-blue-200: #bfd9ff;
+  --color-blue-300: #99b0fe;
   --color-blue-400: #4d75fd;
-  --color-blue-500: #1054ff;
-  --color-blue-600: #0848cc;
-  --color-blue-700: #023ca0;
-  --color-blue-800: #022b63;
-  --color-blue-900: #01172e;
-  --color-blue-tint-50: #e7eeff;
-  --color-blue-active-dark: #010f20;
+  --color-blue-500: #0066ff;
+  --color-blue-600: #1054ff;
+  --color-blue-700: #023bfd;
+  --color-blue-800: #000083;
+  --color-blue-900: #000040;
+  --color-blue-tint-50: #f2f5ff;
+  --color-blue-active-dark: #000083;
 
   /* ---------- color: text ---------- */
-  --color-text-primary: #141414;
-  --color-text-secondary: #4a4d57;
-  --color-text-muted: #656873;
+  --color-text-primary: #0c0c0c;
+  --color-text-secondary: #4e4c4c;
+  --color-text-muted: #636363;
   --color-text-link: #1054ff;
-  --color-text-link-hover: #0848cc;
+  --color-text-link-hover: #023bfd;
   --color-text-on-dark: #ffffff;
-  --color-text-on-dark-secondary: #a9b8cc;
-  --color-text-on-dark-muted: #8ea0b8;
-  --color-text-on-dark-accent: #7b9bff;
-  --color-text-disabled: #8c8f9b;
+  --color-text-on-dark-secondary: #bfd9ff;
+  --color-text-on-dark-muted: #99b0fe;
+  --color-text-on-dark-accent: #99b0fe;
+  --color-text-disabled: #929292;
 
   /* ---------- color: surface ---------- */
   --color-surface-page: #ffffff;
-  --color-surface-subtle: #f0f0f3;
+  --color-surface-subtle: #f2f5ff;
   --color-surface-card: #ffffff;
-  --color-surface-dark: #01172e;
-  --color-surface-dark-alt: #141414;
-  --color-surface-code: #01172e;
+  --color-surface-dark: #000040;
+  --color-surface-dark-alt: #0c0c0c;
+  --color-surface-code: #000040;
 
   /* ---------- color: border ---------- */
-  --color-border-default: #e4e4ea;
-  --color-border-strong: #d3d4dc;
-  --color-border-input: #8c8f9b;
-  --color-border-ink: #141414;
+  --color-border-default: #d8d8d8;
+  --color-border-strong: #d8d8d8;
+  --color-border-input: #929292;
+  --color-border-ink: #0c0c0c;
   --color-border-on-dark: rgba(255, 255, 255, 0.12);
   --color-border-on-dark-strong: rgba(255, 255, 255, 0.24);
   --color-surface-dark-card: rgba(255, 255, 255, 0.04);
 
   /* ---------- color: status (state only, never decoration) ---------- */
-  --color-success-text: #136c42; --color-success-bg: #e3f4ea; --color-success-border: #b6e0c8; --color-success-dot: #1f9d61;
-  --color-warning-text: #8a5300; --color-warning-bg: #fff3d9; --color-warning-border: #f2d58f; --color-warning-dot: #b87700;
-  --color-error-text: #a3201f;   --color-error-bg: #fde7e7;   --color-error-border: #f1b5b5;   --color-error-dot: #d6322f;
-  --color-info-text: #0848cc;    --color-info-bg: #e7eeff;    --color-info-border: #b9cefb;    --color-info-dot: #1054ff;
-  --color-neutral-text: #4a4d57; --color-neutral-bg: #f0f0f3; --color-neutral-border: #e4e4ea; --color-neutral-dot: #8c8f9b;
+  --color-success-text: #1e7a4a; --color-success-bg: #d6f0e2; --color-success-border: #a8dcc0; --color-success-dot: #34a853;
+  --color-warning-text: #9a6100; --color-warning-bg: #fdf0d5; --color-warning-border: #f5d48a; --color-warning-dot: #fbbc04;
+  --color-error-text: #9b2020;   --color-error-bg: #fadadd;   --color-error-border: #f0aaaa;   --color-error-dot: #f57469;
+  --color-info-text: #023bfd;    --color-info-bg: #e6ebff;    --color-info-border: #bfcefe;    --color-info-dot: #1054ff;
+  --color-neutral-text: #636363; --color-neutral-bg: #f0f0f0; --color-neutral-border: #d8d8d8; --color-neutral-dot: #929292;
 
   /* ---------- typography: families ---------- */
-  --font-display: var(--font-instrument), "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
-  --font-text: var(--font-dm), "DM Sans", "Helvetica Neue", Arial, sans-serif;
-  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--font-dm), "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-text: var(--font-inter), "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-azeret), "Azeret Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---------- typography: scale (fluid between mobile and desktop values) ---------- */
   --text-display-xl: clamp(40px, 6.25vw - 8px, 72px);
   --text-display-xl--line-height: 1;
   --text-display-xl--letter-spacing: -0.035em;
-  --text-display-lg: clamp(36px, 3.906vw + 6px, 56px);
+  --text-display-lg: clamp(28px, 4.2vw + 12px, 56px);
   --text-display-lg--line-height: 1.04;
   --text-display-lg--letter-spacing: -0.03em;
-  --text-h1: clamp(32px, 3.125vw + 8px, 48px);
+  --text-h1: clamp(28px, 1.8vw + 21px, 40px);
   --text-h1--line-height: 1.08;
   --text-h1--letter-spacing: -0.03em;
-  --text-h2: clamp(28px, 1.562vw + 16px, 36px);
+  --text-h2: clamp(24px, 1.6vw + 18px, 35px);
   --text-h2--line-height: 1.12;
   --text-h2--letter-spacing: -0.025em;
-  --text-h3: clamp(22px, 1.172vw + 13px, 28px);
+  --text-h3: clamp(20px, 1.17vw + 15.6px, 28px);
   --text-h3--line-height: 1.2;
   --text-h3--letter-spacing: -0.02em;
-  --text-h4: clamp(20px, 0.3906vw + 17px, 22px);
+  --text-h4: clamp(18px, 0.6vw + 15.7px, 24px);
   --text-h4--line-height: 1.25;
   --text-h4--letter-spacing: -0.015em;
   --text-lead: clamp(18px, 0.3906vw + 15px, 20px);
   --text-lead--line-height: 1.5;
   --text-lead--letter-spacing: -0.005em;
-  --text-body-lg: clamp(17px, 0.1953vw + 15.5px, 18px);
+  --text-body-lg: 16px;
   --text-body-lg--line-height: 1.55;
   /* card copy: fluid 14px (phone) to 16px (wide desktop), tracks the viewport */
   --text-card: clamp(14px, 0.25vw + 11.5px, 16px);
@@ -150,7 +147,7 @@
   --text-nano--line-height: 1.4;
   --text-micro: 12px;
   --text-micro--line-height: 1.4;
-  --text-caption: 13px;
+  --text-caption: 12px;
   --text-caption--line-height: 1.4;
   --text-code: 13px;
   --text-code--line-height: 1.63;
@@ -160,9 +157,9 @@
   --text-button-lg--line-height: 1;
 
   /* ---------- radius ---------- */
-  --radius-button: 6px;
-  --radius-input: 6px;
-  --radius-tag: 6px;
+  --radius-button: 8px;
+  --radius-input: 8px;
+  --radius-tag: 4px;
   --radius-card: 12px;
   --radius-media: 12px;
   --radius-code: 12px;
@@ -175,11 +172,11 @@
 
   /* ---------- shadow ---------- */
   --shadow-none: none;
-  --shadow-card-rest: 0 0 1px rgba(1, 30, 61, 0.03), 0 1px 2px rgba(1, 30, 61, 0.06);
-  --shadow-menu: 0 8px 24px -8px rgba(1, 30, 61, 0.18), 0 0 0 1px rgba(1, 30, 61, 0.06);
-  --shadow-product: 0 30px 45px -30px rgba(1, 30, 61, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.1);
+  --shadow-card-rest: 0 0 1px rgba(0, 0, 64, 0.03), 0 1px 2px rgba(0, 0, 64, 0.06);
+  --shadow-menu: 0 8px 24px -8px rgba(0, 0, 64, 0.18), 0 0 0 1px rgba(0, 0, 64, 0.06);
+  --shadow-product: 0 30px 45px -30px rgba(0, 0, 64, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.1);
   --shadow-focus: 0 0 0 2px #ffffff, 0 0 0 4px #1054ff;
-  --shadow-focus-on-dark: 0 0 0 2px #01172e, 0 0 0 4px #7b9bff;
+  --shadow-focus-on-dark: 0 0 0 2px #000040, 0 0 0 4px #99b0fe;
 
   /* ---------- motion: easings ---------- */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
@@ -228,8 +225,8 @@
   color-scheme: light;
 
   /* layout */
-  --container-max: 1280px;
-  --gutter: 48px;
+  --container-max: 1320px;
+  --gutter: 60px;
   --grid-gap: 24px;
   --nav-height: 64px;
   --section-y: 96px;
@@ -239,8 +236,6 @@
   --card-min: 16rem;
   --drawer-width: 18rem;
   --sidebar-width: 15rem;
-  --module-size: 2px;
-  --module-pitch: 16px;
 
   /* motion durations — consumed by the duration-* utilities (see contract §4) */
   --dur-instant: 100ms;
@@ -254,15 +249,22 @@
 }
 
 @media (max-width: 1023px) {
-  :root { --gutter: 32px; --section-y: 72px; --section-y-statement: 96px; --section-y-compact: 48px; }
+  :root { --gutter: 40px; --section-y: 72px; --section-y-statement: 96px; --section-y-compact: 48px; }
 }
 @media (max-width: 767px) {
-  :root { --gutter: 20px; --grid-gap: 16px; --section-y: 56px; --section-y-statement: 72px; --section-y-compact: 40px; --card-padding: 24px; }
+  :root { --gutter: 32px; }
+}
+@media (max-width: 479px) {
+  :root { --gutter: 20px; }
+}
+@media (max-width: 767px) {
+  :root { --grid-gap: 16px; --section-y: 56px; --section-y-statement: 72px; --section-y-compact: 40px; --card-padding: 24px; }
 }
 
 /* ---------- utilities: layout & type ---------- */
 @utility mono-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -337,6 +339,81 @@
     }
   }
 }
+/* Process line: an <ol class="process-line reveal"> whose <li> each start with an <i> node.
+   One rail runs through the nodes (vertical on small screens, horizontal from 64rem). When the list
+   scrolls into view (.is-visible, set by the reveal observer) the blue line draws and the nodes light up in order. */
+@utility process-line {
+  position: relative;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--color-border-strong);
+  }
+  &::after {
+    left: 4.5px;
+    width: 2px;
+    background: var(--color-inspire-blue);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 1.6s var(--ease-emphasized) 0.2s;
+  }
+  &.is-visible::after {
+    transform: none;
+  }
+  & > li > i {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 11px;
+    height: 11px;
+    border-radius: var(--radius-module);
+    border: 2px solid var(--color-border-strong);
+    background: var(--color-surface-page);
+    transition: background-color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), scale var(--dur-base) var(--ease-standard);
+    transition-delay: calc(0.2s + var(--i, 0) * 0.4s);
+  }
+  &.is-visible > li > i {
+    border-color: var(--color-inspire-blue);
+    background: var(--color-inspire-blue);
+    scale: 1.15;
+  }
+  @media (min-width: 64rem) {
+    &::before,
+    &::after {
+      left: 0;
+      right: 0;
+      top: 5px;
+      bottom: auto;
+      width: auto;
+      height: 1px;
+    }
+    &::after {
+      top: 4.5px;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &::after,
+    & > li > i {
+      transition: none;
+    }
+    &::after {
+      transform: none;
+    }
+    & > li > i {
+      border-color: var(--color-inspire-blue);
+      background: var(--color-inspire-blue);
+    }
+  }
+}
+
 /* SVG line draw: pair with style="--len: <path length>". */
 @utility draw-line {
   stroke-dasharray: var(--len, 1200);
@@ -427,7 +504,9 @@
   &:active {
     transform: scale(0.98);
   }
+  /* the arrow slides on hover */
   & svg {
+    flex-shrink: 0;
     transition: transform var(--dur-base) var(--ease-standard);
   }
   &:hover svg,
@@ -437,6 +516,10 @@
   @media (prefers-reduced-motion: reduce) {
     & svg {
       transition: none;
+    }
+    &:hover svg,
+    &:focus-visible svg {
+      transform: none;
     }
   }
 }
@@ -621,7 +704,7 @@
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgba(1, 23, 46, 0.48);
+  background: rgba(0, 0, 64, 0.48);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--dur-base) var(--ease-standard);
@@ -638,37 +721,6 @@
 }
 
 /* ---------- utilities: module field (signature texture of hero / CTA) ---------- */
-/* Resting grid = pure CSS: 2px squares on a 16px pitch, grey at 45%, masked toward the bottom.
-   Pointer trail = templates/module-field.js (canvas, off for touch + reduced-motion).
-   Markup: <div class="module-field" data-module-field aria-hidden="true"></div> as the first
-   child of a `relative isolate overflow-hidden` host. Variants: module-field-dark,
-   module-field-mask-left, module-field-mask-none. */
-@utility module-field {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  --module-lit-1: var(--color-blue-500);
-  --module-lit-2: var(--color-blue-400);
-  --module-lit-3: var(--color-blue-300);
-  -webkit-mask-image: var(--module-mask, linear-gradient(to bottom, #000 35%, transparent 100%));
-  mask-image: var(--module-mask, linear-gradient(to bottom, #000 35%, transparent 100%));
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0.45;
-    background-image: conic-gradient(from 270deg at var(--module-size) var(--module-size), var(--module-color, var(--color-border-strong)) 0 90deg, transparent 0);
-    background-size: var(--module-pitch) var(--module-pitch);
-    background-position: calc((var(--module-pitch) - var(--module-size)) / 2) calc((var(--module-pitch) - var(--module-size)) / 2);
-  }
-  & > canvas {
-    position: absolute;
-    inset: 0;
-  }
-}
-@utility module-field-dark { --module-color: var(--color-border-on-dark-strong); }
-@utility module-field-mask-left { --module-mask: linear-gradient(to right, transparent 8%, #000 60%); }
-@utility module-field-mask-none { --module-mask: none; }
 
 /* ---------- base ---------- */
 @layer base {

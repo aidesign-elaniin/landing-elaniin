@@ -1,6 +1,5 @@
 export type CaseStudy = {
   id: string;
-  featured?: boolean;
   theme: "vivid" | "black" | "excellence";
   title: string; // short title: the client is already shown by its logo, so the name is not repeated
   logo: string; // file in /public
@@ -26,14 +25,13 @@ export type CaseStudy = {
 export const cases: CaseStudy[] = [
   {
     id: "tse",
-    featured: true,
     theme: "vivid",
     title: "Consulta electoral a escala nacional",
     logo: "/certifications/tribuna-supremo-electoral.svg",
     logoRatio: 512.93 / 72.95,
     logoH: { card: 36, modal: 30 },
     tag: "Sector público · Plataforma ciudadana",
-    summary: "Millones de consultas ciudadanas con disponibilidad cercana al 100 % durante el proceso electoral.",
+    summary: "Millones de consultas con disponibilidad cercana al 100\u00a0% durante la elección.",
     button: "Ver caso",
     client: "Tribunal Supremo Electoral",
     highlight: { value: "Millones", label: "de consultas ciudadanas durante el proceso electoral" },
@@ -51,12 +49,45 @@ export const cases: CaseStudy[] = [
       ],
       results: [
         "Millones de consultas ciudadanas exitosas durante el proceso electoral.",
-        "Disponibilidad cercana al 100 % durante todo el proceso.",
+        "Disponibilidad cercana al 100\u00a0% durante todo el proceso.",
         "Tiempos de respuesta rápidos bajo demanda pico.",
         "Manejo seguro de la base de datos nacional de votantes.",
         "Uno de los servicios digitales más utilizados del proceso electoral.",
       ],
       cta: "¿Tu institución necesita una plataforma que funcione cuando más se usa? Hablemos.",
+    },
+  },
+  {
+    id: "credicomer",
+    theme: "black",
+    title: "Apertura de cuenta 100\u00a0%\u00a0digital",
+    logo: "/sectors/credicomer.svg",
+    logoRatio: 185 / 43,
+    logoH: { card: 46, modal: 40 },
+    tag: "Banca · Producto digital",
+    summary: "Cuenta de ahorro en tres minutos, con verificación de identidad por IA y banca en línea de alta disponibilidad.",
+    button: "Ver caso",
+    client: "Credicomer · El Salvador",
+    highlight: { value: "3 minutos", label: "para abrir una cuenta de ahorro, sin visitar una agencia" },
+    detail: {
+      client: "Credicomer · El Salvador",
+      industry: "Banca",
+      service: "Desarrollo de software · Banca digital y producto móvil",
+      challenge:
+        "Credicomer necesitaba un producto para que nuevos clientes abrieran una cuenta de ahorro sin presentarse en una agencia, y una banca en línea renovada con una experiencia de primer nivel para personas naturales y jurídicas.",
+      solution: [
+        "Rapicuenta: app móvil para abrir una cuenta de ahorro simplificada en tres minutos.",
+        "Verificación de identidad con IA, mediante fotografía del documento y del rostro, y aceptación del contrato durante el registro.",
+        "Credicomer en Línea: actualización completa de la banca web y móvil sobre una arquitectura escalable y de alta disponibilidad.",
+        "Inicio de sesión con biometría y transacciones en pocos pasos.",
+      ],
+      results: [
+        "Apertura de cuenta 100\u00a0% digital, sin visitar una agencia.",
+        "Verificación de identidad automatizada con validación de documento y rostro.",
+        "Banca web y móvil con arquitectura escalable y de alta disponibilidad.",
+        "Transferencias, pagos y consultas de balance de forma rápida y segura.",
+      ],
+      cta: "¿Tu organización necesita un producto digital crítico? Conversemos.",
     },
   },
   {
@@ -67,7 +98,7 @@ export const cases: CaseStudy[] = [
     logoRatio: 470.94 / 88.13,
     logoH: { card: 28, modal: 32 },
     tag: "Sector financiero regulado · Google Cloud",
-    summary: "Cientos de APIs críticas migradas a Apigee, sin interrumpir servicios regulados por CONSAR.",
+    summary: "Cientos de APIs migradas sin interrumpir servicios conectados a CONSAR.",
     button: "Ver caso",
     client: "Procesar · México",
     highlight: { value: "Cientos", label: "de APIs críticas migradas a Apigee" },
@@ -76,8 +107,8 @@ export const cases: CaseStudy[] = [
       industry: "Pensiones y servicios financieros regulados",
       service: "Google Cloud · Modernización de arquitectura",
       challenge:
-        "Procesar opera infraestructura crítica para la Comisión Nacional del Sistema de Ahorro para el Retiro (CONSAR). Su ecosistema tenía cientos de APIs repartidas en plataformas legacy, sin políticas unificadas de seguridad, control de acceso ni monitoreo. Cada nueva funcionalidad ponía en riesgo los servicios existentes.",
-      solutionIntro: "Elaniin ejecutó la migración completa hacia Apigee, la plataforma de gestión de APIs de Google Cloud, desde el discovery hasta producción:",
+        "Procesar opera infraestructura crítica para la Comisión Nacional del Sistema de Ahorro para el Retiro (CONSAR). Su ecosistema tenía cientos de APIs repartidas en plataformas legacy, sin políticas unificadas de seguridad, control de acceso ni monitoreo.",
+      solutionIntro: "Migración completa hacia Apigee, la plataforma de gestión de APIs de Google Cloud, desde el discovery hasta producción:",
       solution: [
         "Discovery técnico de cientos de APIs, con documentación de endpoints, dependencias y reglas de negocio.",
         "Plan de migración por fases, priorizando las APIs críticas.",
@@ -102,7 +133,7 @@ export const cases: CaseStudy[] = [
     logoRatio: 256.6 / 138.89,
     logoH: { card: 56, modal: 64 },
     tag: "Estados Unidos · Equipos de ingeniería",
-    summary: "Ingenieros senior y líderes técnicos integrados a su organización para acelerar la entrega y elevar la calidad.",
+    summary: "Ingenieros senior y líderes técnicos integrados a su organización.",
     button: "Ver caso",
     client: "Jostens · Estados Unidos",
     highlight: { value: "Desde 2022", label: "con ingenieros integrados a su organización" },
@@ -112,7 +143,7 @@ export const cases: CaseStudy[] = [
       service: "Staff augmentation nearshore · Liderazgo técnico",
       challenge:
         "Al expandir sus plataformas digitales y de e-commerce, Jostens necesitaba liderar varios equipos de ingeniería en paralelo, mantener alta calidad de código y reducir deuda técnica, sin elevar significativamente sus costos de contratación en Estados Unidos.",
-      solutionIntro: "Desde 2022, Elaniin provee ingenieros de software senior y líderes técnicos que trabajan integrados en la organización de ingeniería de Jostens, aportando ejecución y liderazgo:",
+      solutionIntro: "Desde 2022, Elaniin provee ingenieros de software senior y líderes técnicos integrados en la organización de ingeniería de Jostens, aportando ejecución y liderazgo:",
       solution: [
         "Fortalecimiento de decisiones de arquitectura.",
         "Mejores estándares de QA y desarrollo.",
@@ -120,7 +151,7 @@ export const cases: CaseStudy[] = [
         "Gestión de roadmaps de producto complejos entre equipos de Estados Unidos y Latinoamérica.",
       ],
       results: [
-        "Ciclos de entrega más rápidos en iniciativas de e-commerce y manufactura.",
+        "Ciclos de entrega más cortos en iniciativas de e-commerce y manufactura.",
         "Menor deuda técnica y mayor calidad de código.",
         "Mejor organización y liderazgo de los equipos de ingeniería.",
         "Colaboración fluida entre equipos nearshore y de Estados Unidos.",

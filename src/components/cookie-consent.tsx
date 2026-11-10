@@ -43,7 +43,7 @@ function subscribe(cb: () => void) {
 }
 
 const primary =
-  "inline-flex h-11 items-center justify-center rounded-button bg-elevate-blue px-5 font-display text-button font-medium text-white transition-colors duration-base hover:bg-blue-600 active:bg-blue-700 focus-ring";
+  "inline-flex h-11 items-center justify-center rounded-button bg-elevate-blue px-5 font-display text-button font-medium text-white transition-colors duration-base hover:bg-blue-700 active:bg-blue-800 focus-ring";
 const secondary =
   "inline-flex h-11 items-center justify-center rounded-button border border-border-default bg-white px-5 font-display text-button font-medium text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring";
 

@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Building2, Check, Landmark, Maximize2, Users, X } from "lucide-react";
+import { ArrowRight, Building2, Check, Landmark, Maximize2, Smartphone, Users, X } from "lucide-react";
 import { cases, type CaseStudy } from "@/data/cases";
 
-const icons = { tse: Landmark, procesar: Building2, jostens: Users } as const;
+const icons = { tse: Landmark, credicomer: Smartphone, procesar: Building2, jostens: Users } as const;
 
 function Logo({ c, h, white = false }: { c: CaseStudy; h: number; white?: boolean }) {
   return (
@@ -31,27 +31,27 @@ export const themes = {
     button: "bg-white text-text-primary hover:bg-blue-tint-50",
     panel: "bg-elevate-blue text-white",
     panelMuted: "text-blue-100",
-    glow: { primary: "#6a9aff", bg: "#1054ff", angle: 115, reverse: false, slow: 1 },
+    glow: { primary: "#99b0fe", bg: "#1054ff", angle: 115, reverse: false, slow: 1 },
   },
   black: {
     card: "bg-elaniin-black text-white",
     tag: "text-text-on-dark-accent",
     title: "text-white",
     logoWhite: true,
-    button: "bg-elevate-blue text-white hover:bg-blue-600",
+    button: "bg-elevate-blue text-white hover:bg-blue-700",
     panel: "bg-elaniin-black text-white",
     panelMuted: "text-text-on-dark-accent",
-    glow: { primary: "#1054ff", bg: "#141414", angle: 65, reverse: true, slow: 0.9 },
+    glow: { primary: "#1054ff", bg: "#0c0c0c", angle: 65, reverse: true, slow: 0.9 },
   },
   excellence: {
     card: "bg-excellence-blue text-white",
     tag: "text-text-on-dark-accent",
     title: "text-white",
     logoWhite: true,
-    button: "bg-elevate-blue text-white hover:bg-blue-600",
+    button: "bg-elevate-blue text-white hover:bg-blue-700",
     panel: "bg-excellence-blue text-white",
     panelMuted: "text-text-on-dark-accent",
-    glow: { primary: "#1054ff", bg: "#01172e", angle: 150, reverse: false, slow: 1.3 },
+    glow: { primary: "#1054ff", bg: "#000040", angle: 150, reverse: false, slow: 1.3 },
   },
 } as const;
 
@@ -102,35 +102,46 @@ export function Glow({ primary, bg, angle, reverse, slow }: GlowProps) {
   );
 }
 
+/*
+  Stacked cases: every card is full width and sticky, each one pinned a little lower than the
+  previous, so the next case slides over the one before and the edge of each stays visible.
+*/
 function CaseCard({ c, onOpen, index }: { c: CaseStudy; onOpen: () => void; index: number }) {
   const t = themes[c.theme];
-  const big = !!c.featured;
   return (
     <article
-      className={`card-glow lift reveal relative isolate col-span-12 flex min-w-0 cursor-pointer flex-col justify-between gap-12 rounded-card pad-card ${t.card} ${big ? "md:col-span-7 md:row-span-2" : "md:col-span-5"}`}
-      style={{ ["--i" as string]: index }}
+      className={`card-glow reveal relative isolate grid min-w-0 cursor-pointer gap-10 rounded-card pad-card shadow-product md:sticky md:min-h-[26rem] md:grid-cols-[1.3fr_1fr] md:gap-12 ${t.card}`}
+      style={{ ["--i" as string]: index, top: `calc(var(--nav-height) + ${24 + index * 20}px)` }}
     >
       <Glow {...t.glow} />
-      <p className={`mono-label text-nano ${t.tag}`}>{c.tag}</p>
 
-      <div className="min-w-0">
-        <div className="flex h-14 items-center">
-          <Logo c={c} h={c.logoH.card} white={t.logoWhite} />
+      <div className="flex min-w-0 flex-col justify-between gap-10">
+        <p className={`mono-label text-nano ${t.tag}`}>{c.tag}</p>
+        <div className="min-w-0">
+          <div className="flex h-14 items-center">
+            <Logo c={c} h={c.logoH.card} white={t.logoWhite} />
+          </div>
+          <h3 className={`mt-4 break-words font-display text-h1 font-semibold md:max-w-[16ch] ${t.title}`}>{c.title}</h3>
+          <p className={`mt-3 max-w-[44ch] text-body ${t.panelMuted}`}>{c.summary}</p>
         </div>
-        <h4 className={`mt-4 break-words font-display font-medium ${t.title} ${big ? "text-h1 md:max-w-[16ch]" : "text-h3"}`}>{c.title}</h4>
+        <div>
+          <button
+            type="button"
+            onClick={onOpen}
+            aria-haspopup="dialog"
+            aria-label={`${c.button}: ${c.client}, ${c.title}`}
+            className={`btn-arrow inline-flex h-11 items-center gap-2 rounded-button px-4 font-display text-button font-semibold transition-colors duration-base after:absolute after:inset-0 after:content-[''] focus-ring ${t.button}`}
+          >
+            {c.button}
+            <Maximize2 size={15} strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
-      <div>
-        <button
-          type="button"
-          onClick={onOpen}
-          aria-haspopup="dialog"
-          aria-label={`${c.button}: ${c.client}, ${c.title}`}
-          className={`btn-arrow inline-flex h-11 items-center gap-2 rounded-button px-4 font-display text-button font-medium transition-colors duration-base after:absolute after:inset-0 after:content-[''] focus-ring ${t.button}`}
-        >
-          {c.button}
-          <Maximize2 size={15} strokeWidth={1.75} aria-hidden="true" />
-        </button>
+      {/* the figure leads, its label stays small */}
+      <div className="flex min-w-0 flex-col justify-end border-t border-border-on-dark pt-6 md:border-l md:border-t-0 md:pl-12 md:pt-0">
+        <p className="break-words font-display text-display-lg font-semibold tabular-nums">{c.highlight.value}</p>
+        <p className={`mono-label mt-3 max-w-[26ch] text-micro ${t.panelMuted}`}>{c.highlight.label}</p>
       </div>
     </article>
   );
@@ -149,7 +160,8 @@ function Checklist({ items }: { items: string[] }) {
   );
 }
 
-export function Cases() {
+export function Cases({ ids }: { ids: string[] }) {
+  const shown = ids.map((id) => cases.find((c) => c.id === id)).filter((c): c is CaseStudy => !!c);
   const [openId, setOpenId] = useState<string | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const current = cases.find((c) => c.id === openId) ?? null;
@@ -170,8 +182,8 @@ export function Cases() {
 
   return (
     <>
-      <div className="grid-page mt-6">
-        {cases.map((c, i) => (
+      <div className="mt-10 flex flex-col gap-6">
+        {shown.map((c, i) => (
           <CaseCard key={c.id} c={c} index={i} onOpen={() => setOpenId(c.id)} />
         ))}
       </div>
@@ -206,7 +218,7 @@ export function Cases() {
                 </span>
                 <span className="mono-label text-micro text-text-secondary">{current.tag}</span>
               </div>
-              <h3 id="case-title" className="mt-8 break-words font-display text-h2 font-medium text-text-primary">
+              <h3 id="case-title" className="mt-8 break-words font-display text-h2 font-semibold text-text-primary">
                 {current.title}
               </h3>
               <p className="mt-4 text-body-lg text-text-secondary">{current.summary}</p>
@@ -224,23 +236,23 @@ export function Cases() {
                 ))}
               </dl>
 
-              <h4 className="mt-10 font-display text-h4 font-medium text-text-primary">El reto</h4>
+              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">El reto</h4>
               <p className="mt-3 text-body text-text-secondary">{current.detail.challenge}</p>
 
-              <h4 className="mt-10 font-display text-h4 font-medium text-text-primary">La solución</h4>
+              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">La solución</h4>
               {current.detail.solutionIntro && <p className="mt-3 text-body text-text-secondary">{current.detail.solutionIntro}</p>}
               <Checklist items={current.detail.solution} />
 
-              <h4 className="mt-10 font-display text-h4 font-medium text-text-primary">Resultados</h4>
+              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">Resultados</h4>
               <Checklist items={current.detail.results} />
 
               <div className="mt-10 rounded-card border border-border-default bg-surface-subtle p-6">
-                <p className="font-display text-h4 font-medium text-text-primary">{current.detail.cta}</p>
+                <p className="font-display text-h4 font-semibold text-text-primary">{current.detail.cta}</p>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <a
                     href="#contacto"
                     onClick={close}
-                    className="btn-arrow inline-flex h-11 items-center gap-2 rounded-button bg-elevate-blue px-5 font-display text-button font-medium text-white transition-colors duration-base hover:bg-blue-600 active:bg-blue-700 focus-ring"
+                    className="btn-arrow inline-flex h-11 items-center gap-2 rounded-button bg-elevate-blue px-5 font-display text-button font-semibold text-white transition-colors duration-base hover:bg-blue-700 active:bg-blue-800 focus-ring"
                   >
                     Conversemos
                     <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
@@ -248,7 +260,7 @@ export function Cases() {
                   <button
                     type="button"
                     onClick={close}
-                    className="inline-flex h-11 items-center rounded-button border border-border-default bg-white px-5 font-display text-button font-medium text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring"
+                    className="inline-flex h-11 items-center rounded-button border border-border-default bg-white px-5 font-display text-button font-semibold text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring"
                   >
                     Volver a los casos
                   </button>
@@ -263,7 +275,7 @@ export function Cases() {
               <Glow {...themes[current.theme].glow} />
               <Logo c={current} h={current.logoH.modal} white={themes[current.theme].logoWhite} />
               <div>
-                <p className="font-display text-display-lg font-medium tabular-nums">{current.highlight.value}</p>
+                <p className="font-display text-display-lg font-semibold tabular-nums">{current.highlight.value}</p>
                 <p className={`mono-label mt-3 max-w-[26ch] text-micro ${themes[current.theme].panelMuted}`}>{current.highlight.label}</p>
               </div>
             </aside>

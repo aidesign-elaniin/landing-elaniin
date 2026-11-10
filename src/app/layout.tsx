@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Geist_Mono, Instrument_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { CookieConsent } from "@/components/cookie-consent";
 import { Living } from "@/components/living";
 import { Providers } from "@/components/providers";
@@ -7,9 +7,33 @@ import { INDEXABLE, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 import { JsonLd } from "@/components/json-ld";
 import "./globals.css";
 
-const instrument = Instrument_Sans({ variable: "--font-instrument", subsets: ["latin"], weight: ["400", "500", "600"], display: "swap" });
-const dm = DM_Sans({ variable: "--font-dm", subsets: ["latin"], weight: ["400", "500"], display: "swap" });
-const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], weight: ["400", "500"], display: "swap" });
+// Fonts are served from the project (@fontsource files), not fetched from Google Fonts at build time:
+// a failed or odd response from Google broke the dev server and would break a deploy the same way.
+const dm = localFont({
+  variable: "--font-dm",
+  display: "swap",
+  src: [
+    { path: "../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-600-normal.woff2", weight: "600", style: "normal" },
+    { path: "../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-700-normal.woff2", weight: "700", style: "normal" },
+  ],
+});
+const inter = localFont({
+  variable: "--font-inter",
+  display: "swap",
+  src: [
+    { path: "../../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2", weight: "500", style: "normal" },
+  ],
+});
+const mono = localFont({
+  variable: "--font-azeret",
+  display: "swap",
+  src: [
+    { path: "../../node_modules/@fontsource/azeret-mono/files/azeret-mono-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../../node_modules/@fontsource/azeret-mono/files/azeret-mono-latin-600-normal.woff2", weight: "600", style: "normal" },
+  ],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -23,7 +47,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${instrument.variable} ${dm.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="es" className={`${dm.variable} ${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>

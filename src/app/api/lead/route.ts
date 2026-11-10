@@ -1,6 +1,4 @@
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const clean = (v: unknown, max = 200) => (typeof v === "string" ? v.trim().slice(0, max) : "");
-const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+import { parseLead } from "@/lib/lead";
 
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
@@ -11,24 +9,11 @@ export async function POST(req: Request) {
   }
 
   // Honeypot: bots fill it, people never see it. Reply ok so they do not retry.
-  if (clean(body.website)) return Response.json({ ok: true });
+  if (typeof body.website === "string" && body.website.trim()) return Response.json({ ok: true });
 
-  // Only the 5 UTM fields travel on, trimmed; anything else in the object is dropped.
-  const utmIn = (typeof body.utm === "object" && body.utm ? body.utm : {}) as Record<string, unknown>;
-  const utm = Object.fromEntries(UTM_KEYS.map((k) => [k, clean(utmIn[k], 100)]).filter(([, v]) => v));
-
-  const lead = {
-    nombre: clean(body.nombre),
-    correo: clean(body.correo),
-    empresa: clean(body.empresa),
-    cargo: clean(body.cargo),
-    utm,
-    referrer: clean(body.referrer, 300),
-    page: clean(body.page) || "/",
-  };
-  if (!lead.nombre || !lead.empresa || !EMAIL.test(lead.correo)) {
-    return Response.json({ ok: false }, { status: 422 });
-  }
+  const parsed = parseLead(body);
+  if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 422 });
+  const { lead } = parsed;
 
   // n8n stores the lead in Google Sheets and sends the team + confirmation emails.
   const url = process.env.N8N_LEAD_WEBHOOK_URL;
@@ -41,9 +26,18 @@ export async function POST(req: Request) {
       }).catch(() => null)
     : null;
 
-  if (!res?.ok) {
+  // The flow answers 200 with { ok, error, detalle }: `ok` is true only once the row is stored.
+  // ponytail: a 2xx with no JSON body (a flow that does not report) counts as delivered.
+  const text = res ? await res.text().catch(() => "") : "";
+  let reply: { ok?: unknown; error?: unknown; detalle?: unknown } = {};
+  try {
+    reply = JSON.parse(text);
+  } catch {
+    // not JSON: judged by the status alone
+  }
+  if (!res?.ok || reply.ok === false) {
     // Keep the lead in the server log so it can be recovered by hand.
-    console.error("[lead] n8n failed:", url ? (res?.status ?? "no response") : "N8N_LEAD_WEBHOOK_URL not set", JSON.stringify(lead));
+    console.error("[lead] n8n failed:", url ? (res?.status ?? "no response") : "N8N_LEAD_WEBHOOK_URL not set", "|", String(reply.error ?? ""), "|", String(reply.detalle ?? text).slice(0, 300), "|", JSON.stringify(lead));
     return Response.json({ ok: false }, { status: 502 });
   }
   return Response.json({ ok: true });

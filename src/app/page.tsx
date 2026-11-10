@@ -1,23 +1,6 @@
-import { Nav } from "@/components/nav";
-import { Sectors } from "@/components/sector-card";
-import { Certifications, Clients, Experience, FinalCta, Footer, Hero, Services } from "@/components/sections";
-import { Method } from "@/components/method";
+import { Landing } from "@/components/sections";
+import { variants } from "@/data/variants";
 
 export default function Home() {
-  return (
-    <>
-      <Nav />
-      <main id="main">
-        <Hero />
-        <Clients />
-        <Services />
-        <Sectors />
-        <Method />
-        <Experience />
-        <Certifications />
-        <FinalCta />
-      </main>
-      <Footer />
-    </>
-  );
+  return <Landing v={variants.software} />;
 }

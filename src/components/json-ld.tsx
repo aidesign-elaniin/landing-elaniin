@@ -16,7 +16,7 @@ const data = {
       sameAs: ["https://www.linkedin.com/company/elaniin", "https://clutch.co/profile/elaniin"],
       makesOffer: [
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "Desarrollo de software", provider: { "@id": `${SITE_URL}/#organization` } } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Google Cloud: migración, APIs con Apigee y operación en la nube", provider: { "@id": `${SITE_URL}/#organization` } } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Migración, modernización y operación cloud", provider: { "@id": `${SITE_URL}/#organization` } } },
       ],
     },
     { "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: SITE_URL, name: "Elaniin", inLanguage: "es", publisher: { "@id": `${SITE_URL}/#organization` } },

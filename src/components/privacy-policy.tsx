@@ -16,12 +16,12 @@ function Text({ children }: { children: string }) {
   );
 }
 
-/* Content of the policy, shared by the consent modal and the /privacidad page. `lang="en"` marks the legal text as English. */
+/* Content of the policy, shared by the consent modal and the /privacidad page. The legal text is in Spanish (data/privacy.ts). */
 export function PolicyContent({ headingLevel = 3 }: { headingLevel?: 2 | 3 }) {
   const H = `h${headingLevel}` as "h2" | "h3";
   const Sub = `h${headingLevel + 1}` as "h3" | "h4";
   return (
-    <div lang="en" className="space-y-10">
+    <div className="space-y-10">
       {privacy.map((section) => (
         <section key={section.title}>
           <H className="font-display text-h4 font-medium text-text-primary">{section.title}</H>
@@ -40,7 +40,7 @@ export function PolicyContent({ headingLevel = 3 }: { headingLevel?: 2 | 3 }) {
           </div>
         </section>
       ))}
-      <p className="mono-label text-micro text-text-muted">This Privacy Policy was last reviewed on {privacyUpdated}.</p>
+      <p className="mono-label text-micro text-text-muted">Esta Política de Privacidad se revisó por última vez el {privacyUpdated}.</p>
     </div>
   );
 }

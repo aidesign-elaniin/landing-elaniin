@@ -7,7 +7,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const font = (pkg: string, file: string) => readFile(join(process.cwd(), "node_modules/@fontsource", pkg, "files", file));
-const display = await font("instrument-sans", "instrument-sans-latin-500-normal.woff");
+const display = await font("dm-sans", "dm-sans-latin-600-normal.woff");
 
 // Module-field texture of the site: 2px squares on a 16px pitch, only on the right side.
 const dots: { x: number; y: number }[] = [];
@@ -16,7 +16,7 @@ for (let c = 0; c < 30; c++) for (let r = 0; r < 40; r++) dots.push({ x: 720 + c
 export default async function Image() {
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", position: "relative", background: "#01172e", fontFamily: "Instrument Sans" }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", position: "relative", background: "#000040", fontFamily: "DM Sans" }}>
         <svg width="1200" height="630" viewBox="0 0 1200 630" style={{ position: "absolute", top: 0, left: 0 }}>
           {dots.map((d, i) => (
             <rect key={i} x={d.x} y={d.y} width="2" height="2" fill="#ffffff" opacity={Math.min(0.22, 0.03 + (d.x - 720) / 3200)} />
@@ -29,9 +29,9 @@ export default async function Image() {
           </svg>
 
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", flexWrap: "wrap", width: 980, fontSize: 84, lineHeight: 1.05, letterSpacing: "-0.035em", color: "#ffffff", fontWeight: 500 }}>
-              <span style={{ marginRight: 20 }}>Ejecutemos tu próximo</span>
-              <span style={{ color: "#4d75fd" }}>proyecto tecnológico.</span>
+            <div style={{ display: "flex", flexWrap: "wrap", width: 980, fontSize: 76, lineHeight: 1.05, letterSpacing: "-0.035em", color: "#ffffff", fontWeight: 600 }}>
+              <span style={{ marginRight: 20 }}>Proyectos críticos merecen</span>
+              <span style={{ color: "#4d75fd" }}>ingeniería de primer nivel.</span>
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default async function Image() {
     {
       ...size,
       fonts: [
-        { name: "Instrument Sans", data: display, style: "normal", weight: 500 },
+        { name: "DM Sans", data: display, style: "normal", weight: 600 },
       ],
     },
   );

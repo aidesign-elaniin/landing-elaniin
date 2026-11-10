@@ -1,0 +1,263 @@
+{
+  "name": "Landing Elaniin: leads",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "landing-elaniin-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Lead recibido",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "lead-recibido",
+      "webhookId": "landing-elaniin-lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fecha",
+              "name": "fecha",
+              "type": "string",
+              "value": "={{ $json.body.fecha }}"
+            },
+            {
+              "id": "modo",
+              "name": "modo",
+              "type": "string",
+              "value": "={{ $json.body.modo }}"
+            },
+            {
+              "id": "variante",
+              "name": "variante",
+              "type": "string",
+              "value": "={{ $json.body.variante }}"
+            },
+            {
+              "id": "nombre",
+              "name": "nombre",
+              "type": "string",
+              "value": "={{ $json.body.nombre }}"
+            },
+            {
+              "id": "correo",
+              "name": "correo",
+              "type": "string",
+              "value": "={{ $json.body.correo }}"
+            },
+            {
+              "id": "empresa_dominio",
+              "name": "empresa_dominio",
+              "type": "string",
+              "value": "={{ $json.body.correo.split('@')[1] }}"
+            },
+            {
+              "id": "sector",
+              "name": "sector",
+              "type": "string",
+              "value": "={{ $json.body.perfil.sector }}"
+            },
+            {
+              "id": "servicio",
+              "name": "servicio",
+              "type": "string",
+              "value": "={{ $json.body.perfil.servicio }}"
+            },
+            {
+              "id": "situacion",
+              "name": "situacion",
+              "type": "string",
+              "value": "={{ $json.body.perfil.situacion }}"
+            },
+            {
+              "id": "nube",
+              "name": "nube",
+              "type": "string",
+              "value": "={{ $json.body.perfil.nube }}"
+            },
+            {
+              "id": "tipo_plataforma",
+              "name": "tipo_plataforma",
+              "type": "string",
+              "value": "={{ $json.body.perfil.tipo_plataforma.join(', ') }}"
+            },
+            {
+              "id": "casos_vistos",
+              "name": "casos_vistos",
+              "type": "string",
+              "value": "={{ $json.body.interes.casos_vistos.join(', ') }}"
+            },
+            {
+              "id": "temas_vistos",
+              "name": "temas_vistos",
+              "type": "string",
+              "value": "={{ $json.body.interes.temas_vistos.join(', ') }}"
+            },
+            {
+              "id": "preguntas_libres",
+              "name": "preguntas_libres",
+              "type": "string",
+              "value": "={{ $json.body.interes.preguntas_libres.join(' | ') }}"
+            },
+            {
+              "id": "mensaje",
+              "name": "mensaje",
+              "type": "string",
+              "value": "={{ $json.body.interes.mensaje }}"
+            },
+            {
+              "id": "ruta",
+              "name": "ruta",
+              "type": "string",
+              "value": "={{ $json.body.ruta.join(' > ') }}"
+            },
+            {
+              "id": "chat_completo",
+              "name": "chat_completo",
+              "type": "string",
+              "value": "={{ $json.body.ruta.includes('L4') ? 'si' : 'no' }}"
+            },
+            {
+              "id": "consentimiento_fecha",
+              "name": "consentimiento_fecha",
+              "type": "string",
+              "value": "={{ $json.body.consentimiento_fecha }}"
+            },
+            {
+              "id": "utm_source",
+              "name": "utm_source",
+              "type": "string",
+              "value": "={{ $json.body.utm.utm_source }}"
+            },
+            {
+              "id": "utm_medium",
+              "name": "utm_medium",
+              "type": "string",
+              "value": "={{ $json.body.utm.utm_medium }}"
+            },
+            {
+              "id": "utm_campaign",
+              "name": "utm_campaign",
+              "type": "string",
+              "value": "={{ $json.body.utm.utm_campaign }}"
+            },
+            {
+              "id": "utm_term",
+              "name": "utm_term",
+              "type": "string",
+              "value": "={{ $json.body.utm.utm_term }}"
+            },
+            {
+              "id": "utm_content",
+              "name": "utm_content",
+              "type": "string",
+              "value": "={{ $json.body.utm.utm_content }}"
+            },
+            {
+              "id": "referrer",
+              "name": "referrer",
+              "type": "string",
+              "value": "={{ $json.body.referrer }}"
+            },
+            {
+              "id": "page",
+              "name": "page",
+              "type": "string",
+              "value": "={{ $json.body.page }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Aplanar lead",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "id": "aplanar-lead"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "PEGA_AQUI_LA_URL_DE_APPS_SCRIPT_QUE_TERMINA_EN_/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ...$json, token: \"CAMBIA_ESTE_TOKEN\" }) }}",
+        "options": {
+          "timeout": 9000
+        }
+      },
+      "name": "Enviar a Apps Script",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "enviar-a-apps-script"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: $json.ok === true, error: $json.ok === true ? \"\" : ($json.error || \"Apps Script no devolvió JSON\"), detalle: $json.ok === true ? \"\" : String($json.data || $json.correos || \"\").slice(0, 300) }) }}",
+        "options": {}
+      },
+      "name": "Responder al sitio",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        0
+      ],
+      "id": "responder-al-sitio"
+    }
+  ],
+  "connections": {
+    "Lead recibido": {
+      "main": [
+        [
+          {
+            "node": "Aplanar lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplanar lead": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Apps Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar a Apps Script": {
+      "main": [
+        [
+          {
+            "node": "Responder al sitio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

@@ -1,16 +1,50 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { Logo } from "./logo";
+import type { VariantId } from "@/data/variants";
 
 const links = [
-  { href: "#servicios", label: "Servicios" },
-  { href: "#metodo", label: "Cómo trabajamos" },
-  { href: "#experiencia", label: "Experiencia" },
+  { href: "#capacidades", label: "Capacidades" },
+  { href: "#casos", label: "Casos" },
+  { href: "#respaldo", label: "Respaldo" },
 ];
 
 const FOCUSABLE = 'a[href], button:not([disabled])';
+
+/* The two landings are separate URLs (each ad lands on its own message); this switch, at the top of the hero
+   so it is seen on phones too, moves between them.
+   It keeps the section (#casos) and the query string (UTMs), so the lead's origin is not lost. */
+const VARIANTS: { id: VariantId; label: string; path: string }[] = [
+  { id: "software", label: "Software", path: "/" },
+  { id: "cloud", label: "Cloud", path: "/cloud" },
+];
+
+export function VariantSwitch({ current, className = "" }: { current: VariantId; className?: string }) {
+  return (
+    <nav aria-label="Servicio" className={`inline-flex shrink-0 rounded-button border border-border-default bg-surface-subtle p-0.5 ${className}`}>
+      {VARIANTS.map((v) => {
+        const on = v.id === current;
+        return (
+          <a
+            key={v.id}
+            href={v.path}
+            aria-current={on ? "page" : undefined}
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+              e.preventDefault();
+              if (!on) location.assign(v.path + location.search + location.hash);
+            }}
+            className={`inline-flex h-9 flex-1 items-center justify-center rounded-[6px] px-4 font-display text-body-sm font-semibold transition-colors duration-base focus-ring ${on ? "bg-white text-inspire-blue shadow-card-rest" : "text-text-secondary hover:text-text-primary"}`}
+          >
+            {v.label}
+          </a>
+        );
+      })}
+    </nav>
+  );
+}
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -61,7 +95,7 @@ export function Nav() {
       </a>
       <header className="sticky top-0 z-40 border-b border-border-default bg-white/90 backdrop-blur">
         <div className="container-site flex h-16 items-center justify-between gap-6">
-          <a href="#contacto" aria-label="Elaniin, ir al inicio" className="inline-flex h-11 shrink-0 items-center rounded-button focus-ring">
+          <a href="#main" aria-label="Elaniin, ir al inicio" className="inline-flex h-11 shrink-0 items-center rounded-button focus-ring">
             <Logo />
           </a>
           <div className="flex items-center">
@@ -74,14 +108,12 @@ export function Nav() {
             </nav>
             <div className="flex items-center gap-2">
               <a
-                href="https://elaniin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-arrow inline-flex h-11 items-center gap-2 rounded-button bg-elevate-blue px-4 font-display text-button font-medium text-white transition-colors duration-base hover:bg-blue-600 active:bg-blue-700 focus-ring md:h-10"
+                href="#contacto"
+                className="btn-arrow inline-flex h-11 items-center gap-2 rounded-button bg-elevate-blue px-4 font-display text-button font-medium text-white transition-colors duration-base hover:bg-blue-700 active:bg-blue-800 focus-ring md:h-10"
               >
-                elaniin.com
-                <ArrowUpRight size={16} strokeWidth={2} aria-hidden="true" />
-                <span className="sr-only">(se abre en una pestaña nueva)</span>
+                <span className="max-[479px]:hidden">Hablar con un especialista</span>
+                <span className="min-[480px]:hidden">Hablar</span>
+                <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
               </a>
               <button
                 ref={btn}
@@ -124,15 +156,12 @@ export function Nav() {
             </a>
           ))}
           <a
-            href="https://elaniin.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#contacto"
             onClick={() => close(false)}
-            className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-button bg-elevate-blue font-display text-body font-medium text-white transition-colors duration-base hover:bg-blue-600 active:bg-blue-700 focus-ring"
+            className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-button bg-elevate-blue font-display text-body font-medium text-white transition-colors duration-base hover:bg-blue-700 active:bg-blue-800 focus-ring"
           >
-            elaniin.com
-            <ArrowUpRight size={16} strokeWidth={2} aria-hidden="true" />
-            <span className="sr-only">(se abre en una pestaña nueva)</span>
+            Hablar con un especialista
+            <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
           </a>
         </nav>
       </aside>

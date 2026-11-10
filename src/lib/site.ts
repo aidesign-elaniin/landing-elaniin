@@ -6,6 +6,7 @@ export const SITE_URL =
 
 export const INDEXABLE = process.env.SITE_INDEXABLE !== "false";
 
-export const SITE_TITLE = "Elaniin | Software, transformación digital y Google Cloud";
+// Title and description come from the Software hero (final texts, Nov 9 2026).
+export const SITE_TITLE = "Elaniin | Ingeniería de primer nivel para proyectos críticos";
 export const SITE_DESCRIPTION =
-  "Desarrollo de software, innovación y proyectos de Google Cloud para empresas e instituciones. Desde 2014 desde El Salvador, para la región y EE. UU.";
+  "Desarrollo end-to-end de plataformas críticas para empresas e instituciones, con un estándar de calidad verificado antes de cada entrega.";
