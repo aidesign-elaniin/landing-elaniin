@@ -1,0 +1,50 @@
+# Publishes a static copy of the landing on GitHub Pages, to show the design.
+# GitHub Pages has no server: in this copy the agent picks pieces with keyword rules (no AI)
+# and the contact form cannot send. The full site needs a host that runs Next.js.
+name: GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      # server-only routes cannot be exported as static files
+      - run: rm -rf src/app/api src/app/sitemap.ts src/app/robots.ts src/app/opengraph-image.tsx
+      - run: npm run build
+        env:
+          GITHUB_PAGES: "true"
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+      - run: touch out/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -59,12 +59,40 @@ export const start = (variante: Variante): State => ({ variante, turns: [], sugg
 
 export const seen = (s: State): BlockId[] => s.turns.flatMap((t) => t.blocks);
 
+/**
+ * Stand-in for the AI layer when there is no server to ask (static copy on GitHub Pages) or it is down.
+ * ponytail: plain keyword rules, first match wins. It only has to keep the canvas useful; the real picking is /api/chat.
+ */
+const RULES: [RegExp, string, BlockId[], SuggestionId[]][] = [
+  [/precio|cuesta|costo|presupuesto|cotiza|plazo|cu[aá]nto tarda|tiempo de entrega/, "precio", ["contacto"], []],
+  [/calidad|segur|prueba|vulnerab/, "calidad", ["umbrales", "cap_qa"], ["casos", "respaldo"]],
+  [/respald|certific|partner|sello|qui[eé]n los/, "respaldo", ["respaldo"], ["calidad", "casos"]],
+  [/gobierno|instituci[oó]n|p[uú]blic|ministerio|alcald|licitaci/, "sector_publico", ["sector_publico", "caso_tse", "respaldo"], ["calidad"]],
+  [/ingenier|equipo|staff|talento|desarrolladores|l[ií]der t[eé]cnico/, "servicios", ["caso_jostens", "respaldo"], ["calidad"]],
+  [/\bapi|apigee/, "servicios", ["cap_apigee", "caso_procesar", "respaldo"], ["calidad", "nube"]],
+  [/se cae|pico|demanda|lento|mucha gente|disponibilidad|escal/, "servicios", ["cap_operacion", "caso_tse", "respaldo"], ["calidad", "nube"]],
+  [/nube|cloud|migra|aws|google|servidor|on-?premise|legacy/, "servicios", ["cap_migracion", "caso_procesar", "cap_assessment"], ["calidad", "nube"]],
+  [/alcance|no s[eé] por d[oó]nde|empezar|idea/, "alcance", ["cap_discovery", "caso_credicomer"], ["calidad", "casos"]],
+  [/banco|banca|cuenta|financ|fintech|pago/, "industria", ["cap_desarrollo", "caso_credicomer", "umbrales"], ["calidad", "alcance"]],
+  [/mantener|mantenimiento|soporte|ya tenemos un sistema|evolucion/, "servicios", ["cap_evolucion", "caso_credicomer"], ["calidad"]],
+  [/app|web|m[oó]vil|plataforma|sistema|software|erp|portal|sitio|integraci|caso/, "servicios", ["cap_desarrollo", "caso_credicomer", "umbrales"], ["calidad", "alcance"]],
+];
+
+export function localReply(text: string): AgentReply | null {
+  const t = text.toLowerCase();
+  const rule = RULES.find(([re]) => re.test(t));
+  if (!rule) return null;
+  const [, intencion, bloques, sugerencias] = rule;
+  return { intencion, respuesta: bloques[0] === "contacto" ? CONTACT_LINE : "Esto es lo que aplica a lo que describes.", bloques, sugerencias, perfil_detectado: { sector: "", servicio: "", nube: "" } };
+}
+
 /** The visitor asked for a person: no model call, the contact block comes straight away. */
 export const wantsSpecialist = (text: string) => text.trim() === SUGGESTIONS.especialista;
 
 /**
- * Adds one turn. `reply` is what /api/chat returned, or null when it failed (no key, outage, rate limit):
- * then the fixed line and the contact block. A block is never shown twice; at most three per turn.
+ * Adds one turn. `reply` is what /api/chat returned, or null when it failed (no server, no key, outage, rate limit):
+ * then the keyword stand-in picks the blocks, and if nothing matches, the fixed line and the contact block.
+ * A block is never shown twice; at most three per turn.
  */
 export function addTurn(s: State, user: string, reply: AgentReply | null): State {
   const shown = seen(s);
@@ -72,7 +100,7 @@ export function addTurn(s: State, user: string, reply: AgentReply | null): State
   const direct = wantsSpecialist(user);
   const r: AgentReply = direct
     ? { intencion: "contacto", respuesta: CONTACT_LINE, bloques: ["contacto"], sugerencias: [], perfil_detectado: { sector: "", servicio: "", nube: "" } }
-    : (reply ?? { intencion: "sin_respuesta", respuesta: FALLBACK, bloques: ["contacto"], sugerencias: [], perfil_detectado: { sector: "", servicio: "", nube: "" } });
+    : (reply ?? localReply(user) ?? { intencion: "sin_respuesta", respuesta: FALLBACK, bloques: ["contacto"], sugerencias: [], perfil_detectado: { sector: "", servicio: "", nube: "" } });
 
   const blocks = [...new Set(r.bloques)].filter((b): b is BlockId => (BLOCK_IDS as readonly string[]).includes(b) && !shown.includes(b as BlockId)).slice(0, 3);
   const all = [...shown, ...blocks];

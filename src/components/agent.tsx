@@ -10,6 +10,7 @@ import { Glow, themes } from "./cases";
 import { OPEN_CHAT_EVENT, attribution, type OpenChatDetail } from "./lead-form";
 import { Logo } from "./logo";
 import { PrivacyLink } from "./privacy-link";
+import { asset } from "@/lib/site";
 
 /*
   Agent with canvas. The visitor writes what they need; the agent answers with one sentence (left column)
@@ -101,7 +102,7 @@ function CaseBlock({ id }: { id: string }) {
       <div className="mt-8 grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end">
         <div className="min-w-0">
           {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG logo, nothing for next/image to optimize */}
-          <img src={c.logo} alt={c.client} style={{ height: Math.round(c.logoH.card * 0.9) }} className="w-auto max-w-full brightness-0 invert" />
+          <img src={asset(c.logo)} alt={c.client} style={{ height: Math.round(c.logoH.card * 0.9) }} className="w-auto max-w-full brightness-0 invert" />
           <h3 className="mt-5 font-display text-h2 font-semibold">{c.title}</h3>
           <p className={`mt-2 text-body ${t.panelMuted}`}>{c.summary}</p>
         </div>
@@ -138,7 +139,7 @@ function BackingBlock() {
         {BADGES.map((b) => (
           <li key={b.file} className="h-20">
             {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG badge */}
-            <img src={`/certifications/${b.file}.svg`} alt={b.alt} className="h-full w-auto" />
+            <img src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} className="h-full w-auto" />
           </li>
         ))}
       </ul>

@@ -4,13 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowRight, Building2, Check, Landmark, Maximize2, Smartphone, Users, X } from "lucide-react";
 import { cases, type CaseStudy } from "@/data/cases";
+import { asset } from "@/lib/site";
 
 const icons = { tse: Landmark, credicomer: Smartphone, procesar: Building2, jostens: Users } as const;
 
 function Logo({ c, h, white = false }: { c: CaseStudy; h: number; white?: boolean }) {
   return (
     <Image
-      src={c.logo}
+      src={asset(c.logo)}
       alt=""
       aria-hidden="true"
       width={Math.round(h * c.logoRatio)}

@@ -19,7 +19,11 @@ test("a turn shows the picked blocks once, keeps the profile and offers follow-u
 });
 
 test("asking for a specialist or an outage both end in the contact block, and the lead fits the contract", () => {
-  let s = addTurn(start("software"), "¿Usan IA?", null); // /api/chat failed
+  // no server and a keyword match: the stand-in still fills the canvas
+  const offline = addTurn(start("cloud"), "Tenemos un portal que se cae cuando hay mucha gente", null);
+  assert.deepEqual(offline.turns[0].blocks, ["cap_operacion", "caso_tse", "respaldo"]);
+
+  let s = addTurn(start("software"), "¿Usan IA?", null); // /api/chat failed and nothing matches
   assert.equal(s.turns[0].agent, "No tengo ese dato, pero un especialista te lo puede responder.");
   assert.deepEqual(s.turns[0].blocks, ["contacto"]);
   assert.equal(s.suggestions.includes("especialista"), false); // contact already on screen

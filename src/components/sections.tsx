@@ -8,6 +8,7 @@ import { ButtonLink } from "./ui";
 import { Logo } from "./logo";
 import { Agent, AgentEntry } from "./agent";
 import { PrivacyLink } from "./privacy-link";
+import { asset } from "@/lib/site";
 
 /* Mode 1 (essential summary). Copy: data/variants.ts + the shared texts below, all from the final texts doc. */
 export function Landing({ v }: { v: Variant }) {
@@ -59,7 +60,7 @@ function Hero({ v }: { v: Variant }) {
                 {h.seals.map((s) => (
                   <li key={s} className="flex h-16 items-center">
                     {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG badge, nothing for next/image to optimize */}
-                    <img src={`/certifications/${SEAL_BADGE[s]}.svg`} alt={s} className="h-full w-auto" />
+                    <img src={asset(`/certifications/${SEAL_BADGE[s]}.svg`)} alt={s} className="h-full w-auto" />
                   </li>
                 ))}
               </ul>
@@ -87,7 +88,7 @@ const clients = [
 function ClientLogoImage({ file, name }: { file: string; name: string }) {
   return (
     <Image
-      src={`/clients/${file}.svg`}
+      src={asset(`/clients/${file}.svg`)}
       alt={name}
       width={160}
       height={48}
@@ -235,12 +236,12 @@ function Backing() {
         <ul className="col-span-12 flex min-w-0 flex-wrap items-center gap-x-6 gap-y-6 lg:col-span-8 lg:justify-end xl:gap-x-8">
           {gcpBadges.map((b, i) => (
             <li key={b.file} className={item} style={{ ["--i" as string]: i }}>
-              <Image src={`/certifications/${b.file}.svg`} alt={b.alt} width={b.w} height={b.h} unoptimized className="h-full w-auto" />
+              <Image src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={b.w} height={b.h} unoptimized className="h-full w-auto" />
             </li>
           ))}
           {badges.map((b, i) => (
             <li key={b.file} className={item} style={{ ["--i" as string]: i + gcpBadges.length }}>
-              <Image src={`/certifications/${b.file}.svg`} alt={b.alt} width={Math.round((96 * b.w) / b.h)} height={96} unoptimized className="h-full w-auto" />
+              <Image src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={Math.round((96 * b.w) / b.h)} height={96} unoptimized className="h-full w-auto" />
             </li>
           ))}
         </ul>
@@ -325,7 +326,7 @@ function Footer() {
                       <span
                         aria-hidden="true"
                         className="mx-4 block h-4 bg-current"
-                        style={{ width: (s.w / s.h) * 16, maskImage: `url(${s.logo})`, WebkitMaskImage: `url(${s.logo})`, maskSize: "contain", WebkitMaskSize: "contain", maskRepeat: "no-repeat", WebkitMaskRepeat: "no-repeat", maskPosition: "center", WebkitMaskPosition: "center" }}
+                        style={{ width: (s.w / s.h) * 16, maskImage: `url(${asset(s.logo)})`, WebkitMaskImage: `url(${asset(s.logo)})`, maskSize: "contain", WebkitMaskSize: "contain", maskRepeat: "no-repeat", WebkitMaskRepeat: "no-repeat", maskPosition: "center", WebkitMaskPosition: "center" }}
                       />
                     )}
                   </a>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { Logo } from "./logo";
 import type { VariantId } from "@/data/variants";
+import { BASE_PATH } from "@/lib/site";
 
 const links = [
   { href: "#capacidades", label: "Capacidades" },
@@ -29,12 +30,12 @@ export function VariantSwitch({ current, className = "" }: { current: VariantId;
         return (
           <a
             key={v.id}
-            href={v.path}
+            href={BASE_PATH + v.path}
             aria-current={on ? "page" : undefined}
             onClick={(e) => {
               if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
               e.preventDefault();
-              if (!on) location.assign(v.path + location.search + location.hash);
+              if (!on) location.assign(BASE_PATH + v.path + location.search + location.hash);
             }}
             className={`inline-flex h-9 flex-1 items-center justify-center rounded-[6px] px-4 font-display text-body-sm font-semibold transition-colors duration-base focus-ring ${on ? "bg-white text-inspire-blue shadow-card-rest" : "text-text-secondary hover:text-text-primary"}`}
           >
