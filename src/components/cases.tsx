@@ -2,13 +2,38 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Building2, Check, Landmark, Maximize2, Smartphone, Users, X } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  ArrowRight,
+  Building2,
+  Check,
+  Landmark,
+  Maximize2,
+  Smartphone,
+  Users,
+  X,
+} from "lucide-react";
 import { cases, type CaseStudy } from "@/data/cases";
+import { CAPS } from "@/data/agent";
 import { asset } from "@/lib/site";
 
-const icons = { tse: Landmark, credicomer: Smartphone, procesar: Building2, jostens: Users } as const;
+const icons = {
+  tse: Landmark,
+  credicomer: Smartphone,
+  procesar: Building2,
+  jostens: Users,
+} as const;
 
-function Logo({ c, h, white = false }: { c: CaseStudy; h: number; white?: boolean }) {
+function Logo({
+  c,
+  h,
+  white = false,
+}: {
+  c: CaseStudy;
+  h: number;
+  white?: boolean;
+}) {
   return (
     <Image
       src={asset(c.logo)}
@@ -32,7 +57,13 @@ export const themes = {
     button: "bg-white text-text-primary hover:bg-blue-tint-50",
     panel: "bg-elevate-blue text-white",
     panelMuted: "text-blue-100",
-    glow: { primary: "#99b0fe", bg: "#1054ff", angle: 115, reverse: false, slow: 1 },
+    glow: {
+      primary: "#99b0fe",
+      bg: "#1054ff",
+      angle: 115,
+      reverse: false,
+      slow: 1,
+    },
   },
   black: {
     card: "bg-elaniin-black text-white",
@@ -42,7 +73,13 @@ export const themes = {
     button: "bg-elevate-blue text-white hover:bg-blue-700",
     panel: "bg-elaniin-black text-white",
     panelMuted: "text-text-on-dark-accent",
-    glow: { primary: "#1054ff", bg: "#0c0c0c", angle: 65, reverse: true, slow: 0.9 },
+    glow: {
+      primary: "#1054ff",
+      bg: "#0c0c0c",
+      angle: 65,
+      reverse: true,
+      slow: 0.9,
+    },
   },
   excellence: {
     card: "bg-excellence-blue text-white",
@@ -52,7 +89,13 @@ export const themes = {
     button: "bg-elevate-blue text-white hover:bg-blue-700",
     panel: "bg-excellence-blue text-white",
     panelMuted: "text-text-on-dark-accent",
-    glow: { primary: "#1054ff", bg: "#000040", angle: 150, reverse: false, slow: 1.3 },
+    glow: {
+      primary: "#1054ff",
+      bg: "#000040",
+      angle: 150,
+      reverse: false,
+      slow: 1.3,
+    },
   },
 } as const;
 
@@ -67,7 +110,13 @@ const SCALE = 0.55;
 const OPACITY = 0.4;
 const TILES = 4;
 
-type GlowProps = { primary: string; bg: string; angle: number; reverse: boolean; slow: number };
+type GlowProps = {
+  primary: string;
+  bg: string;
+  angle: number;
+  reverse: boolean;
+  slow: number;
+};
 
 /* angle, direction and speed differ per card so the three never move in sync */
 export function Glow({ primary, bg, angle, reverse, slow }: GlowProps) {
@@ -94,7 +143,10 @@ export function Glow({ primary, bg, angle, reverse, slow }: GlowProps) {
     </div>
   );
   return (
-    <div className="mask-glow pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div
+      className="mask-glow pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      aria-hidden="true"
+    >
       <div className="absolute inset-0 blur-md" style={{ opacity: OPACITY }}>
         {layer(light, 16000)}
         {layer(cut, 6000)}
@@ -107,47 +159,58 @@ export function Glow({ primary, bg, angle, reverse, slow }: GlowProps) {
   Stacked cases: every card is full width and sticky, each one pinned a little lower than the
   previous, so the next case slides over the one before and the edge of each stays visible.
 */
-function CaseCard({ c, onOpen, index }: { c: CaseStudy; onOpen: () => void; index: number }) {
+function CaseCard({ c, onOpen }: { c: CaseStudy; onOpen: () => void }) {
   const t = themes[c.theme];
   return (
-    <article
-      /* The pin offset lives in --stick and is only used together with `sticky`: as a plain `top` it also moved the
-         non-sticky (relative) card down and pushed the last one over the next section. On phones the stack is on
-         only when the screen is tall enough to show a whole card under the bar. */
-      className={`card-glow reveal relative isolate grid min-w-0 cursor-pointer gap-8 rounded-card pad-card shadow-product md:sticky md:top-(--stick) md:min-h-[26rem] md:grid-cols-[1.3fr_1fr] md:gap-12 [@media(min-height:700px)]:sticky [@media(min-height:700px)]:top-(--stick) ${t.card}`}
-      style={{ ["--i" as string]: index, ["--stick" as string]: `calc(var(--nav-height) + ${16 + index * 16}px)` }}
-    >
-      <Glow {...t.glow} />
+    /* One slide of the gallery: narrower than the track, so the next case always peeks in from the right. */
+    <div className="w-[88%] shrink-0 snap-start">
+      <article
+        className={`card-glow relative isolate grid h-full min-w-0 cursor-pointer gap-8 rounded-card pad-card shadow-product md:min-h-[26rem] md:grid-cols-[1.3fr_1fr] md:gap-12 ${t.card}`}
+      >
+        <Glow {...t.glow} />
 
-      <div className="flex min-w-0 flex-col justify-between gap-10">
-        <p className={`mono-label text-nano ${t.tag}`}>{c.tag}</p>
-        <div className="min-w-0">
-          <div className="flex h-14 items-center">
-            <Logo c={c} h={c.logoH.card} white={t.logoWhite} />
+        <div className="flex min-w-0 flex-col justify-between gap-10">
+          <p className={`mono-label text-nano ${t.tag}`}>{c.tag}</p>
+          <div className="min-w-0">
+            <div className="flex h-14 items-center">
+              <Logo c={c} h={c.logoH.card} white={t.logoWhite} />
+            </div>
+            <h3
+              className={`mt-4 break-words font-display text-h1 font-semibold md:max-w-[16ch] ${t.title}`}
+            >
+              {c.title}
+            </h3>
+            <p className={`mt-3 max-w-[44ch] text-body ${t.panelMuted}`}>
+              {c.summary}
+            </p>
           </div>
-          <h3 className={`mt-4 break-words font-display text-h1 font-semibold md:max-w-[16ch] ${t.title}`}>{c.title}</h3>
-          <p className={`mt-3 max-w-[44ch] text-body ${t.panelMuted}`}>{c.summary}</p>
+          <div>
+            <button
+              type="button"
+              onClick={onOpen}
+              aria-haspopup="dialog"
+              aria-label={`${c.button}: ${c.client}, ${c.title}`}
+              className={`btn-arrow inline-flex h-11 items-center gap-2 rounded-button px-4 font-display text-button font-semibold transition-colors duration-base after:absolute after:inset-0 after:content-[''] focus-ring ${t.button}`}
+            >
+              {c.button}
+              <Maximize2 size={15} strokeWidth={1.75} aria-hidden="true" />
+            </button>
+          </div>
         </div>
-        <div>
-          <button
-            type="button"
-            onClick={onOpen}
-            aria-haspopup="dialog"
-            aria-label={`${c.button}: ${c.client}, ${c.title}`}
-            className={`btn-arrow inline-flex h-11 items-center gap-2 rounded-button px-4 font-display text-button font-semibold transition-colors duration-base after:absolute after:inset-0 after:content-[''] focus-ring ${t.button}`}
-          >
-            {c.button}
-            <Maximize2 size={15} strokeWidth={1.75} aria-hidden="true" />
-          </button>
-        </div>
-      </div>
 
-      {/* the figure leads, its label stays small */}
-      <div className="flex min-w-0 flex-col justify-end border-t border-border-on-dark pt-6 md:border-l md:border-t-0 md:pl-12 md:pt-0">
-        <p className="break-words font-display text-display-lg font-semibold tabular-nums">{c.highlight.value}</p>
-        <p className={`mono-label mt-3 max-w-[26ch] text-micro ${t.panelMuted}`}>{c.highlight.label}</p>
-      </div>
-    </article>
+        {/* the figure leads, its label stays small */}
+        <div className="flex min-w-0 flex-col justify-end border-t border-border-on-dark pt-6 md:border-l md:border-t-0 md:pl-12 md:pt-0">
+          <p className="break-words font-display text-display-lg font-semibold tabular-nums">
+            {c.highlight.value}
+          </p>
+          <p
+            className={`mono-label mt-3 max-w-[26ch] text-micro ${t.panelMuted}`}
+          >
+            {c.highlight.label}
+          </p>
+        </div>
+      </article>
+    </div>
   );
 }
 
@@ -156,7 +219,12 @@ function Checklist({ items }: { items: string[] }) {
     <ul className="mt-4 divide-y divide-border-default">
       {items.map((t) => (
         <li key={t} className="flex gap-3 py-3 first:pt-0 last:pb-0">
-          <Check size={18} strokeWidth={2} className="mt-0.5 shrink-0 text-elevate-blue" aria-hidden="true" />
+          <Check
+            size={18}
+            strokeWidth={2}
+            className="mt-0.5 shrink-0 text-elevate-blue"
+            aria-hidden="true"
+          />
           <span className="min-w-0 text-body text-text-secondary">{t}</span>
         </li>
       ))}
@@ -165,9 +233,14 @@ function Checklist({ items }: { items: string[] }) {
 }
 
 export function Cases({ ids }: { ids: string[] }) {
-  const shown = ids.map((id) => cases.find((c) => c.id === id)).filter((c): c is CaseStudy => !!c);
+  const shown = ids
+    .map((id) => cases.find((c) => c.id === id))
+    .filter((c): c is CaseStudy => !!c);
   const [openId, setOpenId] = useState<string | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
+  const view = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const bar = useRef<HTMLElement>(null);
   const current = cases.find((c) => c.id === openId) ?? null;
 
   useEffect(() => {
@@ -176,6 +249,56 @@ export function Cases({ ids }: { ids: string[] }) {
     if (!el.open) el.showModal();
     document.documentElement.classList.add("overflow-hidden");
   }, [openId]);
+
+  /*
+    Gallery driven by the page scroll (GSAP ScrollTrigger): the section pins under the bar and scrolling moves the
+    cases sideways, one stop per case, with the others smaller and dimmed. It replaces the vertical sticky stack,
+    whose pinned card looked frozen until the next one covered it.
+    Only on wide, tall screens with motion allowed; elsewhere the row stays a native swipe.
+  */
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)", () => {
+      const v = view.current, el = track.current, pinned = v?.parentElement;
+      if (!v || !el || !pinned) return;
+      const slides = gsap.utils.toArray<HTMLElement>(el.children);
+      if (slides.length < 2) return;
+      // from layout offsets, not scrollWidth: the scale on the dimmed slides would shorten it
+      const last = slides[slides.length - 1];
+      const distance = () => last.offsetLeft + last.offsetWidth - v.clientWidth;
+      const focus = (p: number) => {
+        const pos = p * (slides.length - 1);
+        slides.forEach((slide, i) => {
+          const d = Math.min(1, Math.abs(i - pos));
+          gsap.set(slide, { scale: 1 - 0.07 * d, opacity: 1 - 0.5 * d });
+        });
+        gsap.set(bar.current, { scaleX: p });
+      };
+      v.scrollLeft = 0;
+      gsap.set(v, { overflow: "visible" });
+      gsap.set(bar.current?.parentElement ?? null, { visibility: "visible" });
+      focus(0);
+      gsap.to(el, {
+        x: () => -distance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: pinned,
+          start: "top top+=96", // just under the 64px bar
+          end: () => "+=" + distance(),
+          pin: true,
+          scrub: 0.5,
+          snap: { snapTo: 1 / (slides.length - 1), duration: { min: 0.2, max: 0.5 }, ease: "power2.inOut" },
+          invalidateOnRefresh: true,
+          onUpdate: (self) => focus(self.progress),
+        },
+      });
+      return () => {
+        gsap.set([v, el, ...slides, bar.current, bar.current?.parentElement ?? null], { clearProps: "all" });
+      };
+    });
+    return () => mm.revert();
+  }, []);
 
   const close = () => {
     dialog.current?.close();
@@ -186,10 +309,16 @@ export function Cases({ ids }: { ids: string[] }) {
 
   return (
     <>
-      <div className="mt-10 flex flex-col gap-6">
-        {shown.map((c, i) => (
-          <CaseCard key={c.id} c={c} index={i} onOpen={() => setOpenId(c.id)} />
-        ))}
+      {/* Without script (or on phones, short screens, reduced motion) this is a swipeable row that snaps per case. */}
+      <div ref={view} className="-mb-10 mt-10 snap-x snap-mandatory overflow-x-auto pb-10 [scrollbar-width:none]">
+        <div ref={track} className="relative flex gap-6">
+          {shown.map((c) => (
+            <CaseCard key={c.id} c={c} onOpen={() => setOpenId(c.id)} />
+          ))}
+        </div>
+      </div>
+      <div aria-hidden="true" className="invisible mt-8 h-0.5 overflow-hidden rounded-full bg-border-default">
+        <i ref={bar} className="block h-full origin-left scale-x-0 bg-inspire-blue" />
       </div>
 
       <dialog
@@ -220,12 +349,19 @@ export function Cases({ ids }: { ids: string[] }) {
                 <span className="inline-flex h-11 w-11 items-center justify-center rounded-button border border-border-default bg-white text-elevate-blue">
                   <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
                 </span>
-                <span className="mono-label text-micro text-text-secondary">{current.tag}</span>
+                <span className="mono-label text-micro text-text-secondary">
+                  {current.tag}
+                </span>
               </div>
-              <h3 id="case-title" className="mt-8 break-words font-display text-h2 font-semibold text-text-primary">
+              <h3
+                id="case-title"
+                className="mt-8 break-words font-display text-h2 font-semibold text-text-primary"
+              >
                 {current.title}
               </h3>
-              <p className="mt-4 text-body-lg text-text-secondary">{current.summary}</p>
+              <p className="mt-4 text-body-lg text-text-secondary">
+                {current.summary}
+              </p>
 
               <dl className="mt-8 divide-y divide-border-default border-y border-border-default">
                 {[
@@ -233,25 +369,44 @@ export function Cases({ ids }: { ids: string[] }) {
                   ["Industria", current.detail.industry],
                   ["Servicio", current.detail.service],
                 ].map(([k, v]) => (
-                  <div key={k} className="grid gap-1 py-3 sm:grid-cols-[7rem_1fr] sm:gap-4">
-                    <dt className="mono-label text-micro leading-6 text-text-muted">{k}</dt>
+                  <div
+                    key={k}
+                    className="grid gap-1 py-3 sm:grid-cols-[7rem_1fr] sm:gap-4"
+                  >
+                    <dt className="mono-label text-micro leading-6 text-text-muted">
+                      {k}
+                    </dt>
                     <dd className="text-body-sm text-text-primary">{v}</dd>
                   </div>
                 ))}
               </dl>
 
-              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">El reto</h4>
-              <p className="mt-3 text-body text-text-secondary">{current.detail.challenge}</p>
+              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">
+                El reto
+              </h4>
+              <p className="mt-3 text-body text-text-secondary">
+                {current.detail.challenge}
+              </p>
 
-              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">La solución</h4>
-              {current.detail.solutionIntro && <p className="mt-3 text-body text-text-secondary">{current.detail.solutionIntro}</p>}
+              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">
+                La solución
+              </h4>
+              {current.detail.solutionIntro && (
+                <p className="mt-3 text-body text-text-secondary">
+                  {current.detail.solutionIntro}
+                </p>
+              )}
               <Checklist items={current.detail.solution} />
 
-              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">Resultados</h4>
+              <h4 className="mt-10 font-display text-h4 font-semibold text-text-primary">
+                Resultados
+              </h4>
               <Checklist items={current.detail.results} />
 
               <div className="mt-10 rounded-card border border-border-default bg-surface-subtle p-6">
-                <p className="font-display text-h4 font-semibold text-text-primary">{current.detail.cta}</p>
+                <p className="font-display text-h4 font-semibold text-text-primary">
+                  {current.detail.cta}
+                </p>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <a
                     href="#contacto"
@@ -277,15 +432,143 @@ export function Cases({ ids }: { ids: string[] }) {
               className={`relative isolate order-first flex min-h-44 flex-col justify-between gap-10 overflow-hidden p-6 md:p-10 lg:order-none lg:sticky lg:top-0 lg:h-[min(calc(100dvh-1.5rem),56rem)] lg:self-start ${themes[current.theme].panel}`}
             >
               <Glow {...themes[current.theme].glow} />
-              <Logo c={current} h={current.logoH.modal} white={themes[current.theme].logoWhite} />
+              <Logo
+                c={current}
+                h={current.logoH.modal}
+                white={themes[current.theme].logoWhite}
+              />
               <div>
-                <p className="font-display text-display-lg font-semibold tabular-nums">{current.highlight.value}</p>
-                <p className={`mono-label mt-3 max-w-[26ch] text-micro ${themes[current.theme].panelMuted}`}>{current.highlight.label}</p>
+                <p className="font-display text-display-lg font-semibold tabular-nums">
+                  {current.highlight.value}
+                </p>
+                <p
+                  className={`mono-label mt-3 max-w-[26ch] text-micro ${themes[current.theme].panelMuted}`}
+                >
+                  {current.highlight.label}
+                </p>
               </div>
             </aside>
           </div>
         )}
       </dialog>
     </>
+  );
+}
+
+/*
+  Capabilities as a mosaic of four sub-services (peers, not steps: no numbers, no connecting line).
+  Depth comes from tiles of different size and color, the moving glints on the dark ones and the product shadow.
+  The chips stay on one straight grid (a tilted version read as untidy); each one lifts and fills under the cursor.
+*/
+const TILES_LAYOUT = [
+  { span: "lg:col-span-7", theme: null },
+  { span: "lg:col-span-5", theme: "excellence" },
+  { span: "lg:col-span-5", theme: "vivid" },
+  { span: "lg:col-span-7", theme: null },
+] as const;
+
+export function CapTiles({ grupo }: { grupo: "software" | "cloud" }) {
+  const caps = Object.values(CAPS).filter((c) => c.grupo === grupo);
+  return (
+    <ul className="mt-10 grid gap-4 lg:grid-cols-12">
+      {caps.map((c, i) => {
+        const { span, theme } = TILES_LAYOUT[i % TILES_LAYOUT.length];
+        const t = theme ? themes[theme] : null;
+        return (
+          <li
+            key={c.nombre}
+            className={`reveal relative isolate flex min-h-[17rem] min-w-0 flex-col justify-between gap-10 overflow-hidden rounded-card p-6 shadow-product md:p-8 ${span} ${t ? t.card : "border border-border-default bg-[linear-gradient(160deg,#fff_45%,var(--color-surface-subtle))]"}`}
+            style={{ ["--i" as string]: i }}
+          >
+            {t && <Glow {...t.glow} />}
+            {/* the terms each service's own text names: one straight row of equal chips; the one under the cursor lifts and fills */}
+            <div aria-hidden="true" className="flex flex-wrap gap-2">
+              {c.piezas.map((p) => (
+                <span
+                  key={p}
+                  className={`group/chip inline-flex h-10 cursor-default items-center gap-2 rounded-button border px-3.5 font-display text-body-sm font-semibold transition duration-base hover:-translate-y-1 hover:shadow-[0_16px_22px_-12px_rgba(0,0,64,.5)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${
+                    t
+                      ? "border-white/25 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white hover:text-text-primary"
+                      : "border-border-default bg-white text-text-primary shadow-card-rest hover:border-inspire-blue hover:bg-inspire-blue hover:text-white"
+                  }`}
+                >
+                  <i
+                    className={`size-1.5 rounded-module transition-colors duration-base ${t ? "bg-white group-hover/chip:bg-inspire-blue" : "bg-inspire-blue group-hover/chip:bg-white"}`}
+                  />
+                  {p}
+                </span>
+              ))}
+            </div>
+            <div className="min-w-0">
+              <h3
+                className={`font-display text-h3 font-semibold ${t ? "text-white" : "text-text-primary"}`}
+              >
+                {c.nombre}
+              </h3>
+              <p
+                className={`mt-2 max-w-[46ch] text-body ${t ? t.panelMuted : "text-text-secondary"}`}
+              >
+                {c.texto}
+              </p>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/*
+  The quality standard as one compact instrument panel on Elevate Blue (same stage as the public-sector case).
+  Left: a seven-segment arc, all lit, with "7/7" inside: every dimension passed before production.
+  Right: the four thresholds the final texts name, as tight rows (figure, label, ten-step gauge), not as cards.
+  References: segmented arc gauge with the figure inside and small stat chips (pin 1115063189023198346);
+  small figures with a compact range indicator (pin 1115063189023236389).
+*/
+const ARC = Array.from({ length: 7 }, (_, k) => {
+  // seven strokes along a half circle (180° to 0°), 4° of gap between them
+  const step = 180 / 7, gap = 4, r = 84, cx = 110, cy = 104;
+  const pt = (deg: number) => `${(cx + r * Math.cos((deg * Math.PI) / 180)).toFixed(2)} ${(cy - r * Math.sin((deg * Math.PI) / 180)).toFixed(2)}`;
+  return `M ${pt(180 - k * step - gap / 2)} A ${r} ${r} 0 0 1 ${pt(180 - (k + 1) * step + gap / 2)}`;
+});
+
+export function QualityGate({ thresholds }: { thresholds: { value: string; label: string; fill: number }[] }) {
+  const t = themes.vivid;
+  return (
+    <div className={`reveal relative isolate mt-12 grid items-center gap-y-8 overflow-hidden rounded-card p-6 shadow-product md:mt-16 md:p-10 lg:grid-cols-12 lg:gap-x-12 ${t.card}`}>
+      <Glow {...t.glow} />
+      <div className="flex min-w-0 items-center gap-6 max-sm:flex-col max-sm:items-start lg:col-span-5">
+        <div className="relative w-[13.75rem] shrink-0">
+          <svg viewBox="0 0 220 112" className="block w-full" aria-hidden="true">
+            {ARC.map((d, k) => (
+              <path key={k} d={d} fill="none" stroke="#fff" strokeWidth="22" className="reveal" style={{ ["--i" as string]: k + 1 }} />
+            ))}
+          </svg>
+          <p className="absolute inset-x-0 bottom-0 text-center font-display text-[2.5rem] font-semibold leading-none tabular-nums" aria-label="Siete de siete">
+            7<span className={t.panelMuted}>/7</span>
+          </p>
+        </div>
+        <div className="min-w-0">
+          <p className={`mono-label text-micro ${t.panelMuted}`}>Software Nivel A</p>
+          <p className="mt-2 max-w-[22ch] font-display text-h4 font-medium text-white">dimensiones de evaluación superadas antes de llegar a producción.</p>
+        </div>
+      </div>
+      <div className="min-w-0 lg:col-span-7">
+        <p className={`mono-label text-micro ${t.panelMuted}`}>Entre ellas</p>
+        <ul className="mt-3">
+          {thresholds.map((th, n) => (
+            <li key={th.label} className="reveal flex min-w-0 items-center gap-4 border-t border-white/25 py-3" style={{ ["--i" as string]: n + 1 }}>
+              <p className="w-[5.5rem] shrink-0 font-mono text-h3 font-semibold leading-none tabular-nums text-white">{th.value}</p>
+              <p className="min-w-0 flex-1 text-body-sm text-white">{th.label}</p>
+              <div className="grid w-24 shrink-0 grid-cols-10 gap-0.5 max-sm:hidden" aria-hidden="true">
+                {Array.from({ length: 10 }, (_, k) => (
+                  <i key={k} className={`h-3 rounded-[2px] ${k < th.fill ? "bg-white" : "bg-white/25"}`} />
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

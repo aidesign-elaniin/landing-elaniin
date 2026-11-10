@@ -108,9 +108,9 @@ export function HeroPreview({ variante }: { variante: VariantId }) {
           <div className="grid min-w-0 content-start gap-2.5 bg-surface-subtle p-3.5">
             <div className="min-w-0 rounded-button border border-border-default bg-white p-3">
               <p className={`${miniLabel} text-text-muted`}>Capacidad que aplica</p>
-              <div className="my-2.5 grid grid-cols-4 gap-1">
+              <div className="my-2.5 flex gap-1">
                 {CAP_GROUPS[cap.grupo].nombres.map((n, i) => (
-                  <i key={n} className={`h-[3px] rounded-full ${i === cap.n ? "bg-inspire-blue" : "bg-border-default"}`} />
+                  <i key={n} className={`h-2.5 rounded-[3px] ${i === cap.n ? "w-10 bg-inspire-blue" : "w-6 border border-border-default"}`} />
                 ))}
               </div>
               <p className="font-display text-[14px] font-semibold text-text-primary">{cap.nombre}</p>
@@ -164,18 +164,17 @@ function CapBlock({ id }: { id: keyof typeof CAPS }) {
   return (
     <section className={card}>
       <p className={kicker}>Capacidad que aplica</p>
-      <ol className="mt-6 grid grid-cols-4 gap-2" aria-label={g.titulo}>
+      {/* the four are parallel services, not steps: plain tags, the one that applies in blue */}
+      <ul className="mt-6 flex flex-wrap gap-2" aria-label={g.titulo}>
         {g.nombres.map((n, i) => {
           const on = i === c.n;
           return (
-            <li key={n} className="min-w-0" aria-current={on ? "step" : undefined}>
-              <div className={`h-1 rounded-full ${on ? "bg-inspire-blue" : "bg-border-default"}`} />
-              <p className={`mt-2 font-mono text-caption font-semibold ${on ? "text-inspire-blue" : "text-text-disabled"}`}>{String(i + 1).padStart(2, "0")}</p>
-              <p className={`mt-1 text-caption max-sm:hidden ${on ? "font-semibold text-text-primary" : "text-text-disabled"}`}>{n}</p>
+            <li key={n} aria-current={on ? "true" : undefined} className={`rounded-tag border px-2.5 py-1 font-display text-caption font-semibold ${on ? "border-inspire-blue bg-inspire-blue text-white" : "border-border-default text-text-muted max-sm:hidden"}`}>
+              {n}
             </li>
           );
         })}
-      </ol>
+      </ul>
       <h3 className="mt-8 font-display text-h3 font-semibold text-text-primary">{c.nombre}</h3>
       <p className="mt-2 max-w-[56ch] text-body text-text-secondary">{c.texto}</p>
     </section>

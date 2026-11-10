@@ -1,10 +1,8 @@
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import type { Variant } from "@/data/variants";
 import { LeadForm } from "./lead-form";
-import { Cases } from "./cases";
+import { CapTiles, Cases, QualityGate } from "./cases";
 import { Nav } from "./nav";
-import { ButtonLink } from "./ui";
 import { Logo } from "./logo";
 import { Agent, AgentEntry, HeroPreview } from "./agent";
 import { PrivacyLink } from "./privacy-link";
@@ -23,7 +21,6 @@ export function Landing({ v }: { v: Variant }) {
         <Quality />
         <Backing />
         <Contact v={v} />
-        <Closing v={v} />
       </main>
       <Footer />
       <Agent variante={v.id} />
@@ -49,7 +46,7 @@ function Hero({ v }: { v: Variant }) {
           <p className="rise measure-lead mt-6 text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
             {h.subtitle}
           </p>
-          {/* main action: tell the agent what you need. The form is reached from the nav button and the closing section. */}
+          {/* main action: tell the agent what you need. The form is reached from the nav button. */}
           <div className="rise mt-10" style={{ ["--i" as string]: 2 }}>
             <AgentEntry variante={v.id} />
           </div>
@@ -135,21 +132,9 @@ function Capabilities({ v }: { v: Variant }) {
     <section id="capacidades" className="section-y">
       <div className="container-site">
         <p className="reveal max-w-[26ch] break-words font-display text-h1 font-semibold text-text-primary">{v.problem}</p>
-        {/* The four capabilities are one continuous process: a single line with four nodes that draws on scroll. */}
+        {/* The four capabilities are parallel sub-services, not steps: a mosaic of peers (see CapTiles). */}
         <h2 className="reveal mt-16 max-w-[28ch] font-display text-h3 font-semibold text-text-primary md:mt-20">{v.capabilities.title}</h2>
-        <ol className="process-line reveal mt-10 grid gap-y-10 lg:grid-cols-4 lg:gap-x-(--grid-gap)">
-          {v.capabilities.names.map((name, i) => (
-            <li key={name} className="flex min-w-0 gap-6 lg:flex-col lg:pr-4" style={{ ["--i" as string]: i }}>
-              <i aria-hidden="true" className="shrink-0" />
-              <div className="-mt-1.5 min-w-0 lg:mt-0">
-                <span className="block font-mono text-code font-semibold text-inspire-blue" aria-hidden="true">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="mt-2 block font-display text-h4 font-medium text-text-primary">{name}</span>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <CapTiles grupo={v.id} />
       </div>
     </section>
   );
@@ -157,7 +142,7 @@ function Capabilities({ v }: { v: Variant }) {
 
 function CasesSection({ v }: { v: Variant }) {
   return (
-    <section id="casos" className="section-y bg-surface-subtle">
+    <section id="casos" className="section-y overflow-x-clip bg-surface-subtle">
       <div className="container-site">
         <h2 className="reveal max-w-[24ch] break-words font-display text-h2 font-semibold text-text-primary">{v.cases.title}</h2>
         <Cases ids={v.cases.ids} />
@@ -168,10 +153,10 @@ function CasesSection({ v }: { v: Variant }) {
 
 /* The four thresholds the final texts name ("Entre ellas: ..."). The other three dimensions are not in the doc, so they are not listed. */
 const THRESHOLDS = [
-  { value: "0", label: "vulnerabilidades críticas o altas" },
-  { value: "0", label: "secretos expuestos" },
-  { value: "80\u00a0%", label: "de cobertura mínima en pruebas automatizadas" },
-  { value: "0", label: "dependencias circulares en la arquitectura" },
+  { value: "0", label: "vulnerabilidades críticas o altas", fill: 0 },
+  { value: "0", label: "secretos expuestos", fill: 0 },
+  { value: "80\u00a0%", label: "de cobertura mínima en pruebas automatizadas", fill: 8 },
+  { value: "0", label: "dependencias circulares en la arquitectura", fill: 0 },
 ];
 
 function Quality() {
@@ -187,57 +172,33 @@ function Quality() {
           </p>
         </div>
 
-        {/* The gate, readable at a glance: seven checkpoints in a row, production only after the last one. */}
-        <div className="mt-12 overflow-hidden rounded-card border border-border-default md:mt-16">
-          <div className="flex flex-col gap-5 border-b border-border-default bg-surface-subtle pad-card md:flex-row md:items-center md:justify-between">
-            <p className="mono-label text-micro text-text-secondary">Siete dimensiones de evaluación</p>
-            <ol className="flex flex-wrap items-center gap-1.5 sm:gap-2" aria-label="Siete dimensiones de evaluación antes de producción">
-              {Array.from({ length: 7 }, (_, n) => (
-                <li key={n} className="reveal grid size-8 place-items-center rounded-tag sm:size-9 bg-inspire-blue font-mono text-caption font-semibold text-white" style={{ ["--i" as string]: n + 1 }}>
-                  {String(n + 1).padStart(2, "0")}
-                </li>
-              ))}
-              <li className="reveal flex items-center gap-2 pl-1 font-display text-body-sm font-semibold text-text-primary" style={{ ["--i" as string]: 8 }}>
-                <ArrowRight size={16} strokeWidth={2} className="text-inspire-blue" aria-hidden="true" />
-                Producción
-              </li>
-            </ol>
-          </div>
-          <div className="pad-card">
-            <p className="mono-label text-micro text-text-muted">Entre ellas</p>
-            <ul className="mt-6 grid gap-x-(--grid-gap) gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-              {THRESHOLDS.map((t, n) => (
-                <li key={t.label} className="reveal min-w-0 border-l-2 border-inspire-blue pl-4" style={{ ["--i" as string]: n }}>
-                  <p className="font-display text-display-lg font-semibold tabular-nums text-text-primary">{t.value}</p>
-                  <p className="mt-2 text-body-sm text-text-secondary">{t.label}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <QualityGate thresholds={THRESHOLDS} />
       </div>
     </section>
   );
 }
 
+// Exported from the brand file "Badges elaniin 2.0.ai" (Nov 10 2026), one SVG per badge, untouched.
 const gcpBadges = [
-  { file: "gcp-cosell-select", alt: "Google Cloud Select, Co-sell Partner", w: 1833, h: 1287 },
-  { file: "gcp-services-select", alt: "Google Cloud Select, Services Partner", w: 1833, h: 1241 },
+  { file: "gcp-services-select", alt: "Google Cloud Select, Services Partner", w: 546, h: 373 },
+  { file: "gcp-cosell-select", alt: "Google Cloud Select, Co-sell Partner", w: 552, h: 377 },
+  { file: "gws-cosell-services-select", alt: "Google Workspace Select, Co-sell & Services Partner", w: 553, h: 377 },
 ];
 
 const badges = [
-  { file: "badge-clutch-aws", alt: "AWS Premier Tier Services", w: 94.1, h: 94.1 },
-  { file: "badge-clutch-top-software-developers", alt: "Clutch Top Software Developers, El Salvador", w: 98.41, h: 109.62 },
-  { file: "badge-clutch-top-staff", alt: "Clutch Top Staff Augmentation, El Salvador", w: 98.41, h: 109.62 },
+  { file: "badge-clutch-aws", alt: "AWS Partner, Premier Tier Services", w: 377, h: 377 },
+  { file: "badge-clutch-top-software-developers", alt: "Clutch Top Software Developers, El Salvador 2024", w: 388, h: 431 },
+  { file: "badge-clutch-top-staff", alt: "Clutch Top Staff Augmentation Company, El Salvador 2024", w: 388, h: 430 },
 ];
 
 function Backing() {
-  const item = "reveal flex h-20 items-center md:h-24 xl:h-28";
+  const item = "reveal flex h-20 items-center md:h-24";
   return (
     <section id="respaldo" className="section-y-compact border-t border-border-default">
       <div className="container-site grid-page items-center">
-        <h2 className="reveal col-span-12 min-w-0 font-display text-h3 font-semibold text-text-primary lg:col-span-4">Respaldo verificable.</h2>
-        <ul className="col-span-12 flex min-w-0 flex-wrap items-center gap-x-6 gap-y-6 lg:col-span-8 lg:justify-end xl:gap-x-8">
+        <h2 className="reveal col-span-12 min-w-0 font-display text-h3 font-semibold text-text-primary">Respaldo verificable.</h2>
+        {/* six badges: one full-width row under the title, so they stay on a single line on desktop */}
+        <ul className="col-span-12 flex min-w-0 flex-wrap items-center gap-x-6 gap-y-6 xl:gap-x-10">
           {gcpBadges.map((b, i) => (
             <li key={b.file} className={item} style={{ ["--i" as string]: i }}>
               <Image src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={b.w} height={b.h} unoptimized className="h-full w-auto" />
@@ -277,19 +238,6 @@ function Contact({ v }: { v: Variant }) {
             <LeadForm variante={v.id} />
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function Closing({ v }: { v: Variant }) {
-  return (
-    <section className="relative isolate overflow-hidden section-y-statement bg-excellence-blue text-white">
-      <div className="container-site relative text-center">
-        <h2 className="reveal mx-auto max-w-[22ch] break-words font-display text-h1 font-semibold text-white">{v.closing.title}</h2>
-        <ButtonLink href="#contacto" size="lg" className="reveal mt-10 max-[479px]:w-full">
-          {v.closing.button}
-        </ButtonLink>
       </div>
     </section>
   );

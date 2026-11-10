@@ -8,7 +8,6 @@ export type Variant = {
   problem: string;
   capabilities: { title: string; names: string[] };
   cases: { title: string; ids: string[] };
-  closing: { title: string; button: string };
 };
 
 export const variants: Record<VariantId, Variant> = {
@@ -28,7 +27,6 @@ export const variants: Record<VariantId, Variant> = {
       names: ["Discovery y arquitectura", "Desarrollo de plataformas", "QA y despliegue", "Evolución y soporte"],
     },
     cases: { title: "Soluciones para operaciones críticas de organizaciones líderes.", ids: ["tse", "credicomer", "jostens"] },
-    closing: { title: "Tu próximo proyecto crítico, con ingeniería de primer nivel.", button: "Conversemos sobre tu proyecto" },
   },
   cloud: {
     id: "cloud",
@@ -47,6 +45,5 @@ export const variants: Record<VariantId, Variant> = {
       names: ["Assessment y estrategia de migración", "Migración y modernización", "Gestión de APIs con Apigee", "Operación y gobernanza"],
     },
     cases: { title: "Infraestructura crítica que ya opera en la nube.", ids: ["procesar", "tse"] },
-    closing: { title: "Lleva tu operación a la nube sin detenerla.", button: "Conversemos sobre tu proyecto" },
   },
 };

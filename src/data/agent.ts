@@ -4,16 +4,16 @@
 
 export type Variante = "software" | "cloud";
 
-/** Capabilities: one block each. `n` is its position on its group's four-step line. */
+/** Capabilities: one block each. `n` is its index in its group; `piezas` are the terms its own text names, drawn as chips on the site. */
 export const CAPS = {
-  cap_discovery: { grupo: "software", n: 0, nombre: "Discovery y arquitectura", texto: "Levantamos requerimientos, reglas de negocio y dependencias antes de escribir la primera línea de código." },
-  cap_desarrollo: { grupo: "software", n: 1, nombre: "Desarrollo de plataformas", texto: "Web, mobile nativo para iOS y Android, sistemas core, ERP e integraciones vía APIs." },
-  cap_qa: { grupo: "software", n: 2, nombre: "QA y despliegue", texto: "Pruebas funcionales, de rendimiento y de regresión integradas a pipelines de CI/CD." },
-  cap_evolucion: { grupo: "software", n: 3, nombre: "Evolución y soporte", texto: "Mantenimiento y nuevas funcionalidades sin comprometer lo que ya opera." },
-  cap_assessment: { grupo: "cloud", n: 0, nombre: "Assessment y estrategia de migración", texto: "Inventario técnico, mapa de dependencias y plan por fases que prioriza lo crítico." },
-  cap_migracion: { grupo: "cloud", n: 1, nombre: "Migración y modernización", texto: "De entornos legacy u on-premise a Google Cloud y AWS, con pruebas en cada fase." },
-  cap_apigee: { grupo: "cloud", n: 2, nombre: "Gestión de APIs con Apigee", texto: "Políticas de seguridad (OAuth, JWT, API Keys), rate limiting, cuotas y observabilidad centralizada." },
-  cap_operacion: { grupo: "cloud", n: 3, nombre: "Operación y gobernanza", texto: "Monitoreo, control de accesos y arquitectura preparada para demanda pico." },
+  cap_discovery: { grupo: "software", n: 0, nombre: "Discovery y arquitectura", texto: "Levantamos requerimientos, reglas de negocio y dependencias antes de escribir la primera línea de código.", piezas: ["Requerimientos", "Reglas de negocio", "Dependencias"] },
+  cap_desarrollo: { grupo: "software", n: 1, nombre: "Desarrollo de plataformas", texto: "Web, mobile nativo para iOS y Android, sistemas core, ERP e integraciones vía APIs.", piezas: ["Web", "iOS", "Android", "Sistemas core", "ERP", "APIs"] },
+  cap_qa: { grupo: "software", n: 2, nombre: "QA y despliegue", texto: "Pruebas funcionales, de rendimiento y de regresión integradas a pipelines de CI/CD.", piezas: ["Pruebas funcionales", "Rendimiento", "Regresión", "CI/CD"] },
+  cap_evolucion: { grupo: "software", n: 3, nombre: "Evolución y soporte", texto: "Mantenimiento y nuevas funcionalidades sin comprometer lo que ya opera.", piezas: ["Mantenimiento", "Nuevas funcionalidades", "Lo que ya opera"] },
+  cap_assessment: { grupo: "cloud", n: 0, nombre: "Assessment y estrategia de migración", texto: "Inventario técnico, mapa de dependencias y plan por fases que prioriza lo crítico.", piezas: ["Inventario técnico", "Mapa de dependencias", "Plan por fases"] },
+  cap_migracion: { grupo: "cloud", n: 1, nombre: "Migración y modernización", texto: "De entornos legacy u on-premise a Google Cloud y AWS, con pruebas en cada fase.", piezas: ["Legacy", "On-premise", "Google Cloud", "AWS", "Pruebas en cada fase"] },
+  cap_apigee: { grupo: "cloud", n: 2, nombre: "Gestión de APIs con Apigee", texto: "Políticas de seguridad (OAuth, JWT, API Keys), rate limiting, cuotas y observabilidad centralizada.", piezas: ["OAuth", "JWT", "API Keys", "Rate limiting", "Cuotas", "Observabilidad"] },
+  cap_operacion: { grupo: "cloud", n: 3, nombre: "Operación y gobernanza", texto: "Monitoreo, control de accesos y arquitectura preparada para demanda pico.", piezas: ["Monitoreo", "Control de accesos", "Demanda pico"] },
 } as const;
 export const CAP_GROUPS: Record<Variante, { titulo: string; nombres: string[] }> = {
   software: { titulo: "Del discovery a producción, un solo equipo.", nombres: ["Discovery y arquitectura", "Desarrollo de plataformas", "QA y despliegue", "Evolución y soporte"] },
