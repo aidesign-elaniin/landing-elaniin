@@ -395,24 +395,19 @@ export function CapTiles({ grupo }: { grupo: "software" | "cloud" }) {
         return (
           <li
             key={c.nombre}
-            className={`reveal relative isolate flex min-h-[17rem] min-w-0 flex-col justify-between gap-10 overflow-hidden rounded-card p-6 shadow-product md:p-8 ${span} ${t ? t.card : "border border-border-default bg-[linear-gradient(160deg,#fff_45%,var(--color-surface-subtle))]"}`}
+            className={`reveal relative isolate flex min-h-[17rem] min-w-0 flex-col justify-between gap-10 overflow-hidden rounded-card p-6 shadow-card-rest md:p-8 ${span} ${t ? t.card : "border border-border-default bg-[linear-gradient(160deg,#fff_45%,var(--color-surface-subtle))]"}`}
             style={{ ["--i" as string]: i }}
           >
             {t && <Glow {...t.glow} />}
-            {/* the terms each service's own text names: one straight row of equal chips; the one under the cursor lifts and fills */}
+            {/* the terms each service's own text names, as quiet tags: light, fully rounded, no hover, not buttons */}
             <div aria-hidden="true" className="flex flex-wrap gap-2">
               {c.piezas.map((p) => (
                 <span
                   key={p}
-                  className={`group/chip inline-flex h-10 cursor-default items-center gap-2 rounded-button border px-3.5 font-display text-body-sm font-semibold transition duration-base hover:-translate-y-1 hover:shadow-[0_16px_22px_-12px_rgba(0,0,64,.5)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${
-                    t
-                      ? "border-white/25 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white hover:text-text-primary"
-                      : "border-border-default bg-white text-text-primary shadow-card-rest hover:border-inspire-blue hover:bg-inspire-blue hover:text-white"
+                  className={`inline-flex h-7 items-center rounded-full border px-3 text-caption font-light ${
+                    t ? "border-white/25 text-white/85" : "border-border-default text-text-secondary"
                   }`}
                 >
-                  <i
-                    className={`size-1.5 rounded-module transition-colors duration-base ${t ? "bg-white group-hover/chip:bg-inspire-blue" : "bg-inspire-blue group-hover/chip:bg-white"}`}
-                  />
                   {p}
                 </span>
               ))}
@@ -441,17 +436,17 @@ export function CapTiles({ grupo }: { grupo: "software" | "cloud" }) {
   Left: the rule. Right: the four thresholds, figure and label only. No gauges or bars: an empty bar next to a
   "0" read as "not met" (team feedback, Nov 10 2026).
 */
-export function QualityGate({ title, thresholds }: { title: string; thresholds: { value: string; label: string }[] }) {
+export function QualityGate({ thresholds }: { thresholds: { value: string; label: string }[] }) {
   const t = themes.vivid;
   return (
-    <div className={`reveal relative isolate mt-12 grid items-center gap-y-8 overflow-hidden rounded-card p-6 shadow-product md:mt-16 md:p-10 lg:grid-cols-12 lg:gap-x-12 ${t.card}`}>
+    // data only: four figures in one row, no dividers
+    <div className={`reveal relative isolate mt-8 overflow-hidden rounded-card p-6 shadow-product md:mt-10 md:p-10 lg:p-12 ${t.card}`}>
       <Glow {...t.glow} />
-      <p className="min-w-0 max-w-[16ch] font-display text-h2 font-semibold text-white lg:col-span-5">{title}</p>
-      <ul className="grid min-w-0 gap-x-10 sm:grid-cols-2 lg:col-span-7">
+      <ul className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-12">
         {thresholds.map((th, n) => (
-          <li key={th.label} className="reveal min-w-0 border-t border-white/25 py-5" style={{ ["--i" as string]: n + 1 }}>
+          <li key={th.label} className="reveal min-w-0" style={{ ["--i" as string]: n + 1 }}>
             <p className="font-display text-display-lg font-semibold leading-none tabular-nums text-white">{th.value}</p>
-            <p className="mt-2 text-body-sm text-white">{th.label}</p>
+            <p className="mt-3 max-w-[22ch] text-body-sm text-white">{th.label}</p>
           </li>
         ))}
       </ul>

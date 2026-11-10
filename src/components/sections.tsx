@@ -28,6 +28,10 @@ export function Landing({ v }: { v: Variant }) {
 }
 
 /* seal that floats on the hero asset, one per landing */
+/* the proof line as one long pill, no bullet (team, Nov 10 2026) */
+const PROOF_PILL =
+  "w-fit max-w-full rounded-full border border-border-default bg-surface-card px-5 py-2.5 font-display text-body-sm font-medium text-text-primary shadow-card-rest";
+
 const HERO_SEAL = { software: "badge-clutch-top-software-developers", cloud: "gcp-services-select" } as const;
 
 function Hero({ v }: { v: Variant }) {
@@ -51,10 +55,9 @@ function Hero({ v }: { v: Variant }) {
               Ver casos
             </a>
           </div>
-          <p className="rise mt-10 flex max-w-[52ch] items-start gap-3 border-t border-border-default pt-5 font-display text-body font-medium text-text-primary" style={{ ["--i" as string]: 3 }}>
-            <span className="mt-2 size-2 shrink-0 rounded-module bg-inspire-blue" aria-hidden="true" />
+          <p className={`rise aura mt-10 ${PROOF_PILL}`} style={{ ["--i" as string]: 3 }}>
             {h.proof}
-        </p>
+          </p>
         </div>
         {/* proof next to the promise: the first two cases of this landing, stacked in space */}
         <HeroStack ids={v.cases.ids} sello={HERO_SEAL[v.id]} />
@@ -149,16 +152,16 @@ function Quality() {
   return (
     <section id="calidad" className="section-y">
       <div className="container-site">
-        <div className="grid-page items-end">
-          <h2 className="reveal col-span-12 min-w-0 max-w-[20ch] break-words font-display text-h1 font-semibold text-text-primary lg:col-span-7">
-            Software crítico exige <span className="text-inspire-blue">un estándar que no se negocia.</span>
-          </h2>
-          <p className="reveal col-span-12 min-w-0 text-lead text-text-secondary lg:col-span-4 lg:col-start-9" style={{ ["--i" as string]: 1 }}>
-            Lo aplicamos en cada solución, sin importar su tamaño.
-          </p>
-        </div>
+        {/* one text block (title + one subtitle) sitting right on top of the data card, same left edge */}
+        <h2 className="reveal max-w-[22ch] break-words font-display text-h1 font-semibold text-text-primary">
+          Software crítico exige <span className="text-inspire-blue">un estándar que no se negocia.</span>
+        </h2>
+        <p className="reveal mt-4 max-w-[60ch] text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
+          Lo aplicamos en cada solución, sin importar su tamaño.
+          <span className="block">Nada llega a producción sin cumplirlo.</span>
+        </p>
 
-        <QualityGate title="Nada llega a producción sin cumplirlo." thresholds={THRESHOLDS} />
+        <QualityGate thresholds={THRESHOLDS} />
       </div>
     </section>
   );
@@ -204,8 +207,7 @@ function Backing() {
 function Contact({ v }: { v: Variant }) {
   return (
     <section id="contacto" className="section-y bg-surface-subtle">
-      {/* The form takes the wider column so its fields and its two options sit side by side and the card stays short.
-          The text column stretches to the card's height: title on top, the variant's proof anchored at the bottom. */}
+      {/* The form takes the wider column so its fields and its two options sit side by side and the card stays short. */}
       <div className="container-site grid-page items-stretch">
         <div className="col-span-12 flex min-w-0 flex-col justify-between gap-10 lg:col-span-5">
           <div>
@@ -214,13 +216,11 @@ function Contact({ v }: { v: Variant }) {
               Un especialista revisará tu proyecto y te contactará para una conversación técnica inicial, sin compromiso.
             </p>
           </div>
-          <p className="reveal hidden items-start gap-3 border-t border-border-default pt-5 font-display text-body font-medium text-text-primary lg:flex" style={{ ["--i" as string]: 2 }}>
-            <span className="mt-2 size-2 shrink-0 rounded-module bg-inspire-blue" aria-hidden="true" />
-            {v.hero.proof}
-          </p>
         </div>
-        <div className="reveal col-span-12 min-w-0 lg:col-span-7" style={{ ["--i" as string]: 2 }}>
-          <div className="rounded-card border border-border-default bg-surface-card pad-card shadow-card-rest">
+        {/* stacked (below lg): extra room so the aura's glow does not touch the text above */}
+        <div className="reveal col-span-12 min-w-0 max-lg:mt-8 lg:col-span-7" style={{ ["--i" as string]: 2 }}>
+          {/* ponytail: aura inherits the card's 12px radius; ring and glow sit 2px and 16px outside, so their corners get radius + offset to stay concentric */}
+          <div className="aura rounded-card before:rounded-[14px] after:rounded-[28px] border border-border-default bg-surface-card pad-card shadow-card-rest">
             <LeadForm variante={v.id} />
           </div>
         </div>

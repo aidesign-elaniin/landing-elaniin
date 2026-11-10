@@ -775,3 +775,31 @@
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 
+
+/* Aura: Elaniin component, copied as is from assets-web-elaniin/componentes/elaniin.css.
+   One per view (hero proof pill). */
+@property --aura-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes aura-spin {
+  to { --aura-angle: 360deg; }
+}
+@utility aura {
+  position: relative;
+  isolation: isolate;
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(from var(--aura-angle), transparent 0 55%, var(--color-blue-300) 75%, var(--color-elevate-blue) 88%, transparent 100%);
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: aura-spin 4s linear infinite;
+    pointer-events: none;
+  }
+  &::before { inset: -2px; padding: 2px; }
+  &::after { inset: -16px; padding: 16px; filter: blur(12px); opacity: 0.5; }
+  @media (prefers-reduced-motion: reduce) { &::before, &::after { animation: none; } }
+}
