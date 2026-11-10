@@ -12,7 +12,7 @@ import type { VariantId } from "@/data/variants";
 const DIRECT_WEBHOOK = process.env.NEXT_PUBLIC_LEAD_WEBHOOK_URL;
 
 type Status = "idle" | "loading" | "success" | "error";
-type Errors = Partial<Record<"nombre" | "correo" | "consentimiento", string>>;
+type Errors = Partial<Record<"nombre" | "correo" | "sector" | "consentimiento", string>>;
 type Attribution = { utm: Record<string, string>; referrer: string };
 
 const ATTRIBUTION_KEY = "elaniin-attribution";
@@ -62,6 +62,12 @@ const fields = [
   { name: "correo", label: "Correo corporativo", type: "email", autoComplete: "email" },
 ] as const;
 
+// Values are the contract's (lib/lead.ts → perfil.sector); n8n writes them to the "sector" column.
+const SECTORS = [
+  { value: "privado", label: "Privado" },
+  { value: "publico", label: "Público" },
+] as const;
+
 export function LeadForm({ variante }: { variante: VariantId }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
@@ -84,9 +90,10 @@ export function LeadForm({ variante }: { variante: VariantId }) {
     const correo = data.correo?.trim() ?? "";
     if (!next.correo && !EMAIL.test(correo)) next.correo = "Escribe un correo válido.";
     else if (!next.correo && !isCorporate(correo)) next.correo = "Necesito tu correo corporativo para que el especialista te contacte.";
+    if (!SECTORS.some((o) => o.value === data.sector)) next.sector = "Selecciona tu sector.";
     if (data.consentimiento !== "on") next.consentimiento = "Acepta la política de privacidad para enviar tus datos.";
     setErrors(next);
-    const firstInvalid = (["nombre", "correo", "consentimiento"] as const).find((k) => next[k]);
+    const firstInvalid = (["nombre", "correo", "sector", "consentimiento"] as const).find((k) => next[k]);
     if (firstInvalid) {
       document.getElementById(`f-${firstInvalid}`)?.focus();
       return;
@@ -107,6 +114,7 @@ export function LeadForm({ variante }: { variante: VariantId }) {
         utm,
         referrer,
         page: location.pathname,
+        perfil: { sector: data.sector },
       };
       const post = (url: string, payload: unknown) => fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       if (DIRECT_WEBHOOK) {
@@ -171,6 +179,35 @@ export function LeadForm({ variante }: { variante: VariantId }) {
               </div>
             );
           })}
+          {/* ponytail: native select, no custom dropdown */}
+          <div className="min-w-0 @lg:col-span-2">
+            <label htmlFor="f-sector" className="mb-2 block font-display text-body-sm font-medium text-text-secondary">
+              Sector
+            </label>
+            <select
+              id="f-sector"
+              name="sector"
+              required
+              defaultValue=""
+              aria-invalid={errors.sector ? true : undefined}
+              aria-describedby={errors.sector ? "e-sector" : undefined}
+              className="field"
+            >
+              <option value="" disabled>
+                Selecciona una opción
+              </option>
+              {SECTORS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+            {errors.sector && (
+              <p id="e-sector" className="mt-1 text-caption text-error-text">
+                {errors.sector}
+              </p>
+            )}
+          </div>
         </div>
         <label className="mt-4 flex cursor-pointer items-start gap-3 text-body-sm text-text-secondary">
           <input

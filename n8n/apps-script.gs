@@ -131,6 +131,7 @@ function avisarAlEquipo(lead) {
   // La hoja conserva las columnas del chat para no descuadrar las filas anteriores.
   var filas = [
     fila("Correo", lead.correo),
+    fila("Sector", { privado: "Privado", publico: "Público" }[lead.sector] || lead.sector),
     fila("Origen", d(lead.utm_source, "directo") + " / " + d(lead.utm_campaign, "sin campaña"))
   ].join("");
   var html = plantilla(
@@ -147,7 +148,7 @@ function avisarAlEquipo(lead) {
     name: "Landing Elaniin",
     subject: "Nuevo lead: " + lead.nombre + " (" + d(lead.empresa_dominio, "sin dominio") + ")",
     // versión de texto para clientes sin HTML
-    body: "Nuevo lead: " + lead.nombre + " <" + lead.correo + ">\nLanding: " + d(lead.variante, "sin dato") + "\nOrigen: " + d(lead.utm_source, "directo") + " / " + d(lead.utm_campaign, "sin campaña"),
+    body: "Nuevo lead: " + lead.nombre + " <" + lead.correo + ">\nSector: " + d(lead.sector, "sin dato") + "\nLanding: " + d(lead.variante, "sin dato") + "\nOrigen: " + d(lead.utm_source, "directo") + " / " + d(lead.utm_campaign, "sin campaña"),
     htmlBody: html,
     inlineImages: { logo: logo() }
   });
@@ -175,7 +176,7 @@ function responder(obj) {
 
 /** Prueba manual: elige "probar" arriba y pulsa Ejecutar. Autoriza permisos, agrega una fila y te manda los dos correos de muestra. */
 function probar() {
-  var lead = { token: TOKEN, fecha: new Date().toISOString(), modo: "formulario", variante: "software", nombre: "Prueba interna", correo: "prueba@elaniin.com", empresa_dominio: "elaniin.com" };
+  var lead = { token: TOKEN, fecha: new Date().toISOString(), modo: "formulario", variante: "software", nombre: "Prueba interna", correo: "prueba@elaniin.com", empresa_dominio: "elaniin.com", sector: "privado" };
   guardar(lead);
   avisarAlEquipo(lead);
   confirmarAlLead({ nombre: lead.nombre, correo: CORREO_EQUIPO.split(",")[0] }); // la confirmación de muestra te llega a ti, no a un cliente

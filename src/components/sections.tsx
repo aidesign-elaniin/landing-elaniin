@@ -120,9 +120,12 @@ function Capabilities({ v }: { v: Variant }) {
   return (
     <section id="capacidades" className="section-y">
       <div className="container-site">
-        <p className="reveal max-w-[26ch] break-words font-display text-h1 font-semibold text-text-primary">{v.problem}</p>
+        {/* H2 + text, same pattern as the standard section (team review, Nov 10 2026: two titles read as a double heading). */}
+        <h2 className="reveal max-w-[26ch] break-words font-display text-h1 font-semibold text-text-primary">{v.problem}</h2>
+        <p className="reveal mt-4 max-w-[60ch] text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
+          {v.capabilities.title}
+        </p>
         {/* The four capabilities are parallel sub-services, not steps: a mosaic of peers (see CapTiles). */}
-        <h2 className="reveal mt-16 max-w-[28ch] font-display text-h3 font-semibold text-text-primary md:mt-20">{v.capabilities.title}</h2>
         <CapTiles grupo={v.id} />
       </div>
     </section>
@@ -217,10 +220,9 @@ function Contact({ v }: { v: Variant }) {
             </p>
           </div>
         </div>
-        {/* stacked (below lg): extra room so the aura's glow does not touch the text above */}
-        <div className="reveal col-span-12 min-w-0 max-lg:mt-8 lg:col-span-7" style={{ ["--i" as string]: 2 }}>
-          {/* ponytail: aura inherits the card's 12px radius; ring and glow sit 2px and 16px outside, so their corners get radius + offset to stay concentric */}
-          <div className="aura rounded-card before:rounded-[14px] after:rounded-[28px] border border-border-default bg-surface-card pad-card shadow-card-rest">
+        <div className="reveal col-span-12 min-w-0 lg:col-span-7" style={{ ["--i" as string]: 2 }}>
+          {/* the aura ring sits 2px outside the card, so its corners get radius + 2px to stay concentric */}
+          <div className="aura rounded-card before:rounded-[14px] border border-border-default bg-surface-card pad-card shadow-card-rest">
             <LeadForm variante={v.id} />
           </div>
         </div>
