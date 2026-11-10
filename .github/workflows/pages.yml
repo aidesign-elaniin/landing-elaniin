@@ -1,6 +1,6 @@
 # Publishes a static copy of the landing on GitHub Pages, to show the design.
-# GitHub Pages has no server: in this copy the contact form cannot send.
-# The full site needs a host that runs Next.js.
+# GitHub Pages has no server: in this copy the contact form posts straight to the n8n webhook
+# (repository variable LEAD_WEBHOOK_URL). n8n must allow this origin (Webhook node > Allowed Origins).
 name: GitHub Pages
 
 on:
@@ -34,6 +34,7 @@ jobs:
         env:
           GITHUB_PAGES: "true"
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_LEAD_WEBHOOK_URL: ${{ vars.LEAD_WEBHOOK_URL }}
       - run: touch out/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

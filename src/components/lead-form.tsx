@@ -5,8 +5,11 @@ import { CheckCircle2 } from "lucide-react";
 import { ArrowIcon } from "./ui";
 import { CONSENT_CHANGE_EVENT, cookiesAccepted } from "./cookie-consent";
 import { PrivacyLink } from "./privacy-link";
-import { EMAIL, UTM_KEYS, isCorporate } from "@/lib/lead";
+import { EMAIL, UTM_KEYS, isCorporate, parseLead } from "@/lib/lead";
 import type { VariantId } from "@/data/variants";
+
+// Set only in the static GitHub Pages build (.github/workflows/pages.yml). Empty everywhere else: the form uses /api/lead.
+const DIRECT_WEBHOOK = process.env.NEXT_PUBLIC_LEAD_WEBHOOK_URL;
 
 type Status = "idle" | "loading" | "success" | "error";
 type Errors = Partial<Record<"nombre" | "correo" | "consentimiento", string>>;
@@ -92,23 +95,34 @@ export function LeadForm({ variante }: { variante: VariantId }) {
     setStatus("loading");
     try {
       const { utm, referrer } = attribution();
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // JSON contract in lib/lead.ts; the form sends it with an empty profile.
-        body: JSON.stringify({
-          modo: "formulario",
-          variante,
-          nombre: data.nombre,
-          correo,
-          consentimiento: true,
-          consentimiento_fecha: new Date().toISOString(),
-          website: data.website,
-          utm,
-          referrer,
-          page: location.pathname,
-        }),
-      });
+      // JSON contract in lib/lead.ts; the form sends it with an empty profile.
+      const body = {
+        modo: "formulario",
+        variante,
+        nombre: data.nombre,
+        correo,
+        consentimiento: true,
+        consentimiento_fecha: new Date().toISOString(),
+        website: data.website,
+        utm,
+        referrer,
+        page: location.pathname,
+      };
+      const post = (url: string, payload: unknown) => fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      if (DIRECT_WEBHOOK) {
+        // Static copy (GitHub Pages): no /api/lead there, so the browser does what the route does and posts to n8n itself.
+        // ponytail: honeypot and whitelist run in the browser here; a bot that posts to the webhook directly skips them. Repeat them in n8n if spam shows up.
+        if (!data.website?.trim()) {
+          const parsed = parseLead(body);
+          if (!parsed.ok) throw new Error(parsed.error);
+          const res = await post(DIRECT_WEBHOOK, parsed.lead);
+          const reply = await res.json().catch(() => ({}));
+          if (!res.ok || reply.ok === false) throw new Error(String(res.status));
+        }
+        setStatus("success");
+        return;
+      }
+      const res = await post("/api/lead", body);
       if (!res.ok) throw new Error(String(res.status));
       setStatus("success");
     } catch {
