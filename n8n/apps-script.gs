@@ -72,23 +72,53 @@ function esc(v) {
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+// Modo oscuro. Gmail (app de iOS y Android) invierte los colores por su cuenta y no deja desactivarlo:
+//  - un fondo puesto como imagen (linear-gradient) no lo invierte: así la franja y el botón conservan su azul;
+//  - el texto blanco sobre ese fondo sí lo oscurece: las clases gmail-* lo devuelven a blanco (solo actúan en Gmail).
+// Apple Mail y Outlook sí leen prefers-color-scheme: ahí el correo usa la versión oscura de la marca.
+var ESTILOS = '<style>' +
+  ':root{color-scheme:light dark;supported-color-schemes:light dark;}' +
+  'u + .body .gmail-screen{background:#000;mix-blend-mode:screen;}' +
+  'u + .body .gmail-difference{background:#000;mix-blend-mode:difference;}' +
+  '@media (prefers-color-scheme:dark){' +
+  '.e-bg{background:#0C0C0C !important;}' +
+  '.e-card{background:#000040 !important;border-color:#000083 !important;}' +
+  '.e-line{border-color:#000083 !important;}' +
+  '.e-t1{color:#FFFFFF !important;}' +
+  '.e-t2{color:#BFD9FF !important;}' +
+  '.e-t3{color:#99B0FE !important;}' +
+  '.e-card a{color:#99B0FE !important;}' +
+  '.e-card a.e-btn{color:#FFFFFF !important;}' +
+  '}</style>';
+
+/** Fondo que Gmail no invierte en modo oscuro (ver ESTILOS). */
+function fondoFijo(color) {
+  return 'background-color:' + color + ';background-image:linear-gradient(' + color + ',' + color + ');';
+}
+
+/** Texto blanco que sigue blanco en el modo oscuro de Gmail (ver ESTILOS). */
+function blancoFijo(html) {
+  return '<span class="gmail-screen" style="display:block;"><span class="gmail-difference" style="display:block;">' + html + '</span></span>';
+}
+
 /** Marco común: franja azul con logo, cuerpo blanco y pie. Tablas y estilos en línea, como exigen Gmail y Outlook. */
 function plantilla(titulo, contenidoHtml, pie) {
   var fuente = "font-family:Arial,Helvetica,sans-serif;";
-  return '<!doctype html><html lang="es"><body style="margin:0;padding:0;background:#F2F5FF;">' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F2F5FF;"><tr><td align="center" style="padding:32px 16px;">' +
-    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#FFFFFF;border:1px solid #D8D8D8;border-radius:12px;overflow:hidden;">' +
-    '<tr><td style="background:#000040;padding:28px 32px;"><img src="cid:logo" width="200" height="31" alt="Elaniin Tech Company" style="display:block;border:0;width:200px;height:auto;"></td></tr>' +
-    '<tr><td style="padding:32px 32px 8px 32px;' + fuente + '"><h1 style="margin:0;font-size:24px;line-height:30px;font-weight:700;color:#0C0C0C;">' + titulo + '</h1></td></tr>' +
-    '<tr><td style="padding:8px 32px 32px 32px;' + fuente + 'font-size:15px;line-height:24px;color:#4E4C4C;">' + contenidoHtml + '</td></tr>' +
-    '<tr><td style="padding:20px 32px;border-top:1px solid #D8D8D8;' + fuente + 'font-size:12px;line-height:18px;color:#636363;">' + pie + '</td></tr>' +
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark">' + ESTILOS + '</head>' +
+    '<body class="body e-bg" style="margin:0;padding:0;background:#F2F5FF;">' +
+    '<table role="presentation" class="e-bg" width="100%" cellpadding="0" cellspacing="0" style="background:#F2F5FF;"><tr><td align="center" style="padding:32px 16px;">' +
+    '<table role="presentation" class="e-card" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#FFFFFF;border:1px solid #D8D8D8;border-radius:12px;overflow:hidden;">' +
+    '<tr><td class="e-line" bgcolor="#000040" style="' + fondoFijo("#000040") + 'padding:28px 32px;border-bottom:1px solid #000040;"><img src="cid:logo" width="200" height="31" alt="Elaniin Tech Company" style="display:block;border:0;width:200px;height:auto;"></td></tr>' +
+    '<tr><td style="padding:32px 32px 8px 32px;' + fuente + '"><h1 class="e-t1" style="margin:0;font-size:24px;line-height:30px;font-weight:700;color:#0C0C0C;">' + titulo + '</h1></td></tr>' +
+    '<tr><td class="e-t2" style="padding:8px 32px 32px 32px;' + fuente + 'font-size:15px;line-height:24px;color:#4E4C4C;">' + contenidoHtml + '</td></tr>' +
+    '<tr><td class="e-line e-t3" style="padding:20px 32px;border-top:1px solid #D8D8D8;' + fuente + 'font-size:12px;line-height:18px;color:#636363;">' + pie + '</td></tr>' +
     '</table></td></tr></table></body></html>';
 }
 
 function fila(etiqueta, valor) {
   if (!valor) return "";
-  return '<tr><td width="150" valign="top" style="padding:10px 0;border-bottom:1px solid #D8D8D8;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:20px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#636363;">' + etiqueta + '</td>' +
-    '<td valign="top" style="padding:10px 0;border-bottom:1px solid #D8D8D8;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:22px;color:#0C0C0C;">' + esc(valor) + '</td></tr>';
+  return '<tr><td class="e-line e-t3" width="150" valign="top" style="padding:10px 0;border-bottom:1px solid #D8D8D8;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:20px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#636363;">' + etiqueta + '</td>' +
+    '<td class="e-line e-t1" valign="top" style="padding:10px 0;border-bottom:1px solid #D8D8D8;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:22px;color:#0C0C0C;">' + esc(valor) + '</td></tr>';
 }
 
 function logo() {
@@ -105,10 +135,10 @@ function avisarAlEquipo(lead) {
   ].join("");
   var html = plantilla(
     esc(lead.nombre),
-    '<p style="margin:0 0 20px 0;">Nuevo lead desde la landing de <strong style="color:#0C0C0C;">' + esc(lead.variante) + '</strong>, por <strong style="color:#0C0C0C;">' + esc(lead.modo) + '</strong>.</p>' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #D8D8D8;">' + filas + '</table>' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:28px;"><tr><td style="background:#023BFD;border-radius:8px;">' +
-    '<a href="mailto:' + encodeURIComponent(lead.correo) + '" style="display:inline-block;padding:13px 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#FFFFFF;text-decoration:none;">Responder a ' + esc(lead.nombre) + '</a></td></tr></table>',
+    '<p style="margin:0 0 20px 0;">Nuevo lead desde la landing de <strong class="e-t1" style="color:#0C0C0C;">' + esc(lead.variante) + '</strong>, por <strong class="e-t1" style="color:#0C0C0C;">' + esc(lead.modo) + '</strong>.</p>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="e-line" style="border-top:1px solid #D8D8D8;">' + filas + '</table>' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:28px;"><tr><td bgcolor="#023BFD" style="' + fondoFijo("#023BFD") + 'border-radius:8px;">' +
+    '<a href="mailto:' + encodeURIComponent(lead.correo) + '" class="e-btn" style="display:inline-block;padding:13px 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#FFFFFF;text-decoration:none;">' + blancoFijo('Responder a ' + esc(lead.nombre)) + '</a></td></tr></table>',
     "Aviso automático de la landing de Elaniin. Recibido el " + esc(d(lead.fecha, "")) + "."
   );
   MailApp.sendEmail({

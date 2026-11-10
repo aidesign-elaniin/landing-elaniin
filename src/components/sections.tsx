@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import type { Variant } from "@/data/variants";
 import { LeadForm } from "./lead-form";
 import { Cases } from "./cases";
-import { Nav, VariantSwitch } from "./nav";
+import { Nav } from "./nav";
 import { ButtonLink } from "./ui";
 import { Logo } from "./logo";
 import { Agent, AgentEntry, HeroPreview } from "./agent";
@@ -43,7 +43,6 @@ function Hero({ v }: { v: Variant }) {
     <section className="relative isolate overflow-hidden pb-20 pt-12 md:pb-28 md:pt-16 lg:pb-32 lg:pt-20">
       <div className="container-site relative grid-page gap-y-0">
         <div className="col-span-12 min-w-0 lg:col-span-7">
-          <VariantSwitch current={v.id} className="rise mb-8" />
           <h1 className="rise break-words font-display text-display-lg font-semibold text-text-primary">
             {h.h1} <span className="text-inspire-blue">{h.accent}</span>
           </h1>

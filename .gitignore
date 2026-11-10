@@ -46,3 +46,6 @@ next-env.d.ts
 
 # referencias Pinterest (32 MB, se regeneran con pull)
 /pinterest-pull
+
+# Apps Script con token y correos reales: nunca al repo público
+n8n/*.local.gs

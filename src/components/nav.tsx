@@ -3,8 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { Logo } from "./logo";
-import type { VariantId } from "@/data/variants";
-import { BASE_PATH } from "@/lib/site";
 
 const links = [
   { href: "#capacidades", label: "Capacidades" },
@@ -13,39 +11,6 @@ const links = [
 ];
 
 const FOCUSABLE = 'a[href], button:not([disabled])';
-
-/* The two landings are separate URLs (each ad lands on its own message); this switch, at the top of the hero
-   so it is seen on phones too, moves between them.
-   It keeps the section (#casos) and the query string (UTMs), so the lead's origin is not lost. */
-const VARIANTS: { id: VariantId; label: string; path: string }[] = [
-  { id: "software", label: "Software", path: "/" },
-  { id: "cloud", label: "Cloud", path: "/cloud" },
-];
-
-export function VariantSwitch({ current, className = "" }: { current: VariantId; className?: string }) {
-  return (
-    <nav aria-label="Servicio" className={`inline-flex shrink-0 rounded-button border border-border-default bg-surface-subtle p-0.5 ${className}`}>
-      {VARIANTS.map((v) => {
-        const on = v.id === current;
-        return (
-          <a
-            key={v.id}
-            href={BASE_PATH + v.path}
-            aria-current={on ? "page" : undefined}
-            onClick={(e) => {
-              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-              e.preventDefault();
-              if (!on) location.assign(BASE_PATH + v.path + location.search + location.hash);
-            }}
-            className={`inline-flex h-9 flex-1 items-center justify-center rounded-[6px] px-4 font-display text-body-sm font-semibold transition-colors duration-base focus-ring ${on ? "bg-white text-inspire-blue shadow-card-rest" : "text-text-secondary hover:text-text-primary"}`}
-          >
-            {v.label}
-          </a>
-        );
-      })}
-    </nav>
-  );
-}
 
 export function Nav() {
   const [open, setOpen] = useState(false);
