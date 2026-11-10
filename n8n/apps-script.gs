@@ -127,15 +127,15 @@ function logo() {
 
 function avisarAlEquipo(lead) {
   var d = function (v, vacio) { return v ? v : vacio; };
+  // Solo existe el formulario (el chat se quitó en nov. 2026): el aviso muestra lo que el formulario captura.
+  // La hoja conserva las columnas del chat para no descuadrar las filas anteriores.
   var filas = [
-    fila("Correo", lead.correo), fila("Sector", lead.sector), fila("Servicio", lead.servicio), fila("Situación", lead.situacion),
-    fila("Nube", lead.nube), fila("Plataforma", lead.tipo_plataforma), fila("Casos vistos", lead.casos_vistos), fila("Temas vistos", lead.temas_vistos),
-    fila("Preguntas", lead.preguntas_libres), fila("Mensaje", lead.mensaje), fila("Ruta", lead.ruta), fila("Chat completo", lead.chat_completo),
+    fila("Correo", lead.correo),
     fila("Origen", d(lead.utm_source, "directo") + " / " + d(lead.utm_campaign, "sin campaña"))
   ].join("");
   var html = plantilla(
     esc(lead.nombre),
-    '<p style="margin:0 0 20px 0;">Nuevo lead desde la landing de <strong class="e-t1" style="color:#0C0C0C;">' + esc(lead.variante) + '</strong>, por <strong class="e-t1" style="color:#0C0C0C;">' + esc(lead.modo) + '</strong>.</p>' +
+    '<p style="margin:0 0 20px 0;">Nuevo lead desde la landing de <strong class="e-t1" style="color:#0C0C0C;">' + esc(lead.variante) + '</strong>.</p>' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="e-line" style="border-top:1px solid #D8D8D8;">' + filas + '</table>' +
     '<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:28px;"><tr><td bgcolor="#023BFD" style="' + fondoFijo("#023BFD") + 'border-radius:8px;">' +
     '<a href="mailto:' + encodeURIComponent(lead.correo) + '" class="e-btn" style="display:inline-block;padding:13px 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#FFFFFF;text-decoration:none;">' + blancoFijo('Responder a ' + esc(lead.nombre)) + '</a></td></tr></table>',
@@ -147,7 +147,7 @@ function avisarAlEquipo(lead) {
     name: "Landing Elaniin",
     subject: "Nuevo lead: " + lead.nombre + " (" + d(lead.empresa_dominio, "sin dominio") + ")",
     // versión de texto para clientes sin HTML
-    body: "Nuevo lead: " + lead.nombre + " <" + lead.correo + ">\nServicio: " + d(lead.servicio, "sin dato") + "\nSector: " + d(lead.sector, "sin dato") + "\nMensaje: " + d(lead.mensaje, "sin mensaje") + "\nRuta: " + d(lead.ruta, "sin ruta"),
+    body: "Nuevo lead: " + lead.nombre + " <" + lead.correo + ">\nLanding: " + d(lead.variante, "sin dato") + "\nOrigen: " + d(lead.utm_source, "directo") + " / " + d(lead.utm_campaign, "sin campaña"),
     htmlBody: html,
     inlineImages: { logo: logo() }
   });
@@ -175,7 +175,7 @@ function responder(obj) {
 
 /** Prueba manual: elige "probar" arriba y pulsa Ejecutar. Autoriza permisos, agrega una fila y te manda los dos correos de muestra. */
 function probar() {
-  var lead = { token: TOKEN, fecha: new Date().toISOString(), modo: "chat", variante: "software", nombre: "Prueba interna", correo: "prueba@elaniin.com", empresa_dominio: "elaniin.com", sector: "privado", servicio: "software", mensaje: "Mensaje de prueba.", ruta: "N0 > N1", chat_completo: "no" };
+  var lead = { token: TOKEN, fecha: new Date().toISOString(), modo: "formulario", variante: "software", nombre: "Prueba interna", correo: "prueba@elaniin.com", empresa_dominio: "elaniin.com" };
   guardar(lead);
   avisarAlEquipo(lead);
   confirmarAlLead({ nombre: lead.nombre, correo: CORREO_EQUIPO.split(",")[0] }); // la confirmación de muestra te llega a ti, no a un cliente
