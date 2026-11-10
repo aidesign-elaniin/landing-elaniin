@@ -23,9 +23,10 @@ const primaryBtn =
 const card = "rise rounded-card border border-border-default bg-white pad-card shadow-card-rest";
 const kicker = "mono-label text-micro text-text-muted";
 
-const EXAMPLES: Record<VariantId, string> = {
-  software: "Necesitamos una app para abrir cuentas sin ir a una agencia",
-  cloud: "Tenemos un portal que se cae cuando hay mucha gente",
+// Ready-made sentences for the visitor who does not know what to write. Each one brings different pieces.
+const EXAMPLES: Record<VariantId, string[]> = {
+  software: ["Necesitamos una app para abrir cuentas sin ir a una agencia", "Queremos lanzar una tienda en línea", "Tenemos un sistema viejo y hay que modernizarlo"],
+  cloud: ["Tenemos un portal que se cae cuando hay mucha gente", "Queremos migrar nuestros sistemas a la nube", "Nuestras APIs no tienen seguridad unificada"],
 };
 
 const open = (detail: OpenChatDetail) => window.dispatchEvent(new CustomEvent(OPEN_CHAT_EVENT, { detail }));
@@ -51,16 +52,19 @@ export function AgentEntry({ variante }: { variante: VariantId }) {
           <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
         </button>
       </form>
-      <p className="mt-3 flex flex-wrap items-center gap-2 text-body-sm text-text-muted">
-        Por ejemplo:
-        <button
-          type="button"
-          onClick={() => open({ texto: EXAMPLES[variante] })}
-          className="rounded-button border border-border-default bg-white px-3 py-1.5 text-left text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring"
-        >
-          {EXAMPLES[variante]}
-        </button>
-      </p>
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-body-sm text-text-muted">
+        <span>Por ejemplo:</span>
+        {EXAMPLES[variante].map((ex) => (
+          <button
+            key={ex}
+            type="button"
+            onClick={() => open({ texto: ex })}
+            className="rounded-button border border-border-default bg-white px-3 py-1.5 text-left text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring"
+          >
+            {ex}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

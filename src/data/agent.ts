@@ -37,6 +37,10 @@ export const SUGGESTIONS = {
   nube: "¿Con qué nube trabajan?",
   alcance: "No tengo el alcance definido",
   equipo: "Necesito sumar ingenieros a mi equipo",
+  banca: "¿Tienen experiencia en banca?",
+  ecommerce: "¿Han hecho comercio electrónico?",
+  logistica: "¿Tienen experiencia en logística?",
+  datos: "¿Cómo migran datos sin perder información?",
   especialista: "Hablar con un especialista",
 } as const;
 export type SuggestionId = keyof typeof SUGGESTIONS;
@@ -66,19 +70,19 @@ export const seen = (s: State): BlockId[] => s.turns.flatMap((t) => t.blocks);
  */
 const RULES: [RegExp, string, BlockId[], SuggestionId[]][] = [
   [/precio|cuesta|costo|presupuesto|cotiza|plazo|cu[aá]nto tarda|tiempo de entrega/, "precio", ["contacto"], []],
+  [/\bapi|apigee/, "servicios", ["cap_apigee", "caso_procesar", "respaldo"], ["calidad", "nube"]],
   [/calidad|segur|prueba|vulnerab/, "calidad", ["umbrales", "cap_qa"], ["casos", "respaldo"]],
   [/respald|certific|partner|sello|qui[eé]n los/, "respaldo", ["respaldo"], ["calidad", "casos"]],
   [/gobierno|instituci[oó]n|p[uú]blic|ministerio|alcald|licitaci|migratori|frontera|visa/, "sector_publico", ["sector_publico", "caso_tse", "caso_dgme"], ["calidad", "respaldo"]],
-  [/tienda|e-?commerce|comercio electr|marketplace|cat[aá]logo|vender en l[ií]nea|carrito/, "industria", ["cap_desarrollo", "caso_mercandu", "caso_graziela"], ["calidad", "alcance"]],
+  [/tienda|e-?commerce|comercio electr|marketplace|cat[aá]logo|vender en l[ií]nea|carrito/, "industria", ["cap_desarrollo", "caso_mercandu", "caso_graziela"], ["logistica", "calidad", "alcance"]],
   [/log[ií]stic|env[ií]o|paquete|casillero|courier/, "industria", ["cap_desarrollo", "caso_transexpress"], ["calidad", "casos"]],
   [/ingenier|equipo|staff|talento|desarrolladores|l[ií]der t[eé]cnico/, "servicios", ["caso_jostens", "respaldo"], ["calidad"]],
-  [/\bapi|apigee/, "servicios", ["cap_apigee", "caso_procesar", "respaldo"], ["calidad", "nube"]],
   [/se cae|pico|demanda|lento|mucha gente|disponibilidad|escal/, "servicios", ["cap_operacion", "caso_tse", "respaldo"], ["calidad", "nube"]],
-  [/nube|cloud|migra|aws|google|servidor|on-?premise|legacy/, "servicios", ["cap_migracion", "caso_procesar", "caso_dgme"], ["calidad", "nube"]],
+  [/nube|cloud|migra|aws|google|servidor|on-?premise|legacy/, "servicios", ["cap_migracion", "caso_procesar", "caso_dgme"], ["datos", "calidad", "nube"]],
   [/alcance|no s[eé] por d[oó]nde|empezar|idea/, "alcance", ["cap_discovery", "caso_credicomer"], ["calidad", "casos"]],
   [/banco|banca|cuenta|financ|fintech|pago/, "industria", ["cap_desarrollo", "caso_credicomer", "caso_bancoazul"], ["calidad", "alcance"]],
-  [/mantener|mantenimiento|soporte|ya tenemos un sistema|evolucion/, "servicios", ["cap_evolucion", "caso_credicomer"], ["calidad"]],
-  [/app|web|m[oó]vil|plataforma|sistema|software|erp|portal|sitio|integraci|caso/, "servicios", ["cap_desarrollo", "caso_credicomer", "umbrales"], ["calidad", "alcance"]],
+  [/mantener|mantenimiento|soporte|ya tenemos un sistema|evolucion|moderniz|viejo|antiguo|anticuad/, "servicios", ["cap_evolucion", "caso_transexpress", "caso_bancoazul"], ["calidad", "datos"]],
+  [/app|web|m[oó]vil|plataforma|sistema|software|erp|portal|sitio|integraci|caso/, "servicios", ["cap_desarrollo", "caso_credicomer", "umbrales"], ["banca", "ecommerce", "calidad"]],
 ];
 
 export function localReply(text: string): AgentReply | null {
@@ -107,11 +111,11 @@ export function addTurn(s: State, user: string, reply: AgentReply | null): State
 
   const blocks = [...new Set(r.bloques)].filter((b): b is BlockId => (BLOCK_IDS as readonly string[]).includes(b) && !shown.includes(b as BlockId)).slice(0, 3);
   const all = [...shown, ...blocks];
-  const suggestions = [...new Set([...r.sugerencias, "especialista"])]
+  const suggestions = [...new Set([...r.sugerencias.slice(0, 3), "especialista"])]
     .filter((id): id is SuggestionId => id in SUGGESTIONS)
     .filter((id) => !asked.includes(SUGGESTIONS[id]))
     .filter((id) => id !== "especialista" || !all.includes("contacto"))
-    .slice(0, 3);
+    .slice(0, 4);
 
   const d = r.perfil_detectado;
   const pick = (cur: string, v: string, allowed: string[]) => (!cur && allowed.includes(v) ? v : cur);

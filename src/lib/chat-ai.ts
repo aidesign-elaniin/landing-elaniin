@@ -79,7 +79,7 @@ Campo "bloques" (de 0 a 3 piezas, en el orden en que deben verse, la más releva
 - En temas de nube usa solo los casos caso_procesar, caso_tse y caso_dgme. Al MTPS nómbralo solo como institución atendida; no tiene caso.
 - No repitas piezas que ya están en "vistos". Si todo lo relevante ya se mostró, no muestres piezas y dilo en la frase.
 
-Campo "sugerencias" (de 0 a 3, lo que tendría sentido preguntar después): calidad, casos, respaldo, publico (solo si es o parece institución pública), nube (solo en temas de nube), alcance, equipo, especialista.
+Campo "sugerencias" (de 0 a 3, lo que tendría sentido preguntar después y aún no se ha visto): calidad, casos, respaldo, publico (solo si es o parece institución pública), nube (solo en temas de nube), alcance, equipo, banca (si es banco o financiera), ecommerce (si vende en línea), logistica (si mueve envíos o paquetes), datos (si hay migración de sistemas o de información), especialista.
 
 Perfil detectado: llena sector (privado o publico), servicio (software, cloud o equipo) y nube (google_cloud, aws, ambas o ninguna) solo si el mensaje lo dice con claridad; si no, deja cadena vacía. "equipo" es sumar ingenieros o liderazgo técnico al equipo de la persona.
 
