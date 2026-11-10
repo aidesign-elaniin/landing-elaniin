@@ -1,3 +1,4 @@
+import { Award } from "lucide-react";
 import Image from "next/image";
 import type { Variant } from "@/data/variants";
 import { LeadForm } from "./lead-form";
@@ -16,8 +17,9 @@ export function Landing({ v }: { v: Variant }) {
       <main id="main">
         <Hero v={v} />
         <Clients />
-        <Capabilities v={v} />
+        {/* storytelling order from the team (Georgina, Nov 10 2026): problem, cases, capabilities, standard, backing, contact */}
         <CasesSection v={v} />
+        <Capabilities v={v} />
         <Quality />
         <Backing />
         <Contact v={v} />
@@ -120,11 +122,7 @@ function Capabilities({ v }: { v: Variant }) {
   return (
     <section id="capacidades" className="section-y">
       <div className="container-site">
-        {/* H2 + text, same pattern as the standard section (team review, Nov 10 2026: two titles read as a double heading). */}
-        <h2 className="reveal max-w-[26ch] break-words font-display text-h1 font-semibold text-text-primary">{v.problem}</h2>
-        <p className="reveal mt-4 max-w-[60ch] text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
-          {v.capabilities.title}
-        </p>
+        <h2 className="reveal max-w-[26ch] break-words font-display text-h2 font-semibold text-text-primary">{v.capabilities.title}</h2>
         {/* The four capabilities are parallel sub-services, not steps: a mosaic of peers (see CapTiles). */}
         <CapTiles grupo={v.id} />
       </div>
@@ -136,7 +134,11 @@ function CasesSection({ v }: { v: Variant }) {
   return (
     <section id="casos" className="section-y bg-surface-subtle">
       <div className="container-site">
-        <h2 className="reveal max-w-[24ch] break-words font-display text-h2 font-semibold text-text-primary">{v.cases.title}</h2>
+        {/* the problem opens the cases: H2 + text, the cases answer it right below */}
+        <h2 className="reveal max-w-[26ch] break-words font-display text-h1 font-semibold text-text-primary">{v.problem}</h2>
+        <p className="reveal mt-4 max-w-[60ch] text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
+          {v.cases.title}
+        </p>
         <Cases ids={v.cases.ids} />
       </div>
     </section>
@@ -171,34 +173,73 @@ function Quality() {
 }
 
 // Exported from the brand file "Badges elaniin 2.0.ai" (Nov 10 2026), one SVG per badge, untouched.
-const gcpBadges = [
+type Badge = { file: string; alt: string; w: number; h: number };
+const GCP: Badge[] = [
   { file: "gcp-services-select", alt: "Google Cloud Select, Services Partner", w: 546, h: 373 },
   { file: "gcp-cosell-select", alt: "Google Cloud Select, Co-sell Partner", w: 552, h: 377 },
   { file: "gws-cosell-services-select", alt: "Google Workspace Select, Co-sell & Services Partner", w: 553, h: 377 },
-];
-
-const badges = [
   { file: "badge-clutch-aws", alt: "AWS Partner, Premier Tier Services", w: 377, h: 377 },
+];
+const CLUTCH: Badge[] = [
   { file: "badge-clutch-top-software-developers", alt: "Clutch Top Software Developers, El Salvador 2024", w: 388, h: 431 },
   { file: "badge-clutch-top-staff", alt: "Clutch Top Staff Augmentation Company, El Salvador 2024", w: 388, h: 430 },
 ];
 
+/* Each fact sits on top of the badges that prove it (team, Nov 10 2026). Figures from Georgina; do not reword without the team.
+   "Partner de Google Cloud y AWS" is what the badges themselves say. */
+const FACTS: { value: string; label: string; badges: Badge[]; span: string; seal?: boolean }[] = [
+  { value: "12 años", label: "en la industria", badges: [], span: "lg:col-span-3", seal: true },
+  { value: "Top 1,000", label: "empresas globales en Clutch", badges: CLUTCH, span: "lg:col-span-3" },
+  { value: "Equipo certificado", label: "Partner de Google Cloud y AWS", badges: GCP, span: "md:col-span-2 lg:col-span-6" },
+];
+
+/* Own seal under "12 años" (2014 to 2026), drawn inline so it uses the page fonts.
+   Same build as the Google badges next to it (white card, colored band at the bottom). It adds, not repeats:
+   the start year, one tick per year (the last in Inspire Blue) and the +500 projects from the hero proof.
+   Icon: lucide Award (already a dependency). Refs: Braun dial ticks and a habit-streak dot row, Pinterest board, Nov 10 2026. */
+function YearsBadge() {
+  const ticks = Array.from({ length: 12 }, (_, i) => 108 + i * 30.5);
+  return (
+    <svg viewBox="0 0 552 377" role="img" aria-label="Desde 2014, más de 500 proyectos en producción" className="h-full w-auto">
+      <rect x="1.5" y="1.5" width="549" height="374" rx="12" fill="#FFFFFF" stroke="#4E4C4C" strokeWidth="3" />
+      <circle cx="276" cy="72" r="40" fill="#EDF1FF" />
+      <Award x="248" y="44" width="56" height="56" color="#023BFD" strokeWidth={1.75} aria-hidden="true" />
+      <text x="276" y="186" textAnchor="middle" className="font-display" fontSize="64" fontWeight="600" letterSpacing="-1.5" fill="#0C0C0C">Desde 2014</text>
+      {ticks.map((x, i) => (
+        <rect key={x} x={x} y={i === 11 ? 214 : 220} width="8" height={i === 11 ? 32 : 20} rx="4" fill={i === 11 ? "#023BFD" : "#99B0FE"} />
+      ))}
+      <text x="108" y="280" className="font-mono" fontSize="20" fill="#4E4C4C">2014</text>
+      <text x="449" y="280" textAnchor="end" className="font-mono" fontSize="20" fill="#4E4C4C">2026</text>
+      <path d="M1.5 313h549v50.5a12 12 0 0 1-12 12h-525a12 12 0 0 1-12-12z" fill="#023BFD" />
+      <text x="276" y="354" textAnchor="middle" className="font-display" fontSize="26" fontWeight="500" fill="#FFFFFF">+500 proyectos en producción</text>
+    </svg>
+  );
+}
+
 function Backing() {
-  const item = "reveal flex h-20 items-center md:h-24";
   return (
     <section id="respaldo" className="section-y-compact border-t border-border-default">
-      <div className="container-site grid-page items-center">
-        <h2 className="reveal col-span-12 min-w-0 font-display text-h3 font-semibold text-text-primary">Respaldo verificable.</h2>
-        {/* six badges: one full-width row under the title, so they stay on a single line on desktop */}
-        <ul className="col-span-12 flex min-w-0 flex-wrap items-center gap-x-6 gap-y-6 xl:gap-x-10">
-          {gcpBadges.map((b, i) => (
-            <li key={b.file} className={item} style={{ ["--i" as string]: i }}>
-              <Image src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={b.w} height={b.h} unoptimized className="h-full w-auto" />
-            </li>
-          ))}
-          {badges.map((b, i) => (
-            <li key={b.file} className={item} style={{ ["--i" as string]: i + gcpBadges.length }}>
-              <Image src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={Math.round((96 * b.w) / b.h)} height={96} unoptimized className="h-full w-auto" />
+      <div className="container-site">
+        <h2 className="reveal font-display text-h3 font-semibold text-text-primary">Respaldo verificable.</h2>
+        <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-12">
+          {FACTS.map((f, i) => (
+            <li key={f.value} className={`reveal min-w-0 ${f.span}`} style={{ ["--i" as string]: i }}>
+              <p className="font-display text-h3 font-semibold leading-tight text-text-primary">{f.value}</p>
+              <p className="mt-1 text-body-sm text-text-secondary">{f.label}</p>
+              {f.seal && (
+                <div className="mt-5 flex h-12 items-center sm:h-16 md:h-20">
+                  <YearsBadge />
+                </div>
+              )}
+              {f.badges.length > 0 && (
+                <ul className="mt-5 flex flex-wrap items-center gap-3 md:gap-4">
+                  {f.badges.map((b) => (
+                    <li key={b.file} className="flex h-12 items-center sm:h-16 md:h-20">
+                      <Image src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={Math.round((80 * b.w) / b.h)} height={80} unoptimized className="h-full w-auto" />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
@@ -216,7 +257,7 @@ function Contact({ v }: { v: Variant }) {
           <div>
             <h2 className="reveal max-w-[16ch] break-words font-display text-h1 font-semibold text-text-primary">Cuéntanos qué necesitas ejecutar.</h2>
             <p className="reveal measure-lead mt-5 text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
-              Un especialista revisará tu proyecto y te contactará para una conversación técnica inicial, sin compromiso.
+              Un especialista te contactará para conocer tu proyecto en una primera conversación.
             </p>
           </div>
         </div>

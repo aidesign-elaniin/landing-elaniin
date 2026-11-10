@@ -28,7 +28,7 @@ export const cases: CaseStudy[] = [
   {
     id: "tse",
     theme: "vivid",
-    title: "Consulta electoral a escala nacional",
+    title: "Consulta de centros de votación a escala nacional",
     logo: "/certifications/tribuna-supremo-electoral.svg",
     logoRatio: 512.93 / 72.95,
     logoH: { card: 36, modal: 30 },
@@ -42,7 +42,7 @@ export const cases: CaseStudy[] = [
       industry: "Sector público · Servicios ciudadanos",
       service: "Desarrollo de software · Plataforma de alta demanda",
       challenge:
-        "La plataforma nacional de consulta de centros de votación para elecciones presidenciales y legislativas debía operar 24/7, soportar millones de consultas en periodos cortos y funcionar en dispositivos de gama baja y redes móviles. Los sistemas anteriores fallaban en picos de tráfico, no estaban optimizados para móvil y representaban riesgos en el manejo de la base de datos nacional de votantes.",
+        "La plataforma nacional de consulta de centros de votación para elecciones presidenciales y legislativas debía operar 24/7, soportar millones de consultas en periodos cortos y funcionar en dispositivos de gama baja y redes móviles. Los sistemas anteriores tenían dificultades en picos de tráfico, no estaban optimizados para móvil y representaban riesgos en el manejo de la base de datos nacional de votantes.",
       solution: [
         "Frontend en React optimizado para rendimiento, bajo consumo de datos y acceso mobile first.",
         "Integración segura con los sistemas del TSE.",
@@ -54,6 +54,7 @@ export const cases: CaseStudy[] = [
         "Disponibilidad cercana al 100\u00a0% durante todo el proceso.",
         "Tiempos de respuesta rápidos bajo demanda pico.",
         "Manejo seguro de la base de datos nacional de votantes.",
+        "Mejor experiencia ciudadana y mayor confianza institucional.",
         "Uno de los servicios digitales más utilizados del proceso electoral.",
       ],
       cta: "¿Tu institución necesita una plataforma que funcione cuando más se usa? Hablemos.",

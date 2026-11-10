@@ -5,8 +5,8 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { Logo } from "./logo";
 
 const links = [
-  { href: "#capacidades", label: "Capacidades" },
   { href: "#casos", label: "Casos" },
+  { href: "#capacidades", label: "Capacidades" },
   { href: "#respaldo", label: "Respaldo" },
 ];
 
