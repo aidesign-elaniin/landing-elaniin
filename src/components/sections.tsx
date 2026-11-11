@@ -159,12 +159,12 @@ function CasesSection({ v }: { v: Variant }) {
   );
 }
 
-/* Thresholds and wording from the team (Georgina, Nov 10 2026). Do not reword without the team. */
-const THRESHOLDS = [
-  { value: "0", label: "vulnerabilidades críticas conocidas" },
-  { value: "0", label: "credenciales expuestas" },
-  { value: "80\u00a0%", label: "mínimo de cobertura en pruebas automáticas" },
-  { value: "100\u00a0%", label: "de entregas revisadas por un ingeniero" },
+/* Dimensions and wording from the team (Georgina, Nov 11 2026). Do not reword without the team. */
+const DIMENSIONS = [
+  { name: "Seguro", text: "Sin vulnerabilidades ni credenciales expuestas." },
+  { name: "Estable", text: "Sin errores conocidos al llegar a producción." },
+  { name: "Mantenible", text: "Código bien estructurado, fácil de evolucionar por cualquier equipo." },
+  { name: "Probado", text: "Cada cambio respaldado por pruebas, sin romper lo que ya funciona." },
 ];
 
 function Quality() {
@@ -173,14 +173,13 @@ function Quality() {
       <div className="container-site">
         {/* one text block (title + one subtitle) sitting right on top of the data card, same left edge */}
         <h2 className="reveal max-w-[22ch] break-words font-display text-h1 font-semibold text-text-primary">
-          Software crítico exige <span className="text-inspire-blue">un estándar que no se negocia.</span>
+          Si una sola dimensión falla, <span className="text-inspire-blue">el producto no está listo.</span>
         </h2>
         <p className="reveal mt-4 max-w-[60ch] text-lead text-text-secondary" style={{ ["--i" as string]: 1 }}>
-          Lo aplicamos en cada solución, sin importar su tamaño.
-          <span className="block">Nada llega a producción sin cumplirlo.</span>
+          Evaluamos cada producto en siete dimensiones, y la calificación final la define la más débil. Por eso solo llega a producción cuando cumple todas.
         </p>
 
-        <QualityGate thresholds={THRESHOLDS} />
+        <QualityGate dimensions={DIMENSIONS} />
       </div>
     </section>
   );
