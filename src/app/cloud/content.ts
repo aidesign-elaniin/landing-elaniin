@@ -1,4 +1,4 @@
-import type { Variant } from ".";
+import type { Variant } from "@/lib/landing";
 
 export const cloud: Variant = {
   id: "cloud",

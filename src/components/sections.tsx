@@ -1,6 +1,6 @@
 import { Award } from "lucide-react";
 import Image from "next/image";
-import type { Variant } from "@/data/variants";
+import type { Variant } from "@/lib/landing";
 import { LeadForm } from "./lead-form";
 import { CapTiles } from "./capabilities";
 import { Cases } from "./cases";
@@ -12,7 +12,7 @@ import { ButtonLink } from "./ui";
 import { PrivacyLink } from "./privacy-link";
 import { asset } from "@/lib/site";
 
-/* Mode 1 (essential summary). Copy: data/variants/<landing>.ts + the shared texts below, all from the final texts doc. */
+/* Mode 1 (essential summary). Copy: src/app/<slug>/content.ts + the shared texts below, all from the final texts doc. */
 export function Landing({ v }: { v: Variant }) {
   return (
     <>

@@ -80,7 +80,7 @@ export function WalletStack({ ids, tags = {} }: { ids: string[]; tags?: Record<s
               <span className={`mono-label flex min-w-0 flex-col text-nano ${t.tag}`}>
                 {/* industry first and solid; the service under it, lighter, so the two lines read as title and detail */}
                 {(tags[c.id] ?? c.tag.split(" · ")[0]).split(" · ").map((part, n) => (
-                  <span key={part} className={n ? "mt-0.5 font-medium normal-case tracking-normal opacity-65" : ""}>
+                  <span key={part} className={n ? "mt-0.5 font-medium normal-case tracking-normal opacity-65" : undefined}>
                     {part}
                   </span>
                 ))}

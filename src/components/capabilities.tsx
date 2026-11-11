@@ -1,4 +1,4 @@
-import type { Variant } from "@/data/variants";
+import type { Variant } from "@/lib/landing";
 import { Glow, themes } from "./case-visuals";
 
 /*

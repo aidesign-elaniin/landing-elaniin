@@ -1,6 +1,12 @@
-import { Landing } from "@/components/sections";
-import { HOME_ID, variants } from "@/data/variants";
+import { Logo } from "@/components/logo";
 
+/* Site root: only the brand on Elevate Blue (the button color). Each landing lives at its own slug (/software, /cloud). */
 export default function Home() {
-  return <Landing v={variants[HOME_ID]} />;
+  return (
+    <main id="main" className="grid min-h-dvh place-items-center bg-elevate-blue px-6">
+      <h1>
+        <Logo tone="light" className="h-10 w-auto md:h-14" />
+      </h1>
+    </main>
+  );
 }
