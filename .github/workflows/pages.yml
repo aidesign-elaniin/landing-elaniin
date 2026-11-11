@@ -28,11 +28,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      # server-only routes cannot be exported as static files
-      - run: rm -rf src/app/api src/app/sitemap.ts src/app/robots.ts src/app/opengraph-image.tsx
+      # demo under a sub-path: skip the SEO files, they are built for the final domain
+      - run: rm -f src/app/sitemap.ts src/app/robots.ts src/app/opengraph-image.tsx
       - run: npm run build
         env:
-          GITHUB_PAGES: "true"
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_LEAD_WEBHOOK_URL: ${{ vars.LEAD_WEBHOOK_URL }}
       - run: touch out/.nojekyll

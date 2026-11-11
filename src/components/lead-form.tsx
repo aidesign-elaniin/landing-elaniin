@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { ArrowIcon } from "./ui";
-import { CONSENT_CHANGE_EVENT, cookiesAccepted } from "./cookie-consent";
 import { PrivacyLink } from "./privacy-link";
 import { EMAIL, UTM_KEYS, isCorporate, parseLead } from "@/lib/lead";
-import type { VariantId } from "@/data/variants";
 
-// Set only in the static GitHub Pages build (.github/workflows/pages.yml). Empty everywhere else: the form uses /api/lead.
-const DIRECT_WEBHOOK = process.env.NEXT_PUBLIC_LEAD_WEBHOOK_URL;
+// n8n webhook: a CI variable when publishing, .env.local when running locally.
+const WEBHOOK = process.env.NEXT_PUBLIC_LEAD_WEBHOOK_URL;
 
 type Status = "idle" | "loading" | "success" | "error";
 type Errors = Partial<Record<"nombre" | "correo" | "sector" | "consentimiento", string>>;
@@ -29,11 +27,8 @@ function fromPage(): Attribution {
   return { utm, referrer: external ? document.referrer : "" };
 }
 
-// First touch of the visit. Only with cookies accepted it is kept in sessionStorage, so it survives
-// a trip to /privacidad and back; nothing persists across visits. Without consent: current page only.
-// ponytail: captured when the form mounts (home) or on accept; a first landing on /privacidad is not covered.
-export function attribution(): Attribution {
-  if (!cookiesAccepted()) return fromPage();
+// First touch of the visit, kept in sessionStorage so it survives a trip to /privacidad and back.
+function attribution(): Attribution {
   try {
     const saved = sessionStorage.getItem(ATTRIBUTION_KEY);
     if (saved) return JSON.parse(saved) as Attribution;
@@ -42,18 +37,6 @@ export function attribution(): Attribution {
     return current;
   } catch {
     return fromPage(); // storage blocked (private mode)
-  }
-}
-
-function syncAttribution() {
-  if (cookiesAccepted()) {
-    attribution();
-    return;
-  }
-  try {
-    sessionStorage.removeItem(ATTRIBUTION_KEY); // rejected after accepting: forget it
-  } catch {
-    // storage blocked: nothing was saved
   }
 }
 
@@ -68,14 +51,12 @@ const SECTORS = [
   { value: "publico", label: "Público" },
 ] as const;
 
-export function LeadForm({ variante }: { variante: VariantId }) {
+export function LeadForm({ variante }: { variante: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
 
   useEffect(() => {
-    syncAttribution();
-    window.addEventListener(CONSENT_CHANGE_EVENT, syncAttribution);
-    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, syncAttribution);
+    attribution(); // remember where the visit came from before any in-page navigation
   }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -116,22 +97,14 @@ export function LeadForm({ variante }: { variante: VariantId }) {
         page: location.pathname,
         perfil: { sector: data.sector },
       };
-      const post = (url: string, payload: unknown) => fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-      if (DIRECT_WEBHOOK) {
-        // Static copy (GitHub Pages): no /api/lead there, so the browser does what the route does and posts to n8n itself.
-        // ponytail: honeypot and whitelist run in the browser here; a bot that posts to the webhook directly skips them. Repeat them in n8n if spam shows up.
-        if (!data.website?.trim()) {
-          const parsed = parseLead(body);
-          if (!parsed.ok) throw new Error(parsed.error);
-          const res = await post(DIRECT_WEBHOOK, parsed.lead);
-          const reply = await res.json().catch(() => ({}));
-          if (!res.ok || reply.ok === false) throw new Error(String(res.status));
-        }
-        setStatus("success");
-        return;
+      // ponytail: honeypot and whitelist run in the browser; a bot that posts to the webhook directly skips them. Repeat them in n8n if spam shows up.
+      if (!data.website?.trim()) {
+        const parsed = parseLead(body);
+        if (!parsed.ok || !WEBHOOK) throw new Error("lead");
+        const res = await fetch(WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(parsed.lead) });
+        const reply = await res.json().catch(() => ({}));
+        if (!res.ok || reply.ok === false) throw new Error(String(res.status));
       }
-      const res = await post("/api/lead", body);
-      if (!res.ok) throw new Error(String(res.status));
       setStatus("success");
     } catch {
       setStatus("error");

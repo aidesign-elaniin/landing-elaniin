@@ -2,6 +2,8 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
+export const dynamic = "force-static"; // static export: built once at build time
+
 export const alt = "Elaniin: Ejecutemos tu próximo proyecto tecnológico.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

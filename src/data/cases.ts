@@ -2,11 +2,12 @@ export type CaseStudy = {
   id: string;
   theme: "vivid" | "black" | "excellence";
   title: string; // short title: the client is already shown by its logo, so the name is not repeated
+  heroTitle?: string; // title on the hero wallet card when it differs from the cases section
   logo: string; // file in /public
   logoRatio: number; // width / height of the logo file
   logoH: { card: number; modal: number }; // heights (px) tuned so every logo carries a similar visual weight
   tag: string;
-  summary: string;
+  summary?: string; // line under the modal title; left out when it would repeat the title
   button: string;
   client: string; // short client label under the logo
   highlight: { value: string; label: string };
@@ -96,27 +97,29 @@ export const cases: CaseStudy[] = [
   {
     id: "procesar",
     theme: "black",
-    title: "Migración de APIs a Apigee",
+    title: "Más de 100 APIs críticas migradas sin interrupciones",
+    heroTitle: "Arquitectura de APIs unificada y segura en Google Cloud",
     logo: "/certifications/procesar.svg",
     logoRatio: 470.94 / 88.13,
     logoH: { card: 28, modal: 32 },
-    tag: "Sector financiero regulado · Google Cloud",
-    summary: "Cientos de APIs migradas sin interrumpir servicios conectados a CONSAR.",
+    tag: "Seguros y pensiones · Google Cloud",
+    summary: "Arquitectura de APIs unificada y segura en Google Cloud.",
     button: "Ver caso",
     client: "Procesar · México",
-    highlight: { value: "Cientos", label: "de APIs críticas migradas a Apigee" },
+    highlight: { value: "150 APIs", label: "migradas sin interrumpir los servicios conectados a CONSAR" },
     detail: {
       client: "Procesar · México",
-      industry: "Pensiones y servicios financieros regulados",
+      industry: "Seguros y pensiones",
       service: "Google Cloud · Modernización de arquitectura",
       challenge:
-        "Procesar opera infraestructura crítica para la Comisión Nacional del Sistema de Ahorro para el Retiro (CONSAR). Su ecosistema tenía cientos de APIs repartidas en plataformas legacy, sin políticas unificadas de seguridad, control de acceso ni monitoreo.",
+        "Procesar opera infraestructura crítica para la Comisión Nacional del Sistema de Ahorro para el Retiro (CONSAR). Su ecosistema tenía unas 150 APIs repartidas en plataformas legacy, sin políticas unificadas de seguridad, control de acceso ni monitoreo.",
       solutionIntro: "Migración completa hacia Apigee, la plataforma de gestión de APIs de Google Cloud, desde el discovery hasta producción:",
       solution: [
-        "Discovery técnico de cientos de APIs, con documentación de endpoints, dependencias y reglas de negocio.",
+        "Discovery técnico de unas 150 APIs, con documentación de endpoints, dependencias y reglas de negocio.",
         "Plan de migración por fases, priorizando las APIs críticas.",
         "Arquitectura en Apigee con políticas centralizadas de seguridad (OAuth, API Keys, JWT), rate limiting, cuotas y caching.",
-        "Migración progresiva sin downtime, con pruebas funcionales, de rendimiento y de regresión, integrada a los pipelines de CI/CD existentes.",
+        "Migración progresiva sin interrupciones, con pruebas funcionales, de rendimiento y de regresión, integrada a los pipelines de CI/CD existentes.",
+        "Entrenamiento en fundamentos de Apigee para 10 personas de su equipo.",
       ],
       results: [
         "Ecosistema de APIs unificado bajo una sola plataforma.",
@@ -124,22 +127,57 @@ export const cases: CaseStudy[] = [
         "Trazabilidad completa de llamadas, errores y rendimiento.",
         "Cumplimiento con los estándares de instituciones críticas como CONSAR.",
         "Arquitectura lista para el crecimiento regulatorio y operativo.",
+        "Equipo interno capacitado para operar y evolucionar la plataforma.",
       ],
       cta: "¿Tu organización necesita modernizar su arquitectura? Hablemos.",
     },
   },
   {
+    id: "publimovil",
+    theme: "excellence",
+    title: "Una red de pantallas digitales lista para crecer en Google Cloud",
+    heroTitle: "La infraestructura de una red de pantallas digitales, en Google Cloud",
+    logo: "/sectors/publimovil.svg",
+    logoRatio: 1641.43 / 343.06,
+    logoH: { card: 30, modal: 32 },
+    tag: "Medios y publicidad · Google Cloud",
+    button: "Ver caso",
+    client: "Publimóvil",
+    highlight: { value: "+200 pantallas", label: "migradas con monitoreo centralizado" },
+    detail: {
+      client: "Publimóvil",
+      industry: "Medios y publicidad",
+      service: "Google Cloud · Migración y modernización",
+      challenge:
+        "Publimóvil opera una red de pantallas digitales que crece en varios países. Su infraestructura limitaba la capacidad de sumar pantallas y mercados, centralizar el monitoreo y automatizar la operación.",
+      solutionIntro: "Migración a Google Cloud y modernización de la operación de la red:",
+      solution: [
+        "Evaluación de la infraestructura actual y plan de migración por fases.",
+        "Migración de cargas de trabajo y datos a Google Cloud sin interrumpir la exhibición de campañas.",
+        "Arquitectura escalable para sumar pantallas y mercados sin rehacer la infraestructura.",
+        "Monitoreo centralizado del estado de la red, con alertas automáticas.",
+        "Automatización de procesos operativos sobre la nueva infraestructura.",
+      ],
+      results: [
+        "Infraestructura de +200 pantallas operando en Google Cloud.",
+        "Monitoreo en tiempo real de toda la red desde una sola consola.",
+        "Base en la nube lista para crecer a nuevos mercados.",
+      ],
+      cta: "¿Tu infraestructura necesita crecer sin rehacerse? Hablemos.",
+    },
+  },
+  {
     id: "jostens",
     theme: "excellence",
-    title: "Ingeniería nearshore desde 2022",
+    title: "Ingenieros senior y líderes técnicos integrados a su equipo",
     logo: "/certifications/jostens.svg",
     logoRatio: 256.6 / 138.89,
     logoH: { card: 56, modal: 64 },
-    tag: "Estados Unidos · Equipos de ingeniería",
-    summary: "Ingenieros senior y líderes técnicos integrados a su organización.",
+    tag: "Retail · Equipos de ingeniería",
+    summary: "Staff augmentation nearshore con liderazgo técnico desde 2022.",
     button: "Ver caso",
     client: "Jostens · Estados Unidos",
-    highlight: { value: "Desde 2022", label: "con ingenieros integrados a su organización" },
+    highlight: { value: "5 años", label: "como parte de su organización de ingeniería" },
     detail: {
       client: "Jostens · Estados Unidos",
       industry: "Manufactura personalizada, plataformas educativas y e-commerce",
@@ -176,7 +214,7 @@ export const cases: CaseStudy[] = [
     summary: "Renovación de los sistemas de control migratorio de El Salvador: de un sistema legacy on-premise de 12 años a la nube.",
     button: "Ver caso",
     client: "Dirección General de Migración y Extranjería · El Salvador",
-    highlight: { value: "86 millones", label: "de registros migratorios migrados a la nube" },
+    highlight: { value: "86 millones", label: "de registros, desde un sistema on-premise de 12 años" },
     ficha: { tipo: "Team augmentation", duracion: "12 meses", tecnologias: "React, Next.js, Laravel, PHP, SQL, AWS" },
     detail: {
       client: "Dirección General de Migración y Extranjería · El Salvador",

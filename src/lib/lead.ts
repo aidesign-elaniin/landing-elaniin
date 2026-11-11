@@ -1,4 +1,4 @@
-// Lead contract shared by the form and /api/lead ("chat" stays a valid `modo` for old rows in the sheet). Shape: plan "Captura del lead y JSON para n8n".
+// Lead contract the form sends to n8n. The chat-era fields (modo "chat", interes, ruta) stay because the n8n workflow maps them. Shape: plan "Captura del lead y JSON para n8n".
 export const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // ponytail: personal mailboxes matched by the provider label (gmail.com, yahoo.com.mx, hotmail.es...). Extend the list if a new one shows up in leads.
@@ -19,7 +19,7 @@ const obj = (v: unknown) => (typeof v === "object" && v ? v : {}) as Record<stri
 
 const PLATFORMS = ["web", "movil", "core_erp", "integraciones", "sin_definir"] as const;
 
-export type LeadError = "nombre" | "correo" | "correo_personal" | "consentimiento";
+type LeadError = "nombre" | "correo" | "correo_personal" | "consentimiento";
 
 /** Whitelists every field: only what the contract names travels to n8n. Dates are set by the server. */
 export function parseLead(body: Record<string, unknown>, now = new Date()) {
@@ -38,7 +38,8 @@ export function parseLead(body: Record<string, unknown>, now = new Date()) {
       evento: "lead_creado",
       fecha: now.toISOString(),
       modo: oneOf(body.modo, ["chat", "formulario"] as const, "formulario"),
-      variante: oneOf(body.variante, ["software", "cloud"] as const, "software"),
+      // any landing slug (data/variants), so a new landing needs no change here; the pattern keeps markup and formulas out
+      variante: typeof body.variante === "string" && /^[a-z0-9-]{1,40}$/.test(body.variante) ? body.variante : "software",
       nombre,
       correo,
       consentimiento: true,

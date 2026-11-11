@@ -1,31 +1,11 @@
 @import "tailwindcss";
 
 /*
-  Elaniin tokens — single source of truth (elaniin-brand skill palette and type · Tailwind v4).
-
-  CONTRACT — Tailwind-first API:
-    1. Every design value lives in @theme (or in :root when it is a layout/duration
-       var consumed by a utility — theme keys alone do NOT generate duration-* utilities).
-    2. Every named CSS resource is an @utility. Raw class selectors inside plain
-       <style> blocks are forbidden: they are invisible to the utility API.
-    3. Animations are tokens: --animate-* + @keyframes inside @theme, so `animate-*`
-       utilities exist — and every motion utility honors prefers-reduced-motion itself.
-    4. Durations are named: instant 100 · fast 150 · base 200 · slow 300 · reveal 500.
-       Use `duration-base`, never `duration-200`.
-
-    5. @theme is STATIC: every token is emitted as a CSS variable even when no utility uses it, so inline
-       styles and JS can reference var(--color-*) (the isometric resource does). Without `static`,
-       Tailwind v4 prunes unused variables and a missing var() silently renders black.
-
-  USAGE:
-    - Tailwind v4 project: include tailwindcss first, then this file (or paste it).
-       (Never spell out the import directive inside this comment: mentioning it
-       anywhere in the block breaks @tailwindcss/browser.)
-    - Standalone HTML: load https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3 and paste
-      this file inside a <style type="text/tailwindcss"> block (templates embed a copy —
-      keep both in sync when editing).
-  Defaults (palette/radii/shadows/breakpoints) are reset on purpose: only the tokens
-  below exist, so a stray `bg-blue-500` simply does not compile.
+  Elaniin tokens (brand palette and type, Tailwind v4).
+  - Every design value is a token in @theme; every named class is an @utility.
+  - Defaults (palette, radii, shadows, breakpoints) are reset: only these tokens exist,
+    so a stray `bg-blue-500` does not compile.
+  - Motion honors prefers-reduced-motion inside each utility.
 */
 
 @theme static {
@@ -184,40 +164,15 @@
 
   /* ---------- motion: animation tokens (each generates an animate-* utility) ---------- */
   --animate-rise: rise var(--dur-reveal) var(--ease-emphasized) both;
-  --animate-draw-line: draw-line 1.6s var(--ease-emphasized) 0.25s both;
-  --animate-float-chip: float-chip 4s ease-in-out infinite;
-  --animate-typing-dot: typing-dot 0.9s ease-in-out infinite;
   --animate-spin-slow: spin-slow 0.9s linear infinite;
-  --animate-ping-soft: ping-soft 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
-  --animate-sheen: sheen 5s linear infinite;
 
   /* ---------- motion: keyframes (paired with the tokens above) ---------- */
   @keyframes rise {
     from { opacity: 0; transform: translateY(var(--reveal-distance)); }
     to { opacity: 1; transform: none; }
   }
-  @keyframes draw-line {
-    from { stroke-dashoffset: var(--len, 1200); }
-    to { stroke-dashoffset: 0; }
-  }
-  @keyframes float-chip {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-  }
-  @keyframes typing-dot {
-    0%, 100% { transform: translateY(0); opacity: 0.45; }
-    50% { transform: translateY(-3px); opacity: 1; }
-  }
   @keyframes spin-slow {
     to { transform: rotate(360deg); }
-  }
-  @keyframes ping-soft {
-    0% { transform: scale(1); opacity: 0.8; }
-    75%, 100% { transform: scale(2.2); opacity: 0; }
-  }
-  @keyframes sheen {
-    from { transform: translate3d(-140%, 0, 0); }
-    to { transform: translate3d(420%, 0, 0); }
   }
 }
 
@@ -230,11 +185,8 @@
   --grid-gap: 24px;
   --nav-height: 64px;
   --section-y: 96px;
-  --section-y-statement: 128px;
   --section-y-compact: 64px;
   --card-padding: 32px;
-  --card-min: 16rem;
-  --drawer-width: 18rem;
   --sidebar-width: 15rem;
 
   /* motion durations — consumed by the duration-* utilities (see contract §4) */
@@ -249,7 +201,7 @@
 }
 
 @media (max-width: 1023px) {
-  :root { --gutter: 40px; --section-y: 72px; --section-y-statement: 96px; --section-y-compact: 48px; }
+  :root { --gutter: 40px; --section-y: 72px; --section-y-compact: 48px; }
 }
 @media (max-width: 767px) {
   :root { --gutter: 32px; }
@@ -258,7 +210,7 @@
   :root { --gutter: 20px; }
 }
 @media (max-width: 767px) {
-  :root { --grid-gap: 16px; --section-y: 56px; --section-y-statement: 72px; --section-y-compact: 40px; --card-padding: 24px; }
+  :root { --grid-gap: 16px; --section-y: 56px; --section-y-compact: 40px; --card-padding: 24px; }
 }
 
 /* ---------- utilities: layout & type ---------- */
@@ -276,9 +228,6 @@
 }
 @utility section-y {
   padding-block: var(--section-y);
-}
-@utility section-y-statement {
-  padding-block: var(--section-y-statement);
 }
 @utility section-y-compact {
   padding-block: var(--section-y-compact);
@@ -302,11 +251,7 @@
 }
 
 /* ---------- utilities: named durations (contract §4) ---------- */
-@utility duration-instant { transition-duration: var(--dur-instant); }
-@utility duration-fast { transition-duration: var(--dur-fast); }
 @utility duration-base { transition-duration: var(--dur-base); }
-@utility duration-slow { transition-duration: var(--dur-slow); }
-@utility duration-reveal { transition-duration: var(--dur-reveal); }
 
 /* ---------- utilities: entrance ---------- */
 /* Time-based entrance: runs without waiting for hydration. Stagger with style="--i: n". */
@@ -340,14 +285,6 @@
   }
 }
 /* SVG line draw: pair with style="--len: <path length>". */
-@utility draw-line {
-  stroke-dasharray: var(--len, 1200);
-  animation: var(--animate-draw-line);
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    stroke-dashoffset: 0;
-  }
-}
 
 /* ---------- utilities: surfaces ---------- */
 @utility spotlight {
@@ -383,24 +320,6 @@
 }
 
 /* ---------- utilities: interactions ---------- */
-@utility nav-link-pill {
-  /* reference-site nav link (DESIGN.md components.nav.link): 40px pill, subtle surface on hover */
-  display: inline-flex;
-  align-items: center;
-  height: 2.5rem;
-  padding-inline: 0.75rem;
-  border-radius: var(--radius-button);
-  font-weight: 500;
-  color: var(--color-text-primary);
-  transition: background-color var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard);
-  &:hover {
-    background: var(--color-surface-subtle);
-    color: var(--color-text-link);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-}
 @utility nav-link {
   position: relative;
   &::after {
@@ -448,51 +367,8 @@
     }
   }
 }
-@utility lift {
-  transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-menu);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    &:hover {
-      transform: none;
-    }
-  }
-}
-@utility row-hover {
-  transition: background-color var(--dur-fast) var(--ease-standard);
-}
 
-/* ---------- utilities: living mockups (loops) ---------- */
-/* 3-dot typing indicator. Markup: <span class="typing-dots"><i></i><i></i><i></i></span> */
-@utility typing-dots {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  & > i {
-    width: 6px;
-    height: 6px;
-    border-radius: var(--radius-full);
-    background: currentColor;
-    animation: var(--animate-typing-dot);
-  }
-  & > i:nth-child(2) { animation-delay: 0.12s; }
-  & > i:nth-child(3) { animation-delay: 0.24s; }
-  @media (prefers-reduced-motion: reduce) {
-    & > i {
-      animation: none;
-      opacity: 0.6;
-    }
-  }
-}
-/* Gentle vertical float for decorative chips. */
-@utility float-chip {
-  animation: var(--animate-float-chip);
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
+/* ---------- utilities: loading spinner ---------- */
 /* Tiny spinner. Markup: <span class="spinner"></span> */
 @utility spinner {
   display: inline-block;
@@ -506,144 +382,16 @@
     animation: none;
   }
 }
-/* Live-data dot with soft ping. Markup: <span class="live-dot"></span> */
-@utility live-dot {
-  position: relative;
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background: var(--color-success-dot);
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius-full);
-    background: var(--color-success-dot);
-    animation: var(--animate-ping-soft);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    &::after {
-      animation: none;
-      opacity: 0;
-    }
-  }
-}
 
-/* ---------- isometric resources: levitation and floating (DESIGN.md motifs.isometric) ---------- */
-/* iso-levitate: the whole piece floats 6px, 3s. iso-float: a label floats 4px, 2s, staggered with --d. */
-@theme {
-  --animate-iso-levitate: iso-levitate 3s var(--ease-standard) infinite alternate;
-  --animate-iso-float: iso-float 2s var(--ease-standard) infinite alternate;
-  @keyframes iso-levitate {
-    from { transform: translateY(0); }
-    to { transform: translateY(-6px); }
-  }
-  @keyframes iso-float {
-    from { transform: translateY(0); }
-    to { transform: translateY(-4px); }
-  }
-}
-@utility iso-levitate {
-  animation: var(--animate-iso-levitate);
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
-@utility iso-float {
-  animation: var(--animate-iso-float);
-  animation-delay: calc(var(--d, 0) * 400ms);
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
 
 /* ---------- utilities: grids (on top of Tailwind's native grid-cols / col-span) ---------- */
-/* gap-grid: the responsive gap token (24px, 16px on mobile). grid-page: 12-col page grid —
-   children carry col-span-12 md:col-span-N. grid-auto: auto-fit cards of unknown count
-   (override --card-min per grid via style). grid-hairline: cells separated by 1px lines,
-   no negative margins; add grid-cols-N / md:grid-cols-N and give children pad-card. */
-@utility gap-grid {
-  gap: var(--grid-gap);
-}
+/* grid-page: 12-col page grid; children carry col-span-12 md:col-span-N. */
 @utility grid-page {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--grid-gap);
 }
-@utility grid-auto {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min)), 1fr));
-  gap: var(--grid-gap);
-}
-@utility grid-hairline {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1px;
-  overflow: hidden;
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-card);
-  background: var(--color-border-default);
-  & > * {
-    min-width: 0;
-    background: var(--color-surface-card);
-  }
-}
 
-/* ---------- utilities: drawer (off-canvas mobile nav) ---------- */
-/* Mobile: panel that slides in from the left; closed = visibility hidden (out of tab order).
-   lg+: sticky full-height sidebar (pinned, only the content scrolls). For a landing's mobile menu add `md:hidden` to drawer and scrim.
-   Behavior: templates/drawer.js (toggle data-open, focus, Esc, scroll lock). */
-@utility drawer {
-  position: fixed;
-  inset-block: 0;
-  inset-inline-start: 0;
-  z-index: 50;
-  width: min(var(--drawer-width), 85vw);
-  transform: translateX(-100%);
-  visibility: hidden;
-  transition: transform var(--dur-slow) var(--ease-emphasized), visibility 0s linear var(--dur-slow);
-  &[data-open="true"] {
-    transform: none;
-    visibility: visible;
-    transition-delay: 0s;
-  }
-  @variant lg {
-    /* persistent sidebar: pinned to the viewport; only the page content scrolls */
-    position: sticky;
-    top: 0;
-    align-self: flex-start;
-    height: 100vh;
-    height: 100dvh;
-    z-index: auto;
-    width: var(--sidebar-width);
-    transform: none;
-    visibility: visible;
-    transition: none;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-}
-@utility scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: rgba(0, 0, 64, 0.48);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dur-base) var(--ease-standard);
-  &[data-open="true"] {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  @variant lg {
-    display: none;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-}
 
 /* ---------- utilities: module field (signature texture of hero / CTA) ---------- */
 
@@ -703,36 +451,10 @@
 }
 
 /* Fine horizontal hairlines used as a card texture (fades toward the bottom). */
-@utility lines-field {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 15px, var(--color-border-default) 15px, var(--color-border-default) 16px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 25%, transparent 85%);
-  mask-image: linear-gradient(to bottom, #000 25%, transparent 85%);
-}
 
 /* Hero fills the first screen (below the sticky nav) so the next section never peeks in. */
-@utility hero-fill {
-  display: flex;
-  align-items: center;
-  min-height: calc(100vh - var(--nav-height));
-  min-height: calc(100dvh - var(--nav-height));
-}
 
 /* Workflow diagram: a bright pulse travels along the active connector (pair with pathLength="1"). */
-@keyframes flow-travel {
-  from { stroke-dashoffset: 0.14; }
-  to { stroke-dashoffset: -1; }
-}
-@utility flow-pulse {
-  stroke-dasharray: 0.14 1;
-  animation: flow-travel var(--flow-ms, 1.2s) linear 1 forwards;
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    opacity: 0;
-  }
-}
 
 /* Moving glints: tiles slide one stripe period sideways, so the loop is seamless. */
 @keyframes glow-scroll {
@@ -777,7 +499,7 @@
 
 
 /* Aura: Elaniin component, from assets-web-elaniin/componentes/elaniin.css.
-   Used on the hero proof pill and the form card. */
+   Used on the form card. */
 @property --aura-angle {
   syntax: "<angle>";
   inherits: false;

@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { CookieConsent } from "@/components/cookie-consent";
+import { PrivacyModal } from "@/components/privacy-modal";
 import { Living } from "@/components/living";
-import { Providers } from "@/components/providers";
-import { INDEXABLE, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 import { JsonLd } from "@/components/json-ld";
 import "./globals.css";
 
@@ -43,7 +42,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: { title: SITE_TITLE, description: SITE_DESCRIPTION, type: "website", locale: "es_SV", siteName: "Elaniin", url: "/" },
   twitter: { card: "summary_large_image", title: SITE_TITLE, description: SITE_DESCRIPTION },
-  robots: INDEXABLE ? { index: true, follow: true } : { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -53,12 +51,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>
       <body>
-        <Providers>
-          <Living />
-          <div className="relative z-10">{children}</div>
-          <CookieConsent />
-          <JsonLd />
-        </Providers>
+        <Living />
+        <div className="relative z-10">{children}</div>
+        <PrivacyModal />
+        <JsonLd />
       </body>
     </html>
   );

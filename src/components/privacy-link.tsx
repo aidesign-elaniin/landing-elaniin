@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-/* Opens the privacy policy modal (mounted once by <CookieConsent />). It is a real link to /privacidad, so crawlers and
+/* Opens the privacy policy modal (mounted once by <PrivacyModal />). It is a real link to /privacidad, so crawlers and
    "open in new tab" still reach the full page; a plain click opens the modal instead. */
 export const OPEN_PRIVACY_EVENT = "open-privacy";
 

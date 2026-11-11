@@ -5,19 +5,11 @@ import { X } from "lucide-react";
 import { PolicyContent } from "./privacy-policy";
 import { OPEN_PRIVACY_EVENT } from "./privacy-link";
 
-/*
-  Privacy policy modal, opened from any <PrivacyLink />. The cookie banner was removed (Adrián, Nov 11 2026:
-  the notice is only required in the EU), so there is no choice to store.
-*/
-/** Kept for lead-form's listener; nothing fires it any more. */
-export const CONSENT_CHANGE_EVENT = "cookie-consent-change";
-/* ponytail: no banner, so the session attribution is always kept. */
-export const cookiesAccepted = () => true;
-
+/* Privacy policy modal, opened from any <PrivacyLink />. */
 const primary =
   "inline-flex h-11 items-center justify-center rounded-button bg-elevate-blue px-5 font-display text-button font-medium text-white transition-colors duration-base hover:bg-blue-700 active:bg-blue-800 focus-ring";
 
-export function CookieConsent() {
+export function PrivacyModal() {
   const [open, setOpen] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
 

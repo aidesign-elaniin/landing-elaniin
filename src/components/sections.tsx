@@ -2,14 +2,17 @@ import { Award } from "lucide-react";
 import Image from "next/image";
 import type { Variant } from "@/data/variants";
 import { LeadForm } from "./lead-form";
-import { CapTiles, Cases, QualityGate, WalletStack } from "./cases";
+import { CapTiles } from "./capabilities";
+import { Cases } from "./cases";
+import { QualityGate } from "./quality-gate";
+import { WalletStack } from "./wallet-stack";
 import { Nav } from "./nav";
 import { Logo } from "./logo";
 import { ButtonLink } from "./ui";
 import { PrivacyLink } from "./privacy-link";
 import { asset } from "@/lib/site";
 
-/* Mode 1 (essential summary). Copy: data/variants.ts + the shared texts below, all from the final texts doc. */
+/* Mode 1 (essential summary). Copy: data/variants/<landing>.ts + the shared texts below, all from the final texts doc. */
 export function Landing({ v }: { v: Variant }) {
   return (
     <>
@@ -30,28 +33,18 @@ export function Landing({ v }: { v: Variant }) {
 }
 
 /* seal that floats on the hero asset, one per landing */
-/* the proof line as one long pill, no bullet (team, Nov 10 2026) */
-const PROOF_PILL =
-  "w-fit max-w-full rounded-full border border-border-default bg-surface-card px-5 py-2.5 font-display text-body-sm font-medium text-text-primary shadow-card-rest";
-
-/* Cloud: partnerships visible on arrival (Adrián, Nov 11 2026). Same official badge files as the backing section. */
-const HERO_PARTNERS = [
-  { file: "gcp-services-select", alt: "Google Cloud Select, Services Partner", w: 546, h: 373 },
-  { file: "badge-clutch-aws", alt: "AWS Partner, Premier Tier Services", w: 377, h: 377 },
-];
-
 function Hero({ v }: { v: Variant }) {
   const h = v.hero;
   return (
     <section className="relative isolate overflow-hidden pb-20 pt-12 md:pb-28 md:pt-16 lg:pb-32 lg:pt-20">
       <div className="container-site relative grid-page gap-y-0">
         <div className="col-span-12 min-w-0 lg:col-span-7">
-          {v.id === "cloud" && (
+          {h.partners && (
             <div className="rise mb-8 flex items-center gap-3">
-              {HERO_PARTNERS.map((b) => (
+              {h.partners.badges.map((b) => (
                 <Image key={b.file} src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={Math.round((56 * b.w) / b.h)} height={56} unoptimized className="h-14 w-auto md:h-16" />
               ))}
-              <p className="ml-1 max-w-[16ch] font-display text-body font-semibold text-text-primary">Partner de Google Cloud y AWS</p>
+              <p className="ml-1 max-w-[16ch] font-display text-body font-semibold text-text-primary">{h.partners.label}</p>
             </div>
           )}
           <h1 className="rise break-words font-display text-display-lg font-semibold text-text-primary">
@@ -62,20 +55,17 @@ function Hero({ v }: { v: Variant }) {
           </p>
           {/* main action: the contact form further down; the cases are the second path */}
           <div className="rise mt-10 flex flex-wrap items-center gap-3" style={{ ["--i" as string]: 2 }}>
-            <ButtonLink href="#contacto" size="lg" className="max-[479px]:w-full">
+            <ButtonLink href="#contacto" className="max-[479px]:w-full">
               {h.button}
             </ButtonLink>
             <a href="#casos" className="inline-flex h-12 items-center justify-center rounded-button border border-border-strong px-6 font-display text-button-lg font-medium text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring max-[479px]:w-full">
               Ver casos
             </a>
           </div>
-          <p className={`rise aura mt-10 ${PROOF_PILL}`} style={{ ["--i" as string]: 3 }}>
-            {h.proof}
-          </p>
         </div>
         {/* proof next to the promise: this landing's cases as a wallet; tap one to bring it to the front */}
         <div className="rise col-span-5 min-w-0 self-center max-lg:hidden xl:pl-6" style={{ ["--i" as string]: 3 }}>
-          <WalletStack ids={v.cases.ids} />
+          <WalletStack ids={v.cases.ids} tags={v.cases.heroTags} />
         </div>
       </div>
     </section>
@@ -138,7 +128,7 @@ function Capabilities({ v }: { v: Variant }) {
       <div className="container-site">
         <h2 className="reveal max-w-[26ch] break-words font-display text-h2 font-semibold text-text-primary">{v.capabilities.title}</h2>
         {/* The four capabilities are parallel sub-services, not steps: a mosaic of peers (see CapTiles). */}
-        <CapTiles grupo={v.id} />
+        <CapTiles items={v.capabilities.items} />
       </div>
     </section>
   );
@@ -208,7 +198,7 @@ const FACTS: { value: string; label: string; badges: Badge[]; span: string; seal
 
 /* Own seal under "12 años" (2014 to 2026), drawn inline so it uses the page fonts.
    Same build as the Google badges next to it (white card, colored band at the bottom). It adds, not repeats:
-   the start year, one tick per year (the last in Inspire Blue) and the +500 projects from the hero proof.
+   the start year, one tick per year (the last in Inspire Blue) and the +500 projects.
    Icon: lucide Award (already a dependency). Refs: Braun dial ticks and a habit-streak dot row, Pinterest board, Nov 10 2026. */
 function YearsBadge() {
   const ticks = Array.from({ length: 12 }, (_, i) => 108 + i * 30.5);
