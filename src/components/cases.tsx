@@ -455,52 +455,84 @@ export function QualityGate({ thresholds }: { thresholds: { value: string; label
 }
 
 /*
-  Hero asset: real proof instead of decoration. Two case cards stacked and tilted in space, with the second
-  case's figure and a seal leaving the plane. It straightens on hover. Everything comes from data/cases.ts.
-  Decorative (aria-hidden): the cases section below exposes the same content to assistive tech.
+  Hero asset: the landing's cases stacked like Apple Wallet (Adrián, Nov 11 2026, from his wallet-stack.html).
+  The front card shows in full, the ones behind only their header; tapping one brings it to the front.
+  It rotates every 5 s until the visitor touches it, pauses on hover/focus and stays still with reduced motion.
+  No "Ver caso" here (team, Nov 11 2026): the cases section right below opens them. Desktop and landscape tablet only
+  (lg+), where the hero fits whole; on smaller screens the cases section follows right away. Data: data/cases.ts.
 */
-export function HeroStack({ ids, sello }: { ids: string[]; sello: string }) {
-  const [front, back] = ids.map((id) => cases.find((c) => c.id === id)).filter((c): c is CaseStudy => !!c);
-  if (!front) return null;
-  const t = themes[front.theme];
-  const pop = "absolute rounded-card shadow-[0_30px_40px_-20px_rgba(0,0,64,.5)]";
+export function WalletStack({ ids }: { ids: string[] }) {
+  const list = ids.map((id) => cases.find((c) => c.id === id)).filter((c): c is CaseStudy => !!c);
+  const n = list.length;
+  // pile from back to front: the last index is the card in front; the first case starts in front
+  const [order, setOrder] = useState(() => list.map((_, i) => i).reverse());
+  const auto = useRef(true);
+  const paused = useRef(false);
+
+  const bringFront = (i: number) => setOrder((o) => (o[o.length - 1] === i ? o : o.filter((x) => x !== i).concat(i)));
+
+  useEffect(() => {
+    if (n < 2 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => {
+      if (!auto.current || paused.current || document.hidden) return;
+      setOrder((o) => {
+        const next = (o[o.length - 1] + 1) % n;
+        return o.filter((x) => x !== next).concat(next);
+      });
+    }, 5000);
+    return () => clearInterval(t);
+  }, [n]);
+
+  const pick = (i: number) => {
+    auto.current = false;
+    bringFront(i);
+  };
+
+  if (!n) return null;
   return (
-    <div aria-hidden="true" className="rise group col-span-5 min-w-0 self-center pb-12 pt-24 pl-4 [perspective:1500px] max-lg:hidden xl:pl-10 min-[1400px]:pl-20" style={{ ["--i" as string]: 3 }}>
-      <div className="relative transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] [transform-style:preserve-3d] [transform:rotateY(-19deg)_rotateX(7deg)_rotateZ(1.5deg)] [zoom:.78] group-hover:[transform:rotateY(-7deg)_rotateX(3deg)] motion-reduce:transition-none xl:[zoom:.88] min-[1400px]:[zoom:1]">
-        {/* the case behind: it rises enough above the front card for its sector line and logo to read */}
-        {back && (
-          <div className={`absolute inset-x-5 -top-[5.5rem] flex h-48 items-start justify-between gap-4 overflow-hidden rounded-card px-6 py-5 shadow-product [transform:translateZ(-60px)] ${themes[back.theme].card}`}>
-            <p className={`mono-label text-micro ${themes[back.theme].tag}`}>{back.tag}</p>
-            <Logo c={back} h={Math.round(back.logoH.card * 0.6)} white={themes[back.theme].logoWhite} />
-          </div>
-        )}
-        {/* the case in front */}
-        <div className={`relative isolate flex min-h-[24rem] flex-col justify-between gap-8 overflow-hidden rounded-card p-7 shadow-[0_60px_80px_-40px_rgba(0,0,64,.45),0_30px_40px_-30px_rgba(0,0,0,.25)] ${t.card}`}>
-          <Glow {...t.glow} />
-          <p className={`mono-label text-nano ${t.tag}`}>{front.tag}</p>
-          <div className="min-w-0">
-            <Logo c={front} h={front.logoH.card} white={t.logoWhite} />
-            <p className="mt-5 max-w-[14ch] break-words font-display text-h2 font-semibold">{front.title}</p>
-          </div>
-          <div className="border-t border-border-on-dark pt-5">
-            <p className="break-words font-display text-display-lg font-semibold tabular-nums">{front.highlight.value}</p>
-            <p className={`mono-label mt-2 max-w-[26ch] text-micro ${t.panelMuted}`}>{front.highlight.label}</p>
-          </div>
-        </div>
-        {/* pieces that leave the plane */}
-        {back && (
-          <div className={`${pop} right-[-10%] top-[50%] w-[44%] bg-excellence-blue px-5 py-4 text-white [transform:translateZ(90px)]`}>
-            <div className="float-chip">
-              <p className="font-display text-[1.75rem] font-semibold leading-none tabular-nums">{back.highlight.value}</p>
-              <p className="mono-label mt-2 text-nano text-text-on-dark-accent">{back.highlight.label}</p>
+    <div
+      role="group"
+      aria-label="Casos destacados"
+      className="relative mx-auto w-full max-w-[29rem] [--card-h:21rem] [--peek:4rem]"
+      style={{ height: `calc(var(--card-h) + var(--peek) * ${n - 1})` }}
+      onMouseEnter={() => (paused.current = true)}
+      onMouseLeave={() => (paused.current = false)}
+      onFocus={() => (paused.current = true)}
+      onBlur={() => (paused.current = false)}
+    >
+      {list.map((c, i) => {
+        const slot = order.indexOf(i);
+        const depth = n - 1 - slot; // 0 = front
+        const active = depth === 0;
+        const t = themes[c.theme];
+        return (
+          <article
+            key={c.id}
+            aria-current={active ? "true" : undefined}
+            className={`absolute inset-x-0 top-0 isolate flex h-[var(--card-h)] origin-top flex-col overflow-hidden rounded-card px-6 pb-6 pt-5 shadow-product transition-transform duration-700 ease-[cubic-bezier(.22,.9,.24,1)] [transform:translateY(calc(var(--peek)*var(--slot)+var(--lift,0px)))_scale(calc(1-var(--depth)*.035))] motion-reduce:transition-none sm:px-7 ${active ? "" : "hover:[--lift:-8px]"} ${t.card}`}
+            style={{ zIndex: slot + 1, ["--slot" as string]: slot, ["--depth" as string]: depth }}
+          >
+            <Glow {...t.glow} />
+            {/* header: the only part a card behind shows; the button covers the whole card while it is behind */}
+            <button
+              type="button"
+              onClick={() => pick(i)}
+              aria-label={active ? `${c.client}: ${c.title}` : `Mostrar caso ${c.client}`}
+              className={`flex min-h-6 items-center justify-between gap-4 text-left focus-ring ${active ? "cursor-default" : "after:absolute after:inset-0 after:content-['']"}`}
+            >
+              <span className={`mono-label min-w-0 text-nano ${active ? "" : "truncate"} ${t.tag}`}>{c.tag}</span>
+              <Logo c={c} h={Math.round(c.logoH.card * 0.6)} white={t.logoWhite} />
+            </button>
+            <div className={`mt-6 flex flex-1 flex-col transition-[opacity,transform] duration-500 ${active ? "translate-y-0 opacity-100 delay-150" : "pointer-events-none translate-y-2 opacity-0"}`} aria-hidden={!active}>
+              <p className="max-w-[18ch] break-words font-display text-h3 font-semibold">{c.title}</p>
+              <div className="mt-auto">
+                <p className="break-words font-display text-display-lg font-semibold leading-none tabular-nums">{c.highlight.value}</p>
+                <p className={`mono-label mt-2 max-w-[30ch] text-micro ${t.panelMuted}`}>{c.highlight.label}</p>
+              </div>
             </div>
-          </div>
-        )}
-        <div className={`${pop} bottom-[-9%] right-[7%] border border-border-default bg-white p-2.5 [transform:translateZ(70px)]`}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- ponytail: static SVG badge */}
-          <img src={asset(`/certifications/${sello}.svg`)} alt="" className="float-chip h-14 w-auto [animation-delay:-3s]" />
-        </div>
-      </div>
+          </article>
+        );
+      })}
     </div>
   );
 }

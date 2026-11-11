@@ -1,55 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { PolicyContent } from "./privacy-policy";
 import { OPEN_PRIVACY_EVENT } from "./privacy-link";
 
 /*
-  Cookie notice + privacy policy modal. The choice is kept in localStorage (the notice never blocks the page).
-  The server render and the first client render show nothing ("unknown"), so there is no flash for returning visitors.
+  Privacy policy modal, opened from any <PrivacyLink />. The cookie banner was removed (Adrián, Nov 11 2026:
+  the notice is only required in the EU), so there is no choice to store.
 */
-const KEY = "elaniin-cookie-consent";
-const CHANGE = "cookie-consent-change";
-type Choice = "accepted" | "rejected" | null | "unknown";
-
-/** Fired on window whenever the visitor accepts or rejects. */
-export const CONSENT_CHANGE_EVENT = CHANGE;
-export const cookiesAccepted = () => read() === "accepted";
-
-function read(): Choice {
-  try {
-    const v = localStorage.getItem(KEY);
-    return v === "accepted" || v === "rejected" ? v : null;
-  } catch {
-    return null;
-  }
-}
-function save(v: "accepted" | "rejected") {
-  try {
-    localStorage.setItem(KEY, v);
-  } catch {
-    /* private mode: the choice lasts for this visit only */
-  }
-  window.dispatchEvent(new Event(CHANGE));
-}
-function subscribe(cb: () => void) {
-  window.addEventListener(CHANGE, cb);
-  window.addEventListener("storage", cb);
-  return () => {
-    window.removeEventListener(CHANGE, cb);
-    window.removeEventListener("storage", cb);
-  };
-}
+/** Kept for lead-form's listener; nothing fires it any more. */
+export const CONSENT_CHANGE_EVENT = "cookie-consent-change";
+/* ponytail: no banner, so the session attribution is always kept. */
+export const cookiesAccepted = () => true;
 
 const primary =
   "inline-flex h-11 items-center justify-center rounded-button bg-elevate-blue px-5 font-display text-button font-medium text-white transition-colors duration-base hover:bg-blue-700 active:bg-blue-800 focus-ring";
-const secondary =
-  "inline-flex h-11 items-center justify-center rounded-button border border-border-default bg-white px-5 font-display text-button font-medium text-text-primary transition-colors duration-base hover:bg-surface-subtle focus-ring";
 
 export function CookieConsent() {
-  const stored = useSyncExternalStore(subscribe, read, () => "unknown" as Choice);
-  const [dismissed, setDismissed] = useState(false); // covers private mode, where nothing can be stored
   const [open, setOpen] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
 
@@ -70,41 +38,8 @@ export function CookieConsent() {
     dialog.current?.close();
     document.documentElement.classList.remove("overflow-hidden");
   };
-  const choose = (v: "accepted" | "rejected") => {
-    save(v);
-    setDismissed(true);
-    close();
-  };
-
-  const showBanner = stored === null && !dismissed;
-
   return (
     <>
-      {showBanner && (
-        <section
-          aria-label="Aviso de cookies"
-          className="rise fixed inset-x-0 bottom-0 z-50 border-t border-border-default bg-white shadow-menu"
-        >
-          <div className="container-site flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-            <p className="min-w-0 text-body-sm text-text-secondary lg:max-w-[72ch]">
-              Usamos cookies propias y de terceros para mejorar tu experiencia en el sitio y analizar su uso. Al hacer clic en «Aceptar» consientes su uso. Conoce más en nuestra política de
-              privacidad.
-            </p>
-            <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
-              <button type="button" onClick={() => setOpen(true)} aria-haspopup="dialog" className="nav-link inline-flex h-11 items-center justify-center font-display text-button font-medium text-text-link focus-ring">
-                Política de privacidad
-              </button>
-              <button type="button" onClick={() => choose("rejected")} className={secondary}>
-                Rechazar
-              </button>
-              <button type="button" onClick={() => choose("accepted")} className={primary}>
-                Aceptar
-              </button>
-            </div>
-          </div>
-        </section>
-      )}
-
       <dialog
         ref={dialog}
         aria-labelledby="privacy-title"
@@ -138,11 +73,8 @@ export function CookieConsent() {
             </div>
 
             <footer className="flex shrink-0 flex-col gap-3 border-t border-border-default bg-surface-subtle px-6 py-4 sm:flex-row sm:justify-end md:px-10">
-              <button type="button" onClick={() => choose("rejected")} className={secondary}>
-                Rechazar cookies
-              </button>
-              <button type="button" onClick={() => choose("accepted")} className={primary}>
-                Aceptar
+              <button type="button" onClick={close} className={primary}>
+                Entendido
               </button>
             </footer>
           </>

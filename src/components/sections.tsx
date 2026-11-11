@@ -2,7 +2,7 @@ import { Award } from "lucide-react";
 import Image from "next/image";
 import type { Variant } from "@/data/variants";
 import { LeadForm } from "./lead-form";
-import { CapTiles, Cases, HeroStack, QualityGate } from "./cases";
+import { CapTiles, Cases, QualityGate, WalletStack } from "./cases";
 import { Nav } from "./nav";
 import { Logo } from "./logo";
 import { ButtonLink } from "./ui";
@@ -34,7 +34,11 @@ export function Landing({ v }: { v: Variant }) {
 const PROOF_PILL =
   "w-fit max-w-full rounded-full border border-border-default bg-surface-card px-5 py-2.5 font-display text-body-sm font-medium text-text-primary shadow-card-rest";
 
-const HERO_SEAL = { software: "badge-clutch-top-software-developers", cloud: "gcp-services-select" } as const;
+/* Cloud: partnerships visible on arrival (Adrián, Nov 11 2026). Same official badge files as the backing section. */
+const HERO_PARTNERS = [
+  { file: "gcp-services-select", alt: "Google Cloud Select, Services Partner", w: 546, h: 373 },
+  { file: "badge-clutch-aws", alt: "AWS Partner, Premier Tier Services", w: 377, h: 377 },
+];
 
 function Hero({ v }: { v: Variant }) {
   const h = v.hero;
@@ -42,6 +46,14 @@ function Hero({ v }: { v: Variant }) {
     <section className="relative isolate overflow-hidden pb-20 pt-12 md:pb-28 md:pt-16 lg:pb-32 lg:pt-20">
       <div className="container-site relative grid-page gap-y-0">
         <div className="col-span-12 min-w-0 lg:col-span-7">
+          {v.id === "cloud" && (
+            <div className="rise mb-8 flex items-center gap-3">
+              {HERO_PARTNERS.map((b) => (
+                <Image key={b.file} src={asset(`/certifications/${b.file}.svg`)} alt={b.alt} width={Math.round((56 * b.w) / b.h)} height={56} unoptimized className="h-14 w-auto md:h-16" />
+              ))}
+              <p className="ml-1 max-w-[16ch] font-display text-body font-semibold text-text-primary">Partner de Google Cloud y AWS</p>
+            </div>
+          )}
           <h1 className="rise break-words font-display text-display-lg font-semibold text-text-primary">
             {h.h1} <span className="text-inspire-blue">{h.accent}</span>
           </h1>
@@ -61,8 +73,10 @@ function Hero({ v }: { v: Variant }) {
             {h.proof}
           </p>
         </div>
-        {/* proof next to the promise: the first two cases of this landing, stacked in space */}
-        <HeroStack ids={v.cases.ids} sello={HERO_SEAL[v.id]} />
+        {/* proof next to the promise: this landing's cases as a wallet; tap one to bring it to the front */}
+        <div className="rise col-span-5 min-w-0 self-center max-lg:hidden xl:pl-6" style={{ ["--i" as string]: 3 }}>
+          <WalletStack ids={v.cases.ids} />
+        </div>
       </div>
     </section>
   );
