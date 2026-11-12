@@ -1,3 +1,4 @@
+import { MetaPixel } from "@/analytics/meta-pixel";
 import { Award } from "lucide-react";
 import Image from "next/image";
 import type { Variant } from "@/lib/landing";
@@ -16,6 +17,7 @@ import { asset } from "@/lib/site";
 export function Landing({ v }: { v: Variant }) {
   return (
     <>
+      <MetaPixel />
       <Nav />
       <main id="main">
         <Hero v={v} />
