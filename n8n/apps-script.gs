@@ -102,14 +102,17 @@ function blancoFijo(html) {
 }
 
 /** Marco común: franja azul con logo, cuerpo blanco y pie. Tablas y estilos en línea, como exigen Gmail y Outlook. */
-function plantilla(titulo, contenidoHtml, pie) {
+/** saludo (opcional): línea pequeña encima del título, como "Hola Ana,". */
+function plantilla(titulo, contenidoHtml, pie, saludo) {
   var fuente = "font-family:Arial,Helvetica,sans-serif;";
   return '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark">' + ESTILOS + '</head>' +
     '<body class="body e-bg" style="margin:0;padding:0;background:#F2F5FF;">' +
     '<table role="presentation" class="e-bg" width="100%" cellpadding="0" cellspacing="0" style="background:#F2F5FF;"><tr><td align="center" style="padding:32px 16px;">' +
     '<table role="presentation" class="e-card" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#FFFFFF;border:1px solid #D8D8D8;border-radius:12px;overflow:hidden;">' +
     '<tr><td class="e-line" bgcolor="#000040" style="' + fondoFijo("#000040") + 'padding:28px 32px;border-bottom:1px solid #000040;"><img src="cid:logo" width="200" height="31" alt="Elaniin Tech Company" style="display:block;border:0;width:200px;height:auto;"></td></tr>' +
-    '<tr><td style="padding:32px 32px 8px 32px;' + fuente + '"><h1 class="e-t1" style="margin:0;font-size:24px;line-height:30px;font-weight:700;color:#0C0C0C;">' + titulo + '</h1></td></tr>' +
+    '<tr><td style="padding:32px 32px 8px 32px;' + fuente + '">' +
+    (saludo ? '<p class="e-t2" style="margin:0 0 8px 0;font-size:15px;line-height:24px;color:#4E4C4C;">' + saludo + '</p>' : '') +
+    '<h1 class="e-t1" style="margin:0;font-size:24px;line-height:30px;font-weight:700;color:#0C0C0C;">' + titulo + '</h1></td></tr>' +
     '<tr><td class="e-t2" style="padding:8px 32px 32px 32px;' + fuente + 'font-size:15px;line-height:24px;color:#4E4C4C;">' + contenidoHtml + '</td></tr>' +
     '<tr><td class="e-line e-t3" style="padding:20px 32px;border-top:1px solid #D8D8D8;' + fuente + 'font-size:12px;line-height:18px;color:#636363;">' + pie + '</td></tr>' +
     '</table></td></tr></table></body></html>';
@@ -155,16 +158,18 @@ function avisarAlEquipo(lead) {
 }
 
 function confirmarAlLead(lead) {
+  // Texto aprobado por el equipo (12 nov 2026).
   var html = plantilla(
-    "Recibimos tus datos, " + esc(lead.nombre) + ".",
-    '<p style="margin:0;">Un especialista revisará tu proyecto y te contactará para una conversación técnica inicial, sin compromiso.</p>',
-    "Elaniin Tech Company"
+    "Tu próximo proyecto empieza aquí.",
+    '<p style="margin:0;">Hemos recibido tu información correctamente. Nuestro equipo se pondrá en contacto contigo próximamente para dar seguimiento a tu solicitud.</p>',
+    "<strong>Elaniin. Technology engineered to deliver impact.</strong>",
+    "Hola " + esc(lead.nombre) + ","
   );
   MailApp.sendEmail({
     to: lead.correo,
     name: "Elaniin",
     subject: "Recibimos tus datos",
-    body: "Hola, " + lead.nombre + ".\n\nRecibimos tus datos. Un especialista revisará tu proyecto y te contactará para una conversación técnica inicial, sin compromiso.\n\nElaniin",
+    body: "Hola " + lead.nombre + ",\n\nTu próximo proyecto empieza aquí.\n\nHemos recibido tu información correctamente. Nuestro equipo se pondrá en contacto contigo próximamente para dar seguimiento a tu solicitud.\n\nElaniin. Technology engineered to deliver impact.",
     htmlBody: html,
     inlineImages: { logo: logo() }
   });
