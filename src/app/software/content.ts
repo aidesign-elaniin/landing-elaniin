@@ -21,6 +21,6 @@ export const software: Variant = {
   cases: {
     title: "Soluciones para operaciones críticas de organizaciones líderes.",
     ids: ["tse", "credicomer", "jostens"],
-    heroTags: { credicomer: "Banca · Desarrollo a medida", tse: "Sector público · Modernización", jostens: "Manufactura · Equipo dedicado" },
+    heroTags: { credicomer: "Banca · Desarrollo a medida", tse: "Sector público · Modernización", jostens: "Retail · Equipo dedicado" },
   },
 };
