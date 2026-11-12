@@ -47,6 +47,8 @@ export function parseLead(body: Record<string, unknown>, now = new Date()) {
       utm: Object.fromEntries(UTM_KEYS.map((k) => [k, str(utmIn[k], 100)])),
       referrer: str(body.referrer, 300),
       page: str(body.page) || "/",
+      // one id per submission, shared with the Meta pixel (lp_lead) so Meta can deduplicate it; a UUID or nothing
+      event_id: typeof body.event_id === "string" && /^[0-9a-f-]{36}$/i.test(body.event_id) ? body.event_id : "",
       perfil: {
         sector: oneOf(perfil.sector, ["privado", "publico"] as const),
         servicio: oneOf(perfil.servicio, ["software", "cloud", "equipo", "sin_definir"] as const),

@@ -49,3 +49,6 @@ next-env.d.ts
 
 # Apps Script con token y correos reales: nunca al repo público
 n8n/*.local.gs
+
+# internal plan with team emails; shared through Claude Docs, never in this public repo
+/docs/analytics/

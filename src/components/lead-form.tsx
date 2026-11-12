@@ -5,6 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import { ArrowIcon } from "./ui";
 import { PrivacyLink } from "./privacy-link";
 import { EMAIL, UTM_KEYS, isCorporate, parseLead } from "@/lib/lead";
+import { emitLead } from "@/analytics/lead-signal";
 
 // n8n webhook: a CI variable when publishing, .env.local when running locally.
 const WEBHOOK = process.env.NEXT_PUBLIC_LEAD_WEBHOOK_URL;
@@ -83,6 +84,7 @@ export function LeadForm({ variante }: { variante: string }) {
     setStatus("loading");
     try {
       const { utm, referrer } = attribution();
+      const eventId = crypto.randomUUID();
       // JSON contract in lib/lead.ts; the form sends it with an empty profile.
       const body = {
         modo: "formulario",
@@ -96,6 +98,7 @@ export function LeadForm({ variante }: { variante: string }) {
         referrer,
         page: location.pathname,
         perfil: { sector: data.sector },
+        event_id: eventId,
       };
       // ponytail: honeypot and whitelist run in the browser; a bot that posts to the webhook directly skips them. Repeat them in n8n if spam shows up.
       if (!data.website?.trim()) {
@@ -104,6 +107,7 @@ export function LeadForm({ variante }: { variante: string }) {
         const res = await fetch(WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(parsed.lead) });
         const reply = await res.json().catch(() => ({}));
         if (!res.ok || reply.ok === false) throw new Error(String(res.status));
+        emitLead({ variante, sector: data.sector, eventId }); // only after n8n accepted it; never for the honeypot
       }
       setStatus("success");
     } catch {

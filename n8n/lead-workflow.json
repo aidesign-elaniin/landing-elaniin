@@ -171,6 +171,12 @@
               "name": "page",
               "type": "string",
               "value": "={{ $json.body.page }}"
+            },
+            {
+              "id": "event_id",
+              "name": "event_id",
+              "type": "string",
+              "value": "={{ $json.body.event_id }}"
             }
           ]
         },

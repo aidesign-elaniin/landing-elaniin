@@ -22,6 +22,9 @@ test("form lead: empty profile, unknown fields dropped, enums whitelisted", () =
   assert.equal(lead.evento, "lead_creado");
   assert.equal(lead.modo, "formulario");
   assert.equal(lead.variante, "cloud");
+  assert.equal(lead.event_id, "");
+  assert.equal(parseLead({ ...base, event_id: "6f1c2a9e-3b4d-4e5f-8a7b-9c0d1e2f3a4b" }).lead.event_id, "6f1c2a9e-3b4d-4e5f-8a7b-9c0d1e2f3a4b");
+  assert.equal(parseLead({ ...base, event_id: "<script>" }).lead.event_id, "");
   for (const bad of ["=HYPERLINK(1)", "<b>x</b>", "Cloud", 3]) assert.equal(parseLead({ ...base, variante: bad }).lead.variante, "software", String(bad));
   assert.equal(lead.nombre, "Ana");
   assert.equal(lead.correo, "ana@institucion.gob.sv");
