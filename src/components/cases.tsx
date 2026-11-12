@@ -83,12 +83,25 @@ export function Cases({ ids }: { ids: string[] }) {
     document.documentElement.classList.add("overflow-hidden");
   }, [openId]);
 
-  const close = () => {
-    dialog.current?.close();
+  const closed = () => {
+    setOpenId(null);
     document.documentElement.classList.remove("overflow-hidden");
   };
 
-  
+  // Plays the closing animation (globals.css, modal-in) and then closes; the content stays mounted until then.
+  const close = () => {
+    const el = dialog.current;
+    if (!el?.open || el.dataset.closing) return;
+    const done = () => {
+      delete el.dataset.closing;
+      el.close();
+      closed(); // do not wait for the dialog's close event: a page that is not being painted may never get it
+    };
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return done();
+    el.dataset.closing = "true";
+    setTimeout(done, 600); // ponytail: same 0.6s as the CSS animation; a timer also closes it in a background tab, where animations pause
+  };
+
   return (
     <>
       {/* Lead case on the left over two rows, the others stacked on the right; two cases share the row evenly. */}
@@ -101,17 +114,18 @@ export function Cases({ ids }: { ids: string[] }) {
       <dialog
         ref={dialog}
         aria-labelledby="case-title"
-        onClose={() => {
-          setOpenId(null);
-          document.documentElement.classList.remove("overflow-hidden");
+        onClose={closed}
+        onCancel={(e) => {
+          e.preventDefault(); // Escape: animate out instead of closing at once
+          close();
         }}
         onClick={(e) => {
           if (e.target === e.currentTarget) close();
         }}
-        className="m-auto max-h-[calc(100dvh-1.5rem)] w-[min(1120px,calc(100vw-1.5rem))] max-w-none overflow-y-auto overscroll-contain rounded-modal border-0 bg-white p-0 text-text-primary shadow-product backdrop:bg-excellence-blue/70 backdrop:backdrop-blur-sm"
+        className="modal-in m-auto max-h-[calc(100dvh-1.5rem)] w-[min(1120px,calc(100vw-1.5rem))] max-w-none overflow-y-auto overscroll-contain rounded-modal border-0 bg-white p-0 text-text-primary shadow-product backdrop:bg-excellence-blue/70 backdrop:backdrop-blur-sm"
       >
         {current && (
-          <div className="rise relative grid lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="relative grid lg:grid-cols-[1.2fr_0.8fr]">
             <button
               type="button"
               onClick={close}

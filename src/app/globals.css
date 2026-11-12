@@ -537,3 +537,27 @@
   animation: tap-ring 0.5s cubic-bezier(0.22, 0.9, 0.24, 1) forwards;
   @media (prefers-reduced-motion: reduce) { animation-duration: 0.01s; }
 }
+
+/* Case modal (team, Nov 12 2026): the curve they asked for, opening and closing, on the panel and its backdrop.
+   Closing: cases.tsx sets data-closing and closes the dialog after the same 0.6s. */
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+}
+@keyframes modal-out {
+  to { opacity: 0; transform: translateY(24px) scale(0.97); }
+}
+@keyframes backdrop-in {
+  from { opacity: 0; }
+}
+@keyframes backdrop-out {
+  to { opacity: 0; }
+}
+@utility modal-in {
+  &[open] { animation: modal-in 0.6s cubic-bezier(1, 0.01, 0.3, 1) both; }
+  &[open]::backdrop { animation: backdrop-in 0.6s cubic-bezier(1, 0.01, 0.3, 1) both; }
+  &[data-closing] { animation: modal-out 0.6s cubic-bezier(1, 0.01, 0.3, 1) both; }
+  &[data-closing]::backdrop { animation: backdrop-out 0.6s cubic-bezier(1, 0.01, 0.3, 1) both; }
+  @media (prefers-reduced-motion: reduce) {
+    &[open], &[open]::backdrop { animation: none; }
+  }
+}
